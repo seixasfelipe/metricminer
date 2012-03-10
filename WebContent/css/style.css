@@ -1,0 +1,17 @@
+@CHARSET "ISO-8859-1";
+
+body {
+	font-family: Verdana, Helvetica, sans serif;
+}
+
+#content {
+	width:960px;
+	margin: 100px auto auto auto;
+}
+
+#projects {
+	width:900px;
+	margin: auto;
+	text-align: center;
+	border: grey;
+}

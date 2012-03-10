@@ -24,4 +24,7 @@ public class ProjectDao {
 		return session.createCriteria(Project.class).list();
 	}
 
+	public Project findProjectBy(Long id) {
+		return (Project) session.load(Project.class, id);
+	}
 }

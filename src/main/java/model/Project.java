@@ -29,4 +29,8 @@ public class Project {
 	public String getScmUrl() {
 		return scmUrl;
 	}
+
+	public Long getId() {
+		return id;
+	}
 }

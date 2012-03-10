@@ -33,4 +33,9 @@ public class ProjectController {
 		result.redirectTo(ProjectController.class).list();
 	}
 
+	@Get("/project/{id}/clone")
+	public void cloneRepository(Long id) {
+		result.include("project", dao.findProjectBy(id));
+	}
+
 }
