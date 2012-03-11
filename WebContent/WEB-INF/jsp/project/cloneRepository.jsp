@@ -7,6 +7,7 @@
 <title>Clonning</title>
 </head>
 <body>
-	${project.scmUrl }
+	${project.scmUrl}
+	${output}
 </body>
 </html>
