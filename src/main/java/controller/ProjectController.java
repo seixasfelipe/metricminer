@@ -1,5 +1,6 @@
 package controller;
 
+import dao.ProjectDao;
 import model.Project;
 import br.com.caelum.revolution.executor.SimpleCommandExecutor;
 import br.com.caelum.vraptor.Get;
@@ -18,7 +19,7 @@ public class ProjectController {
 		this.dao = dao;
 	}
 
-	@Get("/project/new")
+	@Get("/projects/new")
 	public void form() {
 	}
 

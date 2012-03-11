@@ -11,6 +11,7 @@
 	<body>
 	
 		<section id="content">
+		<a href="<c:url value="/projects/new" />">New project</a>
 			<table id="projects">
 					<tr>
 						<th>Name</th>
