@@ -17,7 +17,12 @@
         <property name="show_sql">false</property>
         <property name="format_sql">false</property>
         
-        <mapping class="model.Project"/> 
+        <mapping class="model.Project"/>
+        <mapping class="model.ProjectConfigurationEntry"/>
+        <mapping class="br.com.caelum.revolution.domain.Artifact"/>  
+        <mapping class="br.com.caelum.revolution.domain.Author"/>
+        <mapping class="br.com.caelum.revolution.domain.Commit"/>
+        <mapping class="br.com.caelum.revolution.domain.Modification"/>  
 
     </session-factory>
 </hibernate-configuration>
