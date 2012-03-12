@@ -14,7 +14,7 @@
 		<form method="post" action='<c:url value="/projects"></c:url>' '>
 			<label for="name">Name: </label><input type="text" name="name" /><br />
 			<label for="scmUrl">Git url: </label><input type="text" name="scmUrl" /><br />
-			<input type="submit" value="Send" />
+			<input type="submit" value="Save" />
 		</form>
 		<c:import url="../import/footer.jsp" />
 	</body>
