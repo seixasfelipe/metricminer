@@ -1,10 +1,12 @@
 package model;
 
 import java.util.HashMap;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Project {
@@ -14,6 +16,9 @@ public class Project {
 	private Long id;
 	private String name;
 	private String scmUrl;
+
+	@OneToMany(mappedBy = "project")
+	private List<ConfigurationEntry> configurationEntries;
 
 	public Project() {
 	}
@@ -33,6 +38,10 @@ public class Project {
 
 	public Long getId() {
 		return id;
+	}
+
+	public List<ConfigurationEntry> getConfigurationEntries() {
+		return configurationEntries;
 	}
 
 	public HashMap<String, String> listInitialConfigurationsEntries() {

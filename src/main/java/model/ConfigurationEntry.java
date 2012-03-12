@@ -28,4 +28,12 @@ public class ConfigurationEntry {
 		this.project = project;
 	}
 
+	public String getKey() {
+		return key;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
 }

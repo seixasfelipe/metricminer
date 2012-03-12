@@ -32,6 +32,11 @@ public class ProjectController {
 		result.include("projects", dao.listAll());
 	}
 
+	@Get("/projects/{id}")
+	public void detail(Long id) {
+		result.include("project", dao.findProjectBy(id));
+	}
+
 	@Post("/projects")
 	public void createProject(String name, String scmUrl) {
 		Project project = new Project(name, scmUrl);

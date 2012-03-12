@@ -7,11 +7,21 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 		<title>MetricMiner - Project ${project.name}</title>
 		<c:import url="../import/head.jsp" />
+		<link rel="stylesheet" href="<c:url value='/css/project_detail.css' />">
 	</head>
 	<body>
 		<c:import url="../import/header.jsp" />
 		<section id="project-details">
 			<h1>${project.name}</h1>
+			
+			<table>
+				<c:forEach items="${project.configurationEntries}" var="configurationEntry">
+					<tr>
+						<td class="key">${configurationEntry.key}</td>
+						<td>${configurationEntry.value}</td>
+					</tr>
+				</c:forEach>
+			</table>
 		</section>
 		<c:import url="../import/footer.jsp" />
 	</body>
