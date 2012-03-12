@@ -14,6 +14,7 @@
 		<section id="project-details">
 			<h1>${project.name}</h1>
 			
+			<h3>Configurations</h3>
 			<table>
 				<c:forEach items="${project.configurationEntries}" var="configurationEntry">
 					<tr>
