@@ -43,7 +43,6 @@ public class ProjectController {
 	public void createProject(String name, String scmUrl) {
 		Project project = new Project(name, scmUrl);
 		dao.save(project);
-		configurationEntryDao.saveInitialProjectConfigurations(project);
 		result.redirectTo(ProjectController.class).list();
 	}
 
