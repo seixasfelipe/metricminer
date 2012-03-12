@@ -6,7 +6,7 @@ body {
 
 #content {
 	width:960px;
-	margin: 100px auto auto auto;
+	margin: auto;
 }
 
 #projects {
@@ -14,4 +14,13 @@ body {
 	margin: auto;
 	text-align: center;
 	border: grey;
+}
+
+#menu {
+	width: 960px;
+	margin: 100px auto 20px	 auto;
+}
+
+#menu a {
+	margin-right: 20px;
 }

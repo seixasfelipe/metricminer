@@ -5,29 +5,14 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-		<title>Projects</title>
+		<title>MetricMiner - Project ${project.name}</title>
 		<c:import url="../import/head.jsp" />
 	</head>
 	<body>
 		<c:import url="../import/header.jsp" />
-		
-				<table id="projects">
-						<tr>
-							<th>Name</th>
-							<th>SCM URL</th>
-							<th>Actions</th>
-						</tr>
-					<c:forEach items="${projects}" var="project">
-						<tr>
-							<td><a href="<c:url value="/projects/${project.id}" />">${project.name}</a></td>
-							<td>${project.scmUrl}</td>
-							<td>
-								<a href="<c:url value='/project/${project.id}/clone' />">Clone repository</a>
-							</td>
-						</tr>
-					</c:forEach>
-				</table>
-				
+		<section id="project-details">
+			<h1>${project.name}</h1>
+		</section>
 		<c:import url="../import/footer.jsp" />
 	</body>
 </html>
