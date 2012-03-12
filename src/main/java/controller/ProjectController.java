@@ -8,7 +8,6 @@ import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import dao.ConfigurationEntryDao;
 import dao.ProjectDao;
 
 @Resource
@@ -16,13 +15,10 @@ public class ProjectController {
 
 	private final Result result;
 	private final ProjectDao dao;
-	private final ConfigurationEntryDao configurationEntryDao;
 
-	public ProjectController(Result result, ProjectDao dao,
-			ConfigurationEntryDao projectConfigurationEntryDao) {
+	public ProjectController(Result result, ProjectDao dao) {
 		this.result = result;
 		this.dao = dao;
-		this.configurationEntryDao = projectConfigurationEntryDao;
 	}
 
 	@Get("/projects/new")
@@ -56,7 +52,6 @@ public class ProjectController {
 
 	@Get("/project/{id}/clone")
 	public void cloneRepository(Long id) {
-		Process proc = null;
 		Project project = dao.findProjectBy(id);
 
 		SimpleCommandExecutor executor = new SimpleCommandExecutor();
