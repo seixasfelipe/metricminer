@@ -1,22 +1,26 @@
 package controller;
 
-import dao.ProjectDao;
 import model.Project;
 import br.com.caelum.revolution.executor.SimpleCommandExecutor;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
+import dao.ConfigurationEntryDao;
+import dao.ProjectDao;
 
 @Resource
 public class ProjectController {
 
 	private final Result result;
 	private final ProjectDao dao;
+	private final ConfigurationEntryDao configurationEntryDao;
 
-	public ProjectController(Result result, ProjectDao dao) {
+	public ProjectController(Result result, ProjectDao dao,
+			ConfigurationEntryDao projectConfigurationEntryDao) {
 		this.result = result;
 		this.dao = dao;
+		this.configurationEntryDao = projectConfigurationEntryDao;
 	}
 
 	@Get("/projects/new")
@@ -32,6 +36,7 @@ public class ProjectController {
 	public void createProject(String name, String scmUrl) {
 		Project project = new Project(name, scmUrl);
 		dao.save(project);
+		configurationEntryDao.saveInitialProjectConfigurations(project);
 		result.redirectTo(ProjectController.class).list();
 	}
 
