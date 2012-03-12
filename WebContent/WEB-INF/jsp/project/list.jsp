@@ -23,6 +23,7 @@
 							<td>${project.scmUrl}</td>
 							<td>
 								<a href="<c:url value='/project/${project.id}/clone' />">Clone repository</a>
+								<a href="<c:url value='/project/${project.id}/parse' />">Parse SCM logs</a>
 							</td>
 						</tr>
 					</c:forEach>

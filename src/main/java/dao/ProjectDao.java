@@ -27,4 +27,8 @@ public class ProjectDao {
 	public Project findProjectBy(Long id) {
 		return (Project) session.load(Project.class, id);
 	}
+
+	public Session getSession() {
+		return this.session;
+	}
 }

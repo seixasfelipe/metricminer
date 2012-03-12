@@ -8,6 +8,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import br.com.caelum.revolution.config.MapConfig;
+
 @Entity
 public class Project {
 
@@ -44,14 +46,14 @@ public class Project {
 		return configurationEntries;
 	}
 
-	public HashMap<String, String> listInitialConfigurationsEntries() {
+	public HashMap<String, String> initialConfigurationsEntries() {
 		HashMap<String, String> configurations = new HashMap<String, String>();
 		String metricMinerHome = "/home/csokol/ime/tcc/MetricMinerHome";
 
 		configurations
 				.put("scm", "br.com.caelum.revolution.scm.git.GitFactory");
-		configurations.put("scm.repository", metricMinerHome + "/" + this.id
-				+ "/" + this.name);
+		configurations.put("scm.repository", metricMinerHome + "/projects/"
+				+ this.id + "/" + this.name);
 		configurations.put("changesets",
 				"br.com.caelum.revolution.changesets.AllChangeSetsFactory");
 		configurations.put("build",
@@ -60,5 +62,12 @@ public class Project {
 				"br.com.caelum.revolution.builds.nobuild.NoBuildFactory");
 
 		return configurations;
+	}
+
+	public MapConfig getMapConfig() {
+		HashMap<String, String> configurations = new HashMap<String, String>();
+		for (ConfigurationEntry entry : this.configurationEntries)
+			configurations.put(entry.getKey(), entry.getValue());
+		return new MapConfig(configurations);
 	}
 }

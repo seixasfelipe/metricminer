@@ -2,6 +2,8 @@ package controller;
 
 import model.Project;
 import br.com.caelum.revolution.executor.SimpleCommandExecutor;
+import br.com.caelum.revolution.persistence.runner.HibernatePersistenceRunner;
+import br.com.caelum.revolution.persistence.runner.HibernatePersistenceRunnerFactory;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
@@ -43,6 +45,14 @@ public class ProjectController {
 		dao.save(project);
 		configurationEntryDao.saveInitialProjectConfigurations(project);
 		result.redirectTo(ProjectController.class).list();
+	}
+
+	@Get("/project/{id}/parse")
+	public void parseScmLogs(Long id) {
+		Project project = dao.findProjectBy(id);
+		HibernatePersistenceRunner persistenceRunner = new HibernatePersistenceRunnerFactory()
+				.basedOn(project.getMapConfig(), dao.getSession());
+		persistenceRunner.start();
 	}
 
 	@Get("/project/{id}/clone")

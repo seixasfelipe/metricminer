@@ -20,7 +20,7 @@ public class ConfigurationEntryDao {
 	}
 
 	public void saveInitialProjectConfigurations(Project p) {
-		HashMap<String, String> entries = p.listInitialConfigurationsEntries();
+		HashMap<String, String> entries = p.initialConfigurationsEntries();
 		for (Entry<String, String> entry : entries.entrySet()) {
 			ConfigurationEntry configurationEntry = new ConfigurationEntry(
 					entry.getKey(), entry.getValue(), p);
