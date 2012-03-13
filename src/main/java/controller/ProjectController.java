@@ -46,7 +46,7 @@ public class ProjectController {
 	public void parseScmLogs(Long id) {
 		Project project = dao.findProjectBy(id);
 		HibernatePersistenceRunner persistenceRunner = new HibernatePersistenceRunnerFactory()
-				.basedOn(project.getMapConfig(), dao.getSession());
+				.basedOn(project.getMapConfig(), dao.getSession(), project);
 		persistenceRunner.start();
 	}
 

@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import model.Project;
+
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 
@@ -13,26 +15,68 @@ import br.com.caelum.revolution.scm.DiffData;
 
 public class PersistedCommitConverter {
 
-	public Commit toDomain(CommitData data, Session session) throws ParseException {
-		
-		Author author = searchForPreviouslySavedAuthor(data.getAuthor(), session);
-		if(author == null) {
+	public Commit toDomain(CommitData data, Session session)
+			throws ParseException {
+
+		Author author = searchForPreviouslySavedAuthor(data.getAuthor(),
+				session);
+		if (author == null) {
 			author = new Author(data.getAuthor(), data.getEmail());
 			session.save(author);
 		}
-		
-		Commit commit = new Commit(data.getCommitId(), author, convertDate(data), data.getMessage(), data.getDiff(), data.getPriorCommit());
+
+		Commit commit = new Commit(data.getCommitId(), author,
+				convertDate(data), data.getMessage(), data.getDiff(),
+				data.getPriorCommit());
 		session.save(commit);
-		
+
 		for (DiffData diff : data.getDiffs()) {
-			Artifact artifact = searchForPreviouslySavedArtifact(diff.getName(), session);
+			Artifact artifact = searchForPreviouslySavedArtifact(
+					diff.getName(), session);
 
 			if (artifact == null) {
 				artifact = new Artifact(diff.getName(), diff.getArtifactKind());
 				session.save(artifact);
 			}
-			
-			Modification modification = new Modification(diff.getDiff(), commit, artifact, diff.getModificationKind());
+
+			Modification modification = new Modification(diff.getDiff(),
+					commit, artifact, diff.getModificationKind());
+			artifact.addModification(modification);
+			commit.addModification(modification);
+			commit.addArtifact(artifact);
+			session.save(modification);
+		}
+
+		return commit;
+	}
+
+	public Commit toDomain(CommitData data, Session session, Project project)
+			throws ParseException {
+
+		Author author = searchForPreviouslySavedAuthor(data.getAuthor(),
+				session);
+		if (author == null) {
+			author = new Author(data.getAuthor(), data.getEmail());
+			session.save(author);
+		}
+
+		Commit commit = new Commit(data.getCommitId(), author,
+				convertDate(data), data.getMessage(), data.getDiff(),
+				data.getPriorCommit());
+		session.save(commit);
+
+		for (DiffData diff : data.getDiffs()) {
+			Artifact artifact = searchForPreviouslySavedArtifact(
+					diff.getName(), session);
+
+			if (artifact == null) {
+				artifact = new Artifact(diff.getName(), diff.getArtifactKind(),
+						project);
+				session.save(artifact);
+			}
+
+			Modification modification = new Modification(diff.getDiff(),
+					commit, artifact, diff.getModificationKind());
 			artifact.addModification(modification);
 			commit.addModification(modification);
 			commit.addArtifact(artifact);
@@ -43,15 +87,15 @@ public class PersistedCommitConverter {
 	}
 
 	private Author searchForPreviouslySavedAuthor(String name, Session session) {
-		Author author = (Author)session.createCriteria(Author.class).add(Restrictions.eq("name", name)).uniqueResult();
+		Author author = (Author) session.createCriteria(Author.class)
+				.add(Restrictions.eq("name", name)).uniqueResult();
 		return author;
 	}
 
-	private Artifact searchForPreviouslySavedArtifact(String name, Session session) {
-		Artifact artifact = (Artifact) session
-				.createCriteria(Artifact.class)
-				.add(Restrictions.eq("name", name))
-				.uniqueResult();
+	private Artifact searchForPreviouslySavedArtifact(String name,
+			Session session) {
+		Artifact artifact = (Artifact) session.createCriteria(Artifact.class)
+				.add(Restrictions.eq("name", name)).uniqueResult();
 		return artifact;
 	}
 
@@ -62,5 +106,5 @@ public class PersistedCommitConverter {
 		calendar.setTime(date);
 		return calendar;
 	}
-	
+
 }

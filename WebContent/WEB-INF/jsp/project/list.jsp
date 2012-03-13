@@ -15,7 +15,7 @@
 						<tr>
 							<th>Name</th>
 							<th>SCM URL</th>
-							<th>Actions</th>
+							<th></th>
 						</tr>
 					<c:forEach items="${projects}" var="project">
 						<tr>

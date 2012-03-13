@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 import br.com.caelum.revolution.config.MapConfig;
+import br.com.caelum.revolution.domain.Artifact;
 
 @Entity
 public class Project {
@@ -19,9 +20,10 @@ public class Project {
 	private Long id;
 	private String name;
 	private String scmUrl;
-
 	@OneToMany(mappedBy = "project")
 	private List<ConfigurationEntry> configurationEntries;
+	@OneToMany(mappedBy = "project")
+	private List<Artifact> artifacts;
 
 	public Project() {
 	}

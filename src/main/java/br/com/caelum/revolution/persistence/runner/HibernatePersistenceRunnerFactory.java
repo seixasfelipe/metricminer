@@ -3,6 +3,8 @@ package br.com.caelum.revolution.persistence.runner;
 import java.io.FileInputStream;
 import java.io.InputStream;
 
+import model.Project;
+
 import org.hibernate.Session;
 
 import br.com.caelum.revolution.changesets.ChangeSetCollection;
@@ -18,12 +20,13 @@ public class HibernatePersistenceRunnerFactory {
 	public static void main(String[] args) {
 	}
 
-	public HibernatePersistenceRunner basedOn(Config config, Session session) {
+	public HibernatePersistenceRunner basedOn(Config config, Session session,
+			Project project) {
 		SCM scm = new SCMFactory().basedOn(config);
 		ChangeSetCollection collection = new ChangeSetCollectionFactory(scm)
 				.basedOn(config);
 		return new HibernatePersistenceRunner(new PersistedCommitConverter(),
-				scm, collection, session);
+				scm, collection, session, project);
 	}
 
 	private static Config config(String[] args) {

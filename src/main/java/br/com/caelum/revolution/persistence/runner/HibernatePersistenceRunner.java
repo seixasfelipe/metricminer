@@ -2,6 +2,8 @@ package br.com.caelum.revolution.persistence.runner;
 
 import java.text.ParseException;
 
+import model.Project;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
@@ -19,13 +21,16 @@ public class HibernatePersistenceRunner implements PersistenceRunner {
 	private final ChangeSetCollection collection;
 	private static Logger log = Logger
 			.getLogger(HibernatePersistenceRunner.class);
+	private final Project project;
 
 	public HibernatePersistenceRunner(PersistedCommitConverter converter,
-			SCM scm, ChangeSetCollection collection, Session session) {
+			SCM scm, ChangeSetCollection collection, Session session,
+			Project project) {
 		this.converter = converter;
 		this.scm = scm;
 		this.collection = collection;
 		this.session = session;
+		this.project = project;
 	}
 
 	public void start() {
@@ -35,7 +40,7 @@ public class HibernatePersistenceRunner implements PersistenceRunner {
 			try {
 				log.info("--------------------------");
 				log.info("Persisting change set " + changeSet.getId());
-				converter.toDomain(commitData, session);
+				converter.toDomain(commitData, session, project);
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
