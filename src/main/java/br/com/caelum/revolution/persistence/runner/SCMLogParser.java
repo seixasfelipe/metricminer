@@ -5,7 +5,8 @@ import java.text.ParseException;
 import model.Project;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.classic.Session;
 
 import br.com.caelum.revolution.changesets.ChangeSet;
 import br.com.caelum.revolution.changesets.ChangeSetCollection;
@@ -13,23 +14,23 @@ import br.com.caelum.revolution.domain.PersistedCommitConverter;
 import br.com.caelum.revolution.scm.CommitData;
 import br.com.caelum.revolution.scm.SCM;
 
-public class HibernatePersistenceRunner implements PersistenceRunner {
+public class SCMLogParser implements PersistenceRunner {
 
-	private Session session;
+	private SessionFactory sessionFactory;
 	private PersistedCommitConverter converter;
 	private SCM scm;
 	private final ChangeSetCollection collection;
 	private static Logger log = Logger
-			.getLogger(HibernatePersistenceRunner.class);
+			.getLogger(SCMLogParser.class);
 	private final Project project;
 
-	public HibernatePersistenceRunner(PersistedCommitConverter converter,
-			SCM scm, ChangeSetCollection collection, Session session,
+	public SCMLogParser(PersistedCommitConverter converter,
+			SCM scm, ChangeSetCollection collection, SessionFactory session,
 			Project project) {
 		this.converter = converter;
 		this.scm = scm;
 		this.collection = collection;
-		this.session = session;
+		this.sessionFactory = session;
 		this.project = project;
 	}
 
@@ -40,7 +41,9 @@ public class HibernatePersistenceRunner implements PersistenceRunner {
 			try {
 				log.info("--------------------------");
 				log.info("Persisting change set " + changeSet.getId());
+				Session session = sessionFactory.openSession();
 				converter.toDomain(commitData, session, project);
+				session.close();
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
