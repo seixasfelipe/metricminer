@@ -31,7 +31,7 @@ public class Project {
 	public Project(String name, String scmUrl) {
 		this.name = name;
 		this.scmUrl = scmUrl;
-		this.configurationEntries = initialConfigurationsEntries();
+		this.configurationEntries = new ArrayList<ConfigurationEntry>();
 	}
 
 	public String getName() {
@@ -50,21 +50,23 @@ public class Project {
 		return configurationEntries;
 	}
 
-	private List<ConfigurationEntry> initialConfigurationsEntries() {
-		List<ConfigurationEntry> entries = new ArrayList<ConfigurationEntry>();
+	public void setupInitialConfigurationsEntries() {
 		String metricMinerHome = "/home/csokol/ime/tcc/MetricMinerHome";
 
-		entries.add(new ConfigurationEntry("scm",
+		configurationEntries.add(new ConfigurationEntry("scm",
 				"br.com.caelum.revolution.scm.git.GitFactory", this));
-		entries.add(new ConfigurationEntry("scm.repository", metricMinerHome
-				+ "/projects/" + this.id + "/" + this.name, this));
-		entries.add(new ConfigurationEntry("changesets",
+		configurationEntries.add(new ConfigurationEntry("scm.repository",
+				metricMinerHome + "/projects/" + this.id + "/" + this.name,
+				this));
+		configurationEntries.add(new ConfigurationEntry("changesets",
 				"br.com.caelum.revolution.changesets.AllChangeSetsFactory",
 				this));
-		entries.add(new ConfigurationEntry("build",
-				"br.com.caelum.revolution.builds.nobuild.NoBuildFactory", this));
+		configurationEntries
+				.add(new ConfigurationEntry(
+						"build",
+						"br.com.caelum.revolution.builds.nobuild.NoBuildFactory",
+						this));
 
-		return entries;
 	}
 
 	public MapConfig getMapConfig() {

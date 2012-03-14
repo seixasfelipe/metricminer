@@ -1,9 +1,13 @@
 package controller;
 
 import model.Project;
+
+import org.hibernate.SessionFactory;
+
+import br.com.caelum.revolution.executor.CommandExecutor;
 import br.com.caelum.revolution.executor.SimpleCommandExecutor;
-import br.com.caelum.revolution.persistence.runner.HibernatePersistenceRunner;
-import br.com.caelum.revolution.persistence.runner.HibernatePersistenceRunnerFactory;
+import br.com.caelum.revolution.persistence.runner.SCMLogParser;
+import br.com.caelum.revolution.persistence.runner.SCMLogParserFactory;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
@@ -15,10 +19,13 @@ public class ProjectController {
 
 	private final Result result;
 	private final ProjectDao dao;
+	private final SessionFactory sessionFactory;
 
-	public ProjectController(Result result, ProjectDao dao) {
+	public ProjectController(Result result, ProjectDao dao,
+			SessionFactory sessionFactory) {
 		this.result = result;
 		this.dao = dao;
+		this.sessionFactory = sessionFactory;
 	}
 
 	@Get("/projects/new")
@@ -39,15 +46,18 @@ public class ProjectController {
 	public void createProject(String name, String scmUrl) {
 		Project project = new Project(name, scmUrl);
 		dao.save(project);
+		project.setupInitialConfigurationsEntries();
+		dao.save(project);
 		result.redirectTo(ProjectController.class).list();
 	}
 
 	@Get("/project/{id}/parse")
 	public void parseScmLogs(Long id) {
 		Project project = dao.findProjectBy(id);
-		HibernatePersistenceRunner persistenceRunner = new HibernatePersistenceRunnerFactory()
-				.basedOn(project.getMapConfig(), dao.getSession(), project);
-		persistenceRunner.start();
+		SCMLogParser logParser = new SCMLogParserFactory().basedOn(
+				project.getMapConfig(), sessionFactory, project);
+		new Thread(new ScmLogParserThread(logParser)).start();
+		result.redirectTo(ProjectController.class).list();
 	}
 
 	@Get("/project/{id}/clone")
@@ -59,10 +69,45 @@ public class ProjectController {
 		executor.execute(
 				"mkdir -p " + metricMinerHome + "/projects/" + project.getId(),
 				"/");
-		String output = executor.execute("git clone " + project.getScmUrl(),
-				metricMinerHome + "/projects/" + project.getId());
+		new Thread(new GitCloneThread(executor, project, metricMinerHome))
+				.start();
+		result.redirectTo(ProjectController.class).list();
+	}
 
-		result.include("project", project);
-		result.include("output", output);
+	private class GitCloneThread implements Runnable {
+
+		private CommandExecutor executor;
+		private Project project;
+		private String metricMinerHome;
+
+		public GitCloneThread(CommandExecutor executor, Project project,
+				String metricMinerHome) {
+			this.executor = executor;
+			this.project = project;
+			this.metricMinerHome = metricMinerHome;
+		}
+
+		@Override
+		public void run() {
+			System.out.println("Clonning project...");
+			String output = executor.execute(
+					"git clone " + project.getScmUrl(), metricMinerHome
+							+ "/projects/" + project.getId());
+			System.out.println(output);
+		}
+	}
+
+	private class ScmLogParserThread implements Runnable {
+
+		private final SCMLogParser logParser;
+
+		public ScmLogParserThread(SCMLogParser persistenceRunner) {
+			this.logParser = persistenceRunner;
+		}
+
+		@Override
+		public void run() {
+			logParser.start();
+		}
 	}
 }
