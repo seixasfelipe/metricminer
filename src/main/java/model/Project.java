@@ -24,6 +24,7 @@ public class Project {
 	private List<ConfigurationEntry> configurationEntries;
 	@OneToMany(mappedBy = "project")
 	private List<Artifact> artifacts;
+	private ProjectStatus status;
 
 	public Project() {
 	}
@@ -32,6 +33,7 @@ public class Project {
 		this.name = name;
 		this.scmUrl = scmUrl;
 		this.configurationEntries = new ArrayList<ConfigurationEntry>();
+		this.status = ProjectStatus.AVAILABLE;
 	}
 
 	public String getName() {
