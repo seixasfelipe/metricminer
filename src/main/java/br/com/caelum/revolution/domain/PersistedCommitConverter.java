@@ -67,7 +67,7 @@ public class PersistedCommitConverter {
 
 		for (DiffData diff : data.getDiffs()) {
 			Artifact artifact = searchForPreviouslySavedArtifact(
-					diff.getName(), session);
+					diff.getName(), project, session);
 
 			if (artifact == null) {
 				artifact = new Artifact(diff.getName(), diff.getArtifactKind(),
@@ -90,6 +90,14 @@ public class PersistedCommitConverter {
 		Author author = (Author) session.createCriteria(Author.class)
 				.add(Restrictions.eq("name", name)).uniqueResult();
 		return author;
+	}
+
+	private Artifact searchForPreviouslySavedArtifact(String name,
+			Project project, Session session) {
+		Artifact artifact = (Artifact) session.createCriteria(Artifact.class)
+				.add(Restrictions.eq("name", name))
+				.add(Restrictions.eq("project", project)).uniqueResult();
+		return artifact;
 	}
 
 	private Artifact searchForPreviouslySavedArtifact(String name,

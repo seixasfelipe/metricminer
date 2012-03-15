@@ -20,12 +20,11 @@ public class SCMLogParser implements PersistenceRunner {
 	private PersistedCommitConverter converter;
 	private SCM scm;
 	private final ChangeSetCollection collection;
-	private static Logger log = Logger
-			.getLogger(SCMLogParser.class);
+	private static Logger log = Logger.getLogger(SCMLogParser.class);
 	private final Project project;
 
-	public SCMLogParser(PersistedCommitConverter converter,
-			SCM scm, ChangeSetCollection collection, SessionFactory session,
+	public SCMLogParser(PersistedCommitConverter converter, SCM scm,
+			ChangeSetCollection collection, SessionFactory session,
 			Project project) {
 		this.converter = converter;
 		this.scm = scm;
@@ -41,6 +40,8 @@ public class SCMLogParser implements PersistenceRunner {
 			try {
 				log.info("--------------------------");
 				log.info("Persisting change set " + changeSet.getId());
+				log.info("Author: " + commitData.getAuthor() + " on "
+						+ commitData.getDate());
 				Session session = sessionFactory.openSession();
 				converter.toDomain(commitData, session, project);
 				session.close();
