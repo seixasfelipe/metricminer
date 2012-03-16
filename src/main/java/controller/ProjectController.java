@@ -57,7 +57,9 @@ public class ProjectController {
 		Project project = dao.findProjectBy(id);
 		SCMLogParser logParser = new SCMLogParserFactory().basedOn(
 				project.getMapConfig(), sessionFactory, project);
-		new Thread(new ScmLogParserThread(logParser)).start();
+		new Thread(new ScmLogParserThread(logParser, project)).start();
+		project.taskStarted();
+		dao.save(project);
 		result.redirectTo(ProjectController.class).list();
 	}
 
@@ -69,6 +71,8 @@ public class ProjectController {
 		executor.execute("mkdir -p " + MetricMinerConfigs.metricMinerHome
 				+ "/projects/" + project.getId(), "/");
 		new Thread(new GitCloneThread(executor, project)).start();
+		project.taskStarted();
+		dao.save(project);
 		result.redirectTo(ProjectController.class).list();
 	}
 
@@ -85,25 +89,28 @@ public class ProjectController {
 		@Override
 		public void run() {
 			System.out.println("Clonning project...");
-			String output = executor.execute(
+			executor.execute(
 					"git clone " + project.getScmUrl(),
 					MetricMinerConfigs.metricMinerHome + "/projects/"
 							+ project.getId());
-			System.out.println(output);
+			project.taskEnded();
 		}
 	}
 
 	private class ScmLogParserThread implements Runnable {
 
 		private final SCMLogParser logParser;
+		private Project project;
 
-		public ScmLogParserThread(SCMLogParser persistenceRunner) {
-			this.logParser = persistenceRunner;
+		public ScmLogParserThread(SCMLogParser logParser, Project project) {
+			this.logParser = logParser;
+			this.project = project;
 		}
 
 		@Override
 		public void run() {
 			logParser.start();
+			project.taskEnded();
 		}
 	}
 }

@@ -16,6 +16,7 @@
 							<th>Name</th>
 							<th>SCM URL</th>
 							<th></th>
+							<th>Status</th>
 						</tr>
 					<c:forEach items="${projects}" var="project">
 						<tr>
@@ -25,6 +26,7 @@
 								<a href="<c:url value='/project/${project.id}/clone' />">Clone repository</a>
 								<a href="<c:url value='/project/${project.id}/parse' />">Parse SCM logs</a>
 							</td>
+							<td>${project.status }</td>
 						</tr>
 					</c:forEach>
 				</table>
