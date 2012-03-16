@@ -77,4 +77,20 @@ public class Project {
 			configurations.put(entry.getKey(), entry.getValue());
 		return new MapConfig(configurations);
 	}
+
+	public void taskStarted() {
+		this.status = ProjectStatus.RUNNING_TASK;
+	}
+
+	public void taskEnded() {
+		this.status = ProjectStatus.AVAILABLE;
+	}
+
+	public ProjectStatus getStatus() {
+		return status;
+	}
+
+	private enum ProjectStatus {
+		AVAILABLE, RUNNING_TASK
+	}
 }
