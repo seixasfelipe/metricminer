@@ -12,6 +12,7 @@ import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
+import config.MetricMinerConfigs;
 import dao.ProjectDao;
 
 @Resource
@@ -63,14 +64,11 @@ public class ProjectController {
 	@Get("/project/{id}/clone")
 	public void cloneRepository(Long id) {
 		Project project = dao.findProjectBy(id);
-
 		SimpleCommandExecutor executor = new SimpleCommandExecutor();
-		String metricMinerHome = "/home/csokol/ime/tcc/MetricMinerHome";
-		executor.execute(
-				"mkdir -p " + metricMinerHome + "/projects/" + project.getId(),
-				"/");
-		new Thread(new GitCloneThread(executor, project, metricMinerHome))
-				.start();
+
+		executor.execute("mkdir -p " + MetricMinerConfigs.metricMinerHome
+				+ "/projects/" + project.getId(), "/");
+		new Thread(new GitCloneThread(executor, project)).start();
 		result.redirectTo(ProjectController.class).list();
 	}
 
@@ -78,21 +76,19 @@ public class ProjectController {
 
 		private CommandExecutor executor;
 		private Project project;
-		private String metricMinerHome;
 
-		public GitCloneThread(CommandExecutor executor, Project project,
-				String metricMinerHome) {
+		public GitCloneThread(CommandExecutor executor, Project project) {
 			this.executor = executor;
 			this.project = project;
-			this.metricMinerHome = metricMinerHome;
 		}
 
 		@Override
 		public void run() {
 			System.out.println("Clonning project...");
 			String output = executor.execute(
-					"git clone " + project.getScmUrl(), metricMinerHome
-							+ "/projects/" + project.getId());
+					"git clone " + project.getScmUrl(),
+					MetricMinerConfigs.metricMinerHome + "/projects/"
+							+ project.getId());
 			System.out.println(output);
 		}
 	}
