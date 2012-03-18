@@ -24,6 +24,8 @@ public class Project {
 	private List<ConfigurationEntry> configurationEntries;
 	@OneToMany(mappedBy = "project")
 	private List<Artifact> artifacts;
+	@OneToMany(mappedBy = "project")
+	private List<Task> tasks;
 	private ProjectStatus status;
 
 	public Project() {
@@ -88,6 +90,10 @@ public class Project {
 
 	public ProjectStatus getStatus() {
 		return status;
+	}
+
+	public List<Task> getTasks() {
+		return tasks;
 	}
 
 	private enum ProjectStatus {

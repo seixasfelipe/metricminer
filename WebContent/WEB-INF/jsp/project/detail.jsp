@@ -23,6 +23,16 @@
 					</tr>
 				</c:forEach>
 			</table>
+			
+			<h3>Scheduled Tasks</h3>
+			<table>
+				<c:forEach items="${project.tasks}" var="task">
+					<tr>
+						<td class="key">${task.name}</td>
+						<td>${task.taskRunnerClass}</td>
+					</tr>
+				</c:forEach>
+			</table>
 		</section>
 		<c:import url="../import/footer.jsp" />
 	</body>

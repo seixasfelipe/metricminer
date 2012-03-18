@@ -18,12 +18,14 @@
         <property name="format_sql">false</property>
         
         <mapping class="model.ConfigurationEntry" />
+        <mapping class="model.Task" />
         <mapping class="model.Project" />
         
         <mapping class="br.com.caelum.revolution.domain.Artifact"/>  
         <mapping class="br.com.caelum.revolution.domain.Author"/>
         <mapping class="br.com.caelum.revolution.domain.Commit"/>
         <mapping class="br.com.caelum.revolution.domain.Modification"/>  
+
 
     </session-factory>
 </hibernate-configuration>
