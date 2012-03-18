@@ -1,9 +1,11 @@
 package dao;
 
 import model.Task;
+import model.TaskStatus;
 
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 
 import br.com.caelum.vraptor.ioc.Component;
 
@@ -20,9 +22,10 @@ public class TaskDao {
 		session.save(task);
 	}
 
-	public Task getNewestTask() {
+	public Task getOldestQueuedTask() {
 		return (Task) session.createCriteria(Task.class)
-				.addOrder(Order.desc("submitDate")).setMaxResults(1).list()
+				.add(Restrictions.eq("status", TaskStatus.QUEUED))
+				.addOrder(Order.asc("submitDate")).setMaxResults(1).list()
 				.get(0);
 
 	}

@@ -20,6 +20,7 @@ public class Task {
 	@SuppressWarnings({ "rawtypes" })
 	private Class runnableTaskFactoryClass;
 	private Calendar submitDate;
+	private TaskStatus status;
 
 	public Task() {
 	}
@@ -29,6 +30,7 @@ public class Task {
 		this.name = name;
 		this.runnableTaskFactoryClass = taskRunnerClass;
 		this.submitDate = new GregorianCalendar();
+		this.status = TaskStatus.QUEUED;
 	}
 
 	public String getName() {
@@ -44,4 +46,16 @@ public class Task {
 		return project;
 	}
 
+	public void start() {
+		this.status = TaskStatus.STARTED;
+	}
+
+	public void finish() {
+		this.status = TaskStatus.FINISHED;
+	}
+
+	@Override
+	public String toString() {
+		return this.name + " - " + this.status;
+	}
 }
