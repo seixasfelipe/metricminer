@@ -29,7 +29,7 @@
 				<c:forEach items="${project.tasks}" var="task">
 					<tr>
 						<td class="key">${task.name}</td>
-						<td>${task.taskRunnerClass}</td>
+						<td>${task.runnableTaskFactoryClass}</td>
 					</tr>
 				</c:forEach>
 			</table>

@@ -5,7 +5,7 @@ import java.io.InputStream;
 
 import model.Project;
 
-import org.hibernate.SessionFactory;
+import org.hibernate.Session;
 
 import br.com.caelum.revolution.changesets.ChangeSetCollection;
 import br.com.caelum.revolution.changesets.ChangeSetCollectionFactory;
@@ -19,16 +19,12 @@ import br.com.caelum.vraptor.ioc.Component;
 @Component
 public class SCMLogParserFactory {
 
-	public static void main(String[] args) {
-	}
-
-	public SCMLogParser basedOn(Config config,
-			SessionFactory sessionFactory, Project project) {
+	public SCMLogParser basedOn(Config config, Session session, Project project) {
 		SCM scm = new SCMFactory().basedOn(config);
 		ChangeSetCollection collection = new ChangeSetCollectionFactory(scm)
 				.basedOn(config);
-		return new SCMLogParser(new PersistedCommitConverter(),
-				scm, collection, sessionFactory, project);
+		return new SCMLogParser(new PersistedCommitConverter(), scm,
+				collection, session, project);
 	}
 
 	private static Config config(String[] args) {

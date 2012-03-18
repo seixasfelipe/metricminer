@@ -18,7 +18,7 @@ public class Task {
 	private Project project;
 	private String name;
 	@SuppressWarnings({ "rawtypes" })
-	private Class taskRunnerClass;
+	private Class runnableTaskFactoryClass;
 	private Calendar submitDate;
 
 	public Task() {
@@ -27,7 +27,7 @@ public class Task {
 	public Task(Project project, String name, Class taskRunnerClass) {
 		this.project = project;
 		this.name = name;
-		this.taskRunnerClass = taskRunnerClass;
+		this.runnableTaskFactoryClass = taskRunnerClass;
 		this.submitDate = new GregorianCalendar();
 	}
 
@@ -36,8 +36,12 @@ public class Task {
 	}
 
 	@SuppressWarnings({ "rawtypes" })
-	public Class getTaskRunnerClass() {
-		return taskRunnerClass;
+	public Class getRunnableTaskFactoryClass() {
+		return runnableTaskFactoryClass;
+	}
+
+	public Project getProject() {
+		return project;
 	}
 
 }

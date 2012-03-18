@@ -1,18 +1,10 @@
 package controller;
 
 import model.Project;
-
-import org.hibernate.SessionFactory;
-
-import br.com.caelum.revolution.executor.CommandExecutor;
-import br.com.caelum.revolution.executor.SimpleCommandExecutor;
-import br.com.caelum.revolution.persistence.runner.SCMLogParser;
-import br.com.caelum.revolution.persistence.runner.SCMLogParserFactory;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import config.MetricMinerConfigs;
 import dao.ProjectDao;
 
 @Resource
@@ -20,13 +12,10 @@ public class ProjectController {
 
 	private final Result result;
 	private final ProjectDao dao;
-	private final SessionFactory sessionFactory;
 
-	public ProjectController(Result result, ProjectDao dao,
-			SessionFactory sessionFactory) {
+	public ProjectController(Result result, ProjectDao dao) {
 		this.result = result;
 		this.dao = dao;
-		this.sessionFactory = sessionFactory;
 	}
 
 	@Get("/projects/new")
@@ -52,65 +41,4 @@ public class ProjectController {
 		result.redirectTo(ProjectController.class).list();
 	}
 
-	@Get("/project/{id}/parse")
-	public void parseScmLogs(Long id) {
-		Project project = dao.findProjectBy(id);
-		SCMLogParser logParser = new SCMLogParserFactory().basedOn(
-				project.getMapConfig(), sessionFactory, project);
-		new Thread(new ScmLogParserThread(logParser, project)).start();
-		project.taskStarted();
-		dao.save(project);
-		result.redirectTo(ProjectController.class).list();
-	}
-
-	@Get("/project/{id}/clone")
-	public void cloneRepository(Long id) {
-		Project project = dao.findProjectBy(id);
-		SimpleCommandExecutor executor = new SimpleCommandExecutor();
-
-		executor.execute("mkdir -p " + MetricMinerConfigs.metricMinerHome
-				+ "/projects/" + project.getId(), "/");
-		new Thread(new GitCloneThread(executor, project)).start();
-		project.taskStarted();
-		dao.save(project);
-		result.redirectTo(ProjectController.class).list();
-	}
-
-	private class GitCloneThread implements Runnable {
-
-		private CommandExecutor executor;
-		private Project project;
-
-		public GitCloneThread(CommandExecutor executor, Project project) {
-			this.executor = executor;
-			this.project = project;
-		}
-
-		@Override
-		public void run() {
-			System.out.println("Clonning project...");
-			executor.execute(
-					"git clone " + project.getScmUrl(),
-					MetricMinerConfigs.metricMinerHome + "/projects/"
-							+ project.getId());
-			project.taskEnded();
-		}
-	}
-
-	private class ScmLogParserThread implements Runnable {
-
-		private final SCMLogParser logParser;
-		private Project project;
-
-		public ScmLogParserThread(SCMLogParser logParser, Project project) {
-			this.logParser = logParser;
-			this.project = project;
-		}
-
-		@Override
-		public void run() {
-			logParser.start();
-			project.taskEnded();
-		}
-	}
 }

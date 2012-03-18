@@ -23,10 +23,10 @@
 							<td><a href="<c:url value="/projects/${project.id}" />">${project.name}</a></td>
 							<td>${project.scmUrl}</td>
 							<td>
-								<a href="<c:url value='/tasks/addTask/tasks.GitCloneTask/clone SCM/${project.id}' />">
+								<a href="<c:url value='/tasks/addTask/tasks.GitCloneTaskFactory/clone SCM/${project.id}' />">
 									Clone repository
 								</a>
-								<a href="<c:url value='/tasks/addTask/tasks.ParseGitLogTask/parse SCM/${project.id}' />">
+								<a href="<c:url value='/tasks/addTask/tasks.ParseGitLogTaskFactory/parse SCM/${project.id}' />">
 									Parse SCM logs
 								</a>
 							</td>
