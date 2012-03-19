@@ -16,7 +16,6 @@
 							<th>Name</th>
 							<th>SCM URL</th>
 							<th></th>
-							<th>Status</th>
 						</tr>
 					<c:forEach items="${projects}" var="project">
 						<tr>
@@ -30,7 +29,6 @@
 									Parse SCM logs
 								</a>
 							</td>
-							<td>${project.status }</td>
 						</tr>
 					</c:forEach>
 				</table>
