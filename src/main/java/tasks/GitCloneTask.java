@@ -22,7 +22,7 @@ public class GitCloneTask implements RunnableTask {
 		String basePath = MetricMinerConfigs.metricMinerHome + "/projects/"
 				+ project.getId();
 		log.info("Executing command: " + command);
-		log.info("With baspath: " + basePath);
+		log.info("With basepath: " + basePath);
 		executor.execute("mkdir -p " + basePath, "/");
 		String output = executor.execute(command, basePath);
 		log.info("Git clone output: ");

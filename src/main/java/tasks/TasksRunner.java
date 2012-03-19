@@ -5,6 +5,7 @@ import model.Task;
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.classic.Session;
 
 import dao.TaskDao;
 
@@ -28,10 +29,12 @@ public class TasksRunner {
 			try {
 				RunnableTaskFactory runnableTaskFactory = (RunnableTaskFactory) task
 						.getRunnableTaskFactoryClass().newInstance();
-				runnableTaskFactory.build(task.getProject(),
-						sessionFactory.openSession()).run();
+				Session session = sessionFactory.openSession();
+				session.beginTransaction();
+				runnableTaskFactory.build(task.getProject(), session).run();
 				task.finish();
 				taskDao.update(task);
+				session.getTransaction().commit();
 
 			} catch (Exception e) {
 				e.printStackTrace();
