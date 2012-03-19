@@ -1,6 +1,8 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -26,7 +28,6 @@ public class Project {
 	private List<Artifact> artifacts;
 	@OneToMany(mappedBy = "project")
 	private List<Task> tasks;
-	private ProjectStatus status;
 
 	public Project() {
 	}
@@ -35,7 +36,6 @@ public class Project {
 		this.name = name;
 		this.scmUrl = scmUrl;
 		this.configurationEntries = new ArrayList<ConfigurationEntry>();
-		this.status = ProjectStatus.AVAILABLE;
 	}
 
 	public String getName() {
@@ -80,23 +80,13 @@ public class Project {
 		return new MapConfig(configurations);
 	}
 
-	public void taskStarted() {
-		this.status = ProjectStatus.RUNNING_TASK;
-	}
-
-	public void taskEnded() {
-		this.status = ProjectStatus.AVAILABLE;
-	}
-
-	public ProjectStatus getStatus() {
-		return status;
-	}
-
 	public List<Task> getTasks() {
+		Collections.sort(tasks, new Comparator<Task>() {
+			public int compare(Task o1, Task o2) {
+				return o1.compareTo(o2);
+			};
+		});
 		return tasks;
 	}
 
-	private enum ProjectStatus {
-		AVAILABLE, RUNNING_TASK
-	}
 }

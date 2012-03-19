@@ -30,6 +30,8 @@
 					<tr>
 						<td class="key">${task.name}</td>
 						<td>${task.runnableTaskFactoryClass}</td>
+						<td>${task.status}</td>
+						<td>${task.submitDate.time}</td>
 					</tr>
 				</c:forEach>
 			</table>

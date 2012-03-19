@@ -27,7 +27,6 @@ public class GitCloneTask implements RunnableTask {
 		String output = executor.execute(command, basePath);
 		log.info("Git clone output: ");
 		log.info(output);
-		project.taskEnded();
 	}
 
 }

@@ -8,8 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+@SuppressWarnings("rawtypes")
 @Entity
-public class Task {
+public class Task implements Comparable {
 
 	@Id
 	@GeneratedValue
@@ -17,7 +18,6 @@ public class Task {
 	@ManyToOne
 	private Project project;
 	private String name;
-	@SuppressWarnings({ "rawtypes" })
 	private Class runnableTaskFactoryClass;
 	private Calendar submitDate;
 	private TaskStatus status;
@@ -54,12 +54,16 @@ public class Task {
 		this.status = TaskStatus.FINISHED;
 	}
 
-	@Override
-	public String toString() {
-		return this.name + " - " + this.status;
+	public TaskStatus getStatus() {
+		return status;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public Calendar getSubmitDate() {
+		return submitDate;
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		return ((Task) o).getSubmitDate().compareTo(this.submitDate);
 	}
 }

@@ -1,5 +1,7 @@
 package dao;
 
+import java.util.List;
+
 import model.Task;
 import model.TaskStatus;
 
@@ -23,10 +25,12 @@ public class TaskDao {
 	}
 
 	public Task getOldestQueuedTask() {
-		return (Task) session.createCriteria(Task.class)
+		List tasks = session.createCriteria(Task.class)
 				.add(Restrictions.eq("status", TaskStatus.QUEUED))
-				.addOrder(Order.asc("submitDate")).setMaxResults(1).list()
-				.get(0);
+				.addOrder(Order.asc("submitDate")).setMaxResults(1).list();
+		if (tasks.isEmpty())
+			return null;
+		return (Task) tasks.get(0);
 
 	}
 
