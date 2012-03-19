@@ -10,11 +10,12 @@ import dao.TaskDao;
 
 public class TasksRunner {
 	public static void main(String[] args) throws InterruptedException {
-		SessionFactory sessionFactory = new Configuration().configure()
-				.buildSessionFactory();
-		TaskDao taskDao = new TaskDao(sessionFactory.openSession());
+
 		Logger log = Logger.getLogger(TasksRunner.class);
 		while (true) {
+			SessionFactory sessionFactory = new Configuration().configure()
+					.buildSessionFactory();
+			TaskDao taskDao = new TaskDao(sessionFactory.openSession());
 			Task task = taskDao.getOldestQueuedTask();
 			if (task == null) {
 				Thread.sleep(5000);

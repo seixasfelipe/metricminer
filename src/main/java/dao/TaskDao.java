@@ -6,6 +6,7 @@ import model.Task;
 import model.TaskStatus;
 
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 
@@ -35,7 +36,8 @@ public class TaskDao {
 	}
 
 	public void update(Task task) {
+		Transaction tx = session.beginTransaction();
 		session.saveOrUpdate(task);
-		session.flush();
+		tx.commit();
 	}
 }
