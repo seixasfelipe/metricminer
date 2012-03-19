@@ -14,15 +14,14 @@ public class TasksRunner {
 		TaskDao taskDao = new TaskDao(sessionFactory.openSession());
 		Task task = taskDao.getOldestQueuedTask();
 		task.start();
-		taskDao.save(task);
-		System.out.println(task);
+		taskDao.update(task);
 		try {
 			RunnableTaskFactory runnableTaskFactory = (RunnableTaskFactory) task
 					.getRunnableTaskFactoryClass().newInstance();
 			runnableTaskFactory.build(task.getProject(),
 					sessionFactory.openSession()).run();
 			task.finish();
-			taskDao.save(task);
+			taskDao.update(task);
 			System.out.println(task);
 		} catch (Exception e) {
 			e.printStackTrace();

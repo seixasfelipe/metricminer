@@ -29,4 +29,9 @@ public class TaskDao {
 				.get(0);
 
 	}
+
+	public void update(Task task) {
+		session.saveOrUpdate(task);
+		session.flush();
+	}
 }

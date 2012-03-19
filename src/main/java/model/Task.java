@@ -58,4 +58,8 @@ public class Task {
 	public String toString() {
 		return this.name + " - " + this.status;
 	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 }
