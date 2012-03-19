@@ -32,7 +32,6 @@ public class SCMLogParser implements PersistenceRunner {
 	}
 
 	public void start() {
-		// persistence.initMechanism();
 		for (ChangeSet changeSet : collection.get()) {
 			CommitData commitData = scm.detail(changeSet.getId());
 			try {
