@@ -39,6 +39,8 @@ public class ProjectController {
 	public void createProject(Project project) {
 		Project completeProject = new Project(project);
 		dao.save(completeProject);
+		completeProject.setupInitialConfigurationsEntries();
+		dao.save(completeProject);
 		result.redirectTo(ProjectController.class).list();
 	}
 
