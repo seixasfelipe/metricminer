@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import tasks.GitCloneTaskFactory;
+import tasks.ParseGitLogTaskFactory;
 import br.com.caelum.revolution.config.MapConfig;
 import br.com.caelum.revolution.domain.Artifact;
 import config.MetricMinerConfigs;
@@ -40,6 +42,17 @@ public class Project {
 		this.configurationEntries = new ArrayList<ConfigurationEntry>();
 	}
 
+	public Project(Project baseProject) {
+		this.name = baseProject.getName();
+		this.scmUrl = baseProject.getScmUrl();
+		this.scmRootDirectoryName = baseProject.getScmRootDirectoryName();
+		this.configurationEntries = new ArrayList<ConfigurationEntry>();
+		this.setupInitialConfigurationsEntries();
+		this.tasks = new ArrayList<Task>();
+		tasks.add(new Task(this, "Clone SCM", GitCloneTaskFactory.class));
+		tasks.add(new Task(this, "Parse SCM logs", ParseGitLogTaskFactory.class));
+	}
+
 	public String getName() {
 		return name;
 	}
@@ -57,7 +70,6 @@ public class Project {
 	}
 
 	public void setupInitialConfigurationsEntries() {
-		this.configurationEntries = new ArrayList<ConfigurationEntry>();
 		String metricMinerHome = MetricMinerConfigs.metricMinerHome;
 
 		configurationEntries.add(new ConfigurationEntry("scm",

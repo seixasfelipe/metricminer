@@ -4,6 +4,7 @@ import java.util.List;
 
 import model.ConfigurationEntry;
 import model.Project;
+import model.Task;
 
 import org.hibernate.Session;
 
@@ -21,6 +22,9 @@ public class ProjectDao {
 		session.save(project);
 		for (ConfigurationEntry entry : project.getConfigurationEntries())
 			session.save(entry);
+		for (Task task : project.getTasks()) {
+			session.save(task);
+		}
 	}
 
 	public List<Project> listAll() {
