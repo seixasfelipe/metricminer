@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 
 import br.com.caelum.revolution.config.MapConfig;
 import br.com.caelum.revolution.domain.Artifact;
+import config.MetricMinerConfigs;
 
 @Entity
 public class Project {
@@ -28,6 +29,7 @@ public class Project {
 	private List<Artifact> artifacts;
 	@OneToMany(mappedBy = "project")
 	private List<Task> tasks;
+	private String scmRootDirectoryName;
 
 	public Project() {
 	}
@@ -55,7 +57,8 @@ public class Project {
 	}
 
 	public void setupInitialConfigurationsEntries() {
-		String metricMinerHome = "/home/csokol/ime/tcc/MetricMinerHome";
+		this.configurationEntries = new ArrayList<ConfigurationEntry>();
+		String metricMinerHome = MetricMinerConfigs.metricMinerHome;
 
 		configurationEntries.add(new ConfigurationEntry("scm",
 				"br.com.caelum.revolution.scm.git.GitFactory", this));
@@ -87,6 +90,22 @@ public class Project {
 			};
 		});
 		return tasks;
+	}
+
+	public String getScmRootDirectoryName() {
+		return scmRootDirectoryName;
+	}
+
+	public void setScmRootDirectoryName(String scmRootDirectoryName) {
+		this.scmRootDirectoryName = scmRootDirectoryName;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setScmUrl(String scmUrl) {
+		this.scmUrl = scmUrl;
 	}
 
 }

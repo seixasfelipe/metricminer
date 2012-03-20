@@ -12,8 +12,9 @@
 	<body>
 		<c:import url="../import/header.jsp" />
 		<form method="post" action='<c:url value="/projects"></c:url>' '>
-			<label for="name">Name: </label><input type="text" name="name" /><br />
-			<label for="scmUrl">Git url: </label><input type="text" name="scmUrl" /><br />
+			<label for="project.name">Name: </label><input type="text" name="project.name" /><br />
+			<label for="project.scmUrl">Git url: </label><input type="text" name="project.scmUrl" /><br />
+			<label for="project.scmRootDirectoryName">Git root directory name: </label><input type="text" name="project.scmRootDirectoryName" /><br />
 			<input type="submit" value="Save" />
 		</form>
 		<c:import url="../import/footer.jsp" />

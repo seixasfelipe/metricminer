@@ -33,9 +33,7 @@ public class ProjectController {
 	}
 
 	@Post("/projects")
-	public void createProject(String name, String scmUrl) {
-		Project project = new Project(name, scmUrl);
-		dao.save(project);
+	public void createProject(Project project) {
 		project.setupInitialConfigurationsEntries();
 		dao.save(project);
 		result.redirectTo(ProjectController.class).list();
