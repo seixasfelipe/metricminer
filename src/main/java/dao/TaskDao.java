@@ -25,10 +25,10 @@ public class TaskDao {
 		session.save(task);
 	}
 
-	public Task getOldestQueuedTask() {
+	public Task getFirstQueuedTask() {
 		List tasks = session.createCriteria(Task.class)
 				.add(Restrictions.eq("status", TaskStatus.QUEUED))
-				.addOrder(Order.asc("submitDate")).setMaxResults(1).list();
+				.addOrder(Order.asc("position")).setMaxResults(1).list();
 		if (tasks.isEmpty())
 			return null;
 		return (Task) tasks.get(0);

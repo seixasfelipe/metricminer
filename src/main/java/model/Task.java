@@ -21,16 +21,19 @@ public class Task implements Comparable {
 	private Class runnableTaskFactoryClass;
 	private Calendar submitDate;
 	private TaskStatus status;
+	private Integer position;
 
 	public Task() {
 	}
 
-	public Task(Project project, String name, Class runnableTaskFactoryClass) {
+	public Task(Project project, String name, Class runnableTaskFactoryClass,
+			Integer position) {
 		this.project = project;
 		this.name = name;
 		this.runnableTaskFactoryClass = runnableTaskFactoryClass;
 		this.submitDate = new GregorianCalendar();
 		this.status = TaskStatus.QUEUED;
+		this.position = position;
 	}
 
 	public String getName() {

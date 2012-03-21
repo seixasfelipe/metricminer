@@ -2,7 +2,6 @@ package controller;
 
 import model.Project;
 import model.Task;
-import tasks.GitCloneTask;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
@@ -29,19 +28,13 @@ public class TaskController {
 		try {
 			taskClass = Class.forName(className);
 			Project project = projectDao.findProjectBy(projectId);
-			taskDao.save(new Task(project, taskName, taskClass));
+			taskDao.save(new Task(project, taskName, taskClass, project
+					.taskCount()));
 			result.redirectTo(ProjectController.class).detail(projectId);
 
 		} catch (ClassNotFoundException e) {
 			result.notFound();
 		}
-	}
-
-	@Get("/tasks/cloneScm/{projectId}")
-	public void addParseLogTaskTo(Long projectId) {
-		Project project = projectDao.findProjectBy(projectId);
-		taskDao.save(new Task(project, "SCM clone", GitCloneTask.class));
-		result.redirectTo(ProjectController.class).detail(projectId);
 	}
 
 }

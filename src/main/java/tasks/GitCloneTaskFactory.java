@@ -4,12 +4,14 @@ import model.Project;
 
 import org.hibernate.Session;
 
-import br.com.caelum.revolution.executor.SimpleCommandExecutor;
+import br.com.caelum.revolution.scm.git.Git;
+import br.com.caelum.revolution.scm.git.GitFactory;
 
 public class GitCloneTaskFactory implements RunnableTaskFactory {
 
 	@Override
 	public RunnableTask build(Project project, Session session) {
-		return new GitCloneTask(new SimpleCommandExecutor(), project);
+		Git git = (Git) new GitFactory().build(project.getMapConfig());
+		return new GitCloneTask(git, project);
 	}
 }

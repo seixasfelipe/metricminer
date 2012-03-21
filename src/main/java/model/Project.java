@@ -48,8 +48,10 @@ public class Project {
 		this.scmRootDirectoryName = baseProject.getScmRootDirectoryName();
 		this.configurationEntries = new ArrayList<ConfigurationEntry>();
 		this.tasks = new ArrayList<Task>();
-		tasks.add(new Task(this, "Clone SCM", GitCloneTaskFactory.class));
-		tasks.add(new Task(this, "Parse SCM logs", ParseGitLogTaskFactory.class));
+		tasks.add(new Task(this, "Clone SCM", GitCloneTaskFactory.class,
+				taskCount()));
+		tasks.add(new Task(this, "Parse SCM logs",
+				ParseGitLogTaskFactory.class, taskCount()));
 	}
 
 	public String getName() {
@@ -117,6 +119,10 @@ public class Project {
 
 	public void setScmUrl(String scmUrl) {
 		this.scmUrl = scmUrl;
+	}
+
+	public Integer taskCount() {
+		return this.tasks.size();
 	}
 
 }

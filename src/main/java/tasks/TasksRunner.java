@@ -17,7 +17,7 @@ public class TasksRunner {
 			SessionFactory sessionFactory = new Configuration().configure()
 					.buildSessionFactory();
 			TaskDao taskDao = new TaskDao(sessionFactory.openSession());
-			Task task = taskDao.getOldestQueuedTask();
+			Task task = taskDao.getFirstQueuedTask();
 			if (task == null) {
 				Thread.sleep(5000);
 				log.info("No tasks to run, sleeping for 5000 msec");
