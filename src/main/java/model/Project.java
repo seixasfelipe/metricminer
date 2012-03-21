@@ -47,7 +47,6 @@ public class Project {
 		this.scmUrl = baseProject.getScmUrl();
 		this.scmRootDirectoryName = baseProject.getScmRootDirectoryName();
 		this.configurationEntries = new ArrayList<ConfigurationEntry>();
-		this.setupInitialConfigurationsEntries();
 		this.tasks = new ArrayList<Task>();
 		tasks.add(new Task(this, "Clone SCM", GitCloneTaskFactory.class));
 		tasks.add(new Task(this, "Parse SCM logs", ParseGitLogTaskFactory.class));
