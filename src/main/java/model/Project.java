@@ -76,8 +76,8 @@ public class Project {
 		configurationEntries.add(new ConfigurationEntry("scm",
 				"br.com.caelum.revolution.scm.git.GitFactory", this));
 		configurationEntries.add(new ConfigurationEntry("scm.repository",
-				metricMinerHome + "/projects/" + this.id + "/" + this.name,
-				this));
+				metricMinerHome + "/projects/" + this.id + "/"
+						+ this.scmRootDirectoryName, this));
 		configurationEntries.add(new ConfigurationEntry("changesets",
 				"br.com.caelum.revolution.changesets.AllChangeSetsFactory",
 				this));
