@@ -7,22 +7,26 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.classic.Session;
 
+import br.com.caelum.vraptor.ioc.PrototypeScoped;
+import br.com.caelum.vraptor.tasks.scheduler.Scheduled;
+
 import dao.TaskDao;
 
-public class TasksRunner {
-	public static void main(String[] args) throws InterruptedException {
+@PrototypeScoped
+@Scheduled(cron = "0 0/1 * * * ?")
+public class TasksRunner implements br.com.caelum.vraptor.tasks.Task {
 
-		Logger log = Logger.getLogger(TasksRunner.class);
-		while (true) {
-			SessionFactory sessionFactory = new Configuration().configure()
-					.buildSessionFactory();
-			TaskDao taskDao = new TaskDao(sessionFactory.openSession());
-			Task task = taskDao.getFirstQueuedTask();
-			if (task == null) {
-				Thread.sleep(5000);
-				log.info("No tasks to run, sleeping for 5000 msec");
-				continue;
-			}
+	private static Logger log = Logger.getLogger(TasksRunner.class);
+
+	@Override
+	public void execute() {
+
+		SessionFactory sessionFactory = new Configuration().configure()
+				.buildSessionFactory();
+		TaskDao taskDao = new TaskDao(sessionFactory.openSession());
+		Task task = taskDao.getFirstQueuedTask();
+
+		if (task != null) {
 			log.info("Starting task: " + task.getName());
 			task.start();
 			taskDao.update(task);
@@ -37,7 +41,7 @@ public class TasksRunner {
 				session.getTransaction().commit();
 
 			} catch (Exception e) {
-				e.printStackTrace();
+				log.error("error when running a task", e);
 			}
 		}
 	}
