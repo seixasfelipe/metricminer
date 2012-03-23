@@ -5,7 +5,6 @@ import model.Project;
 import org.apache.log4j.Logger;
 
 import br.com.caelum.revolution.scm.git.Git;
-import config.MetricMinerConfigs;
 
 public class GitCloneTask implements RunnableTask {
 	private Project project;
@@ -18,8 +17,7 @@ public class GitCloneTask implements RunnableTask {
 	}
 
 	public void run() {
-		String localPath = MetricMinerConfigs.metricMinerHome + "/projects/"
-				+ project.getId();
+		String localPath = project.getLocalPath();
 		log.info("Clonning git repo " + project.getScmUrl() + "to " + localPath);
 
 		String output = git.clone(project.getScmUrl(), localPath);

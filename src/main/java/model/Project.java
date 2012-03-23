@@ -13,6 +13,7 @@ import javax.persistence.OneToMany;
 
 import tasks.GitCloneTaskFactory;
 import tasks.ParseGitLogTaskFactory;
+import tasks.RemoveSourceDirectoryTaskFactory;
 import br.com.caelum.revolution.config.MapConfig;
 import br.com.caelum.revolution.domain.Artifact;
 import config.MetricMinerConfigs;
@@ -52,6 +53,8 @@ public class Project {
 				taskCount()));
 		tasks.add(new Task(this, "Parse SCM logs",
 				ParseGitLogTaskFactory.class, taskCount()));
+		tasks.add(new Task(this, "Remove source code directory",
+				RemoveSourceDirectoryTaskFactory.class, taskCount()));
 	}
 
 	public String getName() {
@@ -125,4 +128,7 @@ public class Project {
 		return this.tasks.size();
 	}
 
+	public String getLocalPath() {
+		return MetricMinerConfigs.metricMinerHome + "/projects/" + this.id;
+	}
 }
