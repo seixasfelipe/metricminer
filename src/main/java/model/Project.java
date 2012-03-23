@@ -125,4 +125,7 @@ public class Project {
 		return this.tasks.size();
 	}
 
+	public String getLocalPath() {
+		return MetricMinerConfigs.metricMinerHome + "/projects/" + this.id;
+	}
 }
