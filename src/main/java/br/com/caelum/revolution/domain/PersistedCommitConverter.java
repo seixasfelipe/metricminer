@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 import model.Project;
+import model.SourceCode;
 
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -14,41 +15,6 @@ import br.com.caelum.revolution.scm.CommitData;
 import br.com.caelum.revolution.scm.DiffData;
 
 public class PersistedCommitConverter {
-
-	public Commit toDomain(CommitData data, Session session)
-			throws ParseException {
-
-		Author author = searchForPreviouslySavedAuthor(data.getAuthor(),
-				session);
-		if (author == null) {
-			author = new Author(data.getAuthor(), data.getEmail());
-			session.save(author);
-		}
-
-		Commit commit = new Commit(data.getCommitId(), author,
-				convertDate(data), data.getMessage(), data.getDiff(),
-				data.getPriorCommit());
-		session.save(commit);
-
-		for (DiffData diff : data.getDiffs()) {
-			Artifact artifact = searchForPreviouslySavedArtifact(
-					diff.getName(), session);
-
-			if (artifact == null) {
-				artifact = new Artifact(diff.getName(), diff.getArtifactKind());
-				session.save(artifact);
-			}
-
-			Modification modification = new Modification(diff.getDiff(),
-					commit, artifact, diff.getModificationKind());
-			artifact.addModification(modification);
-			commit.addModification(modification);
-			commit.addArtifact(artifact);
-			session.save(modification);
-		}
-
-		return commit;
-	}
 
 	public Commit toDomain(CommitData data, Session session, Project project)
 			throws ParseException {
@@ -81,6 +47,15 @@ public class PersistedCommitConverter {
 			commit.addModification(modification);
 			commit.addArtifact(artifact);
 			session.save(modification);
+
+			if (artifact.getKind() != ArtifactKind.BINARY) {
+				SourceCode sourceCode = new SourceCode(artifact, commit,
+						diff.getModifedSource());
+				artifact.addSource(sourceCode);
+				commit.addSource(sourceCode);
+				session.save(sourceCode);
+			}
+
 		}
 
 		return commit;

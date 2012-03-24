@@ -88,6 +88,7 @@ public class Git implements SCM {
 			parsedCommit.setPriorCommit(priorCommit.trim());
 
 			for (DiffData diffData : diffParser.parse(parsedCommit.getDiff())) {
+				diffData.setModifedSource(sourceOf(id, diffData.getName()));
 				parsedCommit.addDiff(diffData);
 			}
 

@@ -9,7 +9,8 @@ public class DiffData {
 	private String diff;
 	private ModificationKind modificationKind;
 	private ArtifactKind artifactKind;
-	
+	private String modifedSource;
+
 	public DiffData(String name, String diff,
 			ModificationKind modificationKind, ArtifactKind artifactKind) {
 		this.name = name;
@@ -17,30 +18,45 @@ public class DiffData {
 		this.modificationKind = modificationKind;
 		this.artifactKind = artifactKind;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getDiff() {
 		return diff;
 	}
+
 	public void setDiff(String diff) {
 		this.diff = diff;
 	}
+
 	public ModificationKind getModificationKind() {
 		return modificationKind;
 	}
+
 	public void setModificationKind(ModificationKind modificationKind) {
 		this.modificationKind = modificationKind;
 	}
+
 	public ArtifactKind getArtifactKind() {
 		return artifactKind;
 	}
+
 	public void setArtifactKind(ArtifactKind artifactKind) {
 		this.artifactKind = artifactKind;
 	}
-	
-	
+
+	public void setModifedSource(String sourceCode) {
+		this.modifedSource = sourceCode;
+	}
+
+	public String getModifedSource() {
+		return modifedSource;
+	}
+
 }

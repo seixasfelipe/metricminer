@@ -14,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import model.Project;
+import model.SourceCode;
 
 @Entity
 public class Artifact {
@@ -30,9 +31,12 @@ public class Artifact {
 	private List<Modification> modifications;
 	@ManyToOne
 	private Project project;
+	@OneToMany(mappedBy = "artifact")
+	private List<SourceCode> sources;
 
 	public Artifact() {
 		modifications = new ArrayList<Modification>();
+		sources = new ArrayList<SourceCode>();
 	}
 
 	public Artifact(String name, ArtifactKind kind) {
@@ -79,6 +83,10 @@ public class Artifact {
 
 	public List<Modification> getModifications() {
 		return modifications;
+	}
+
+	public void addSource(SourceCode source) {
+		sources.add(source);
 	}
 
 }

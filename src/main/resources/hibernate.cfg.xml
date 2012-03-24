@@ -25,6 +25,7 @@
         <mapping class="model.ConfigurationEntry" />
         <mapping class="model.Task" />
         <mapping class="model.Project" />
+        <mapping class="model.SourceCode" />
         
         <mapping class="br.com.caelum.revolution.domain.Artifact"/>  
         <mapping class="br.com.caelum.revolution.domain.Author"/>

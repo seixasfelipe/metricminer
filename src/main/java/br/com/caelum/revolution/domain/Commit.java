@@ -12,28 +12,32 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
-import org.hibernate.annotations.Type;
+import model.SourceCode;
 
+import org.hibernate.annotations.Type;
 
 @Entity
 public class Commit {
-	@Id @GeneratedValue
+	@Id
+	@GeneratedValue
 	private int id;
-	
+
 	private String commitId;
 	@ManyToOne
 	private Author author;
 	private Calendar date;
-	@Type(type="text")
+	@Type(type = "text")
 	private String message;
-	@Type(type="text")
+	@Type(type = "text")
 	private String diff;
-	@ManyToMany(cascade=CascadeType.ALL)
+	@ManyToMany(cascade = CascadeType.ALL)
 	private List<Artifact> artifacts;
-	@OneToMany(mappedBy="commit", cascade=CascadeType.ALL)
+	@OneToMany(mappedBy = "commit", cascade = CascadeType.ALL)
 	private List<Modification> modifications;
 	private String priorCommitId;
-	
+	@OneToMany(mappedBy = "commit")
+	private List<SourceCode> sources;
+
 	public Commit(String commitId, Author author, Calendar date,
 			String message, String diff, String priorCommitId) {
 		this();
@@ -48,8 +52,9 @@ public class Commit {
 	public Commit() {
 		this.artifacts = new ArrayList<Artifact>();
 		this.modifications = new ArrayList<Modification>();
+		this.sources = new ArrayList<SourceCode>();
 	}
-	
+
 	public String getCommitId() {
 		return commitId;
 	}
@@ -95,7 +100,7 @@ public class Commit {
 	}
 
 	public void addArtifact(Artifact artifact) {
-		if(artifacts == null) {
+		if (artifacts == null) {
 			artifacts = new ArrayList<Artifact>();
 		}
 		artifacts.add(artifact);
@@ -114,12 +119,16 @@ public class Commit {
 		modifications.add(modification);
 	}
 
-	public String  getPriorCommitId() {
+	public String getPriorCommitId() {
 		return priorCommitId;
 	}
 
 	public void setPriorCommit(String priorCommitId) {
 		this.priorCommitId = priorCommitId;
+	}
+
+	public void addSource(SourceCode source) {
+		sources.add(source);
 	}
 
 }
