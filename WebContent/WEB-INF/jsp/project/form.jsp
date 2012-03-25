@@ -22,10 +22,21 @@
 				
 				<div class="block_content">
 					<form method="post" action='<c:url value="/projects"></c:url>' '>
-						<label for="project.name">Name: </label><input type="text" name="project.name" /><br />
-						<label for="project.scmUrl">Git url: </label><input type="text" name="project.scmUrl" /><br />
-						<label for="project.scmRootDirectoryName">Git root directory name: </label><input type="text" name="project.scmRootDirectoryName" /><br />
-						<input type="submit" value="Save" />
+						<p>
+							<label for="project.name">Name: </label> <br />
+							<input type="text" class="text small" name="project.name" />
+						</p>
+						<p>
+							<label for="project.scmUrl">Git url: </label><br />
+							<input type="text" class="text small" name="project.scmUrl" />
+						</p>
+						<p>
+							<label for="project.scmRootDirectoryName">Git root directory name: </label><br />
+							<input type="text" class="text small" name="project.scmRootDirectoryName" />
+						</p>
+						<p>
+							<input type="submit" class="submit small" value="Save" />
+						</p>
 					</form>
 				</div>		<!-- .block_content ends -->
 				<div class="bendl"></div>
