@@ -22,21 +22,12 @@
 				</div>		<!-- .block_head ends -->
 				
 				<div class="block_content">
-					<h3>Configurations</h3>
-					<table>
-						<c:forEach items="${project.configurationEntries}" var="configurationEntry">
-							<tr>
-								<td class="key">${configurationEntry.key}</td>
-								<td>${configurationEntry.value}</td>
-							</tr>
-						</c:forEach>
-					</table>
-					
 					<h3>Scheduled Tasks</h3>
 					<table>
 						<c:forEach items="${project.tasks}" var="task">
 							<tr>
-								<td class="key">${task.name}</td>
+								<td>#${task.position}</td>
+								<td>${task.name}</td>
 								<td>${task.runnableTaskFactoryClass}</td>
 								<td>${task.status}</td>
 								<td>${task.submitDate.time}</td>

@@ -67,6 +67,10 @@ public class Task implements Comparable {
 
 	@Override
 	public int compareTo(Object o) {
-		return ((Task) o).getSubmitDate().compareTo(this.submitDate);
+		return ((Task) o).getPosition().compareTo(this.position);
+	}
+
+	public Integer getPosition() {
+		return position;
 	}
 }
