@@ -35,12 +35,15 @@ public class Project {
 	private String scmRootDirectoryName;
 
 	public Project() {
+		this.configurationEntries = new ArrayList<ConfigurationEntry>();
+		this.tasks = new ArrayList<Task>();
 	}
 
 	public Project(String name, String scmUrl) {
 		this.name = name;
 		this.scmUrl = scmUrl;
 		this.configurationEntries = new ArrayList<ConfigurationEntry>();
+		this.tasks = new ArrayList<Task>();
 	}
 
 	public Project(Project baseProject) {
