@@ -1,5 +1,6 @@
 package model;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,7 +13,7 @@ public class ConfigurationEntry {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.PERSIST)
 	private Project project;
 	@Column(name = "entry_key")
 	private String key;

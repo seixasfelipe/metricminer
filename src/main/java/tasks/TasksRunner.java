@@ -12,21 +12,26 @@ import br.com.caelum.vraptor.tasks.scheduler.Scheduled;
 import dao.TaskDao;
 
 @PrototypeScoped
-@Scheduled(cron = "0 0/1 * * * ?")
+@Scheduled(cron = "0/30 * * * * ?")
 public class TasksRunner implements br.com.caelum.vraptor.tasks.Task {
 
 	private static Logger log = Logger.getLogger(TasksRunner.class);
 
+	private SessionFactory sessionFactory;
+	private TaskDao taskDao;
+
 	@Override
 	public void execute() {
-
 		SessionFactory sessionFactory = new Configuration().configure()
 				.buildSessionFactory();
 		Session daoSession = sessionFactory.openSession();
 		TaskDao taskDao = new TaskDao(daoSession);
 		Task task = taskDao.getFirstQueuedTask();
-
 		if (task != null) {
+			if (!task.isDependenciesFinished()) {
+				log.info("Waiting for task to finish...");
+				return;
+			}
 			log.info("Starting task: " + task.getName());
 			task.start();
 			taskDao.update(task);
@@ -39,7 +44,6 @@ public class TasksRunner implements br.com.caelum.vraptor.tasks.Task {
 				task.finish();
 				taskDao.update(task);
 				taskSession.getTransaction().commit();
-				taskSession.close();
 
 			} catch (Exception e) {
 				task.fail();

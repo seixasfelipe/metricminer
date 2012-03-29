@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -26,11 +27,11 @@ public class Project {
 	private Long id;
 	private String name;
 	private String scmUrl;
-	@OneToMany(mappedBy = "project")
+	@OneToMany(mappedBy = "project", cascade = CascadeType.PERSIST)
 	private List<ConfigurationEntry> configurationEntries;
-	@OneToMany(mappedBy = "project")
+	@OneToMany(mappedBy = "project", cascade = CascadeType.PERSIST)
 	private List<Artifact> artifacts;
-	@OneToMany(mappedBy = "project")
+	@OneToMany(mappedBy = "project", cascade = CascadeType.PERSIST)
 	private List<Task> tasks;
 	private String scmRootDirectoryName;
 
@@ -52,12 +53,23 @@ public class Project {
 		this.scmRootDirectoryName = baseProject.getScmRootDirectoryName();
 		this.configurationEntries = new ArrayList<ConfigurationEntry>();
 		this.tasks = new ArrayList<Task>();
-		tasks.add(new Task(this, "Clone SCM", GitCloneTaskFactory.class,
-				taskCount()));
-		tasks.add(new Task(this, "Parse SCM logs",
-				ParseGitLogTaskFactory.class, taskCount()));
-		tasks.add(new Task(this, "Remove source code directory",
-				RemoveSourceDirectoryTaskFactory.class, taskCount()));
+		setupInitialTasks();
+	}
+
+	private void setupInitialTasks() {
+		Task cloneTask = new Task(this, "Clone SCM", GitCloneTaskFactory.class,
+				taskCount());
+		Task parseLogTask = new Task(this, "Parse SCM logs",
+				ParseGitLogTaskFactory.class, taskCount());
+		Task removeDirecotryTask = new Task(this,
+				"Remove source code directory",
+				RemoveSourceDirectoryTaskFactory.class, taskCount());
+
+		parseLogTask.addDependency(cloneTask);
+		removeDirecotryTask.addDependency(parseLogTask);
+		tasks.add(cloneTask);
+		tasks.add(parseLogTask);
+		tasks.add(removeDirecotryTask);
 	}
 
 	public String getName() {
