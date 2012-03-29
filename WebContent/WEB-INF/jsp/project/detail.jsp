@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -24,13 +25,20 @@
 				<div class="block_content">
 					<h3>Scheduled Tasks</h3>
 					<table>
+						<tr>
+							<th></th>
+							<th>Submit date</th>
+							<th>Name</th>
+							<th>Task Factory Class</th>
+							<th>Task Status</th>
+						</tr>
 						<c:forEach items="${project.tasks}" var="task">
 							<tr>
 								<td>#${task.position}</td>
+								<td>${task.submitDate.time}</td>							
 								<td>${task.name}</td>
 								<td>${task.runnableTaskFactoryClass}</td>
-								<td>${task.status}</td>
-								<td>${task.submitDate.time}</td>
+								<td class="${fn:toLowerCase(task.status)} task-status">${task.status}</td>
 							</tr>
 						</c:forEach>
 					</table>
@@ -44,6 +52,6 @@
 		</div>						<!-- wrapper ends -->
 	</div>		<!-- #hld ends -->
 	<c:import url="../import/javascripts.jsp" />
+	<script src='<c:url value="/js/project/detail.js"/>'></script>
 </body>
-</html>
 

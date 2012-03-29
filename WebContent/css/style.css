@@ -1001,3 +1001,7 @@ a:hover {
 	float: right;
 	text-align: right;
 	}
+	
+task-status {
+	font-weight: bold;
+}
