@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -20,6 +22,7 @@ public class Task implements Comparable {
 	private String name;
 	private Class runnableTaskFactoryClass;
 	private Calendar submitDate;
+	@Enumerated(EnumType.STRING)
 	private TaskStatus status;
 	private Integer position;
 
@@ -55,6 +58,10 @@ public class Task implements Comparable {
 
 	public void finish() {
 		this.status = TaskStatus.FINISHED;
+	}
+
+	public void fail() {
+		this.status = TaskStatus.FAILED;
 	}
 
 	public TaskStatus getStatus() {

@@ -9,7 +9,6 @@ import org.hibernate.classic.Session;
 
 import br.com.caelum.vraptor.ioc.PrototypeScoped;
 import br.com.caelum.vraptor.tasks.scheduler.Scheduled;
-
 import dao.TaskDao;
 
 @PrototypeScoped
@@ -23,25 +22,32 @@ public class TasksRunner implements br.com.caelum.vraptor.tasks.Task {
 
 		SessionFactory sessionFactory = new Configuration().configure()
 				.buildSessionFactory();
-		TaskDao taskDao = new TaskDao(sessionFactory.openSession());
+		Session daoSession = sessionFactory.openSession();
+		TaskDao taskDao = new TaskDao(daoSession);
 		Task task = taskDao.getFirstQueuedTask();
 
 		if (task != null) {
 			log.info("Starting task: " + task.getName());
 			task.start();
 			taskDao.update(task);
+			Session taskSession = sessionFactory.openSession();
 			try {
 				RunnableTaskFactory runnableTaskFactory = (RunnableTaskFactory) task
 						.getRunnableTaskFactoryClass().newInstance();
-				Session session = sessionFactory.openSession();
-				session.beginTransaction();
-				runnableTaskFactory.build(task.getProject(), session).run();
+				taskSession.beginTransaction();
+				runnableTaskFactory.build(task.getProject(), taskSession).run();
 				task.finish();
 				taskDao.update(task);
-				session.getTransaction().commit();
+				taskSession.getTransaction().commit();
+				taskSession.close();
 
 			} catch (Exception e) {
-				log.error("error when running a task", e);
+				task.fail();
+				taskDao.update(task);
+				log.error("Error when running a task", e);
+			} finally {
+				daoSession.close();
+				taskSession.close();
 			}
 		}
 	}
