@@ -1,38 +1,38 @@
 <project name="Metric Miner" default="war">
-	
+
 	<property file="build.properties" />
-	
+
 	<path id="libs.classpath" path=".">
 		<fileset dir="${libs.dir}">
 			<include name="*.jar" />
 		</fileset>
 	</path>
-	
+
 	<path id="compile.classpath" path=".">
 		<path refid="libs.classpath" />
 	</path>
-	
+
 	<target name="prepare">
 		<mkdir dir="${tmp.dir}" />
 		<mkdir dir="${tmp.webinf.dir}" />
 		<mkdir dir="${tmp.classes.dir}" />
 		<mkdir dir="${tmp.test-classes.dir}" />
 	</target>
-	
+
 	<target name="clean">
 		<delete dir="target/" />
 	</target>
-	
+
 	<target name="compile" depends="prepare">
 		<javac destdir="${tmp.classes.dir}" srcdir="${src.dir}" classpathref="compile.classpath" debug="true" encoding="UTF-8" />
 	</target>
-	
+
 	<target name="war" depends="compile">
 		<delete file="${artifacts.dir}/${war.file}" />
 		<copy todir="${tmp.classes.dir}">
-			<fileset dir="${resources.dir}" /> 
+			<fileset dir="${resources.dir}" />
 		</copy>
-		
+
 		<war destfile="${artifacts.dir}/${war.file}" webxml="${webapp.dir}/WEB-INF/web.xml" compress="true">
 			<fileset dir="${webapp.dir}">
 				<exclude name="WEB-INF/web.xml" />
@@ -42,21 +42,34 @@
 	</target>
 
 	<target name="send" depends="war">
-		<echo>Enviando war para o servidor...</echo>  
+		<echo>Enviando war para o servidor...</echo>
 		<exec executable="scp">
 			<arg value="${artifacts.dir}/${war.file}"/>
 			<arg value="root@${server.address}:/root/tmp/"/>
 		</exec>
-		
+
 		<echo>war enviado</echo>
-		
+
 	</target>
-	
+
 	<target name="deploy" depends="send">
 		<exec executable="ssh">
 			<arg value="root@${server.address}"/>
 			<arg value="/root/deploy.sh"/>
 		</exec>
 	</target>
-	
+
+	<!-- Define the Sonar task if this hasn't been done in a common script -->
+	<taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
+		<classpath path="/home/csokol/downloads/lib-sonar/" />
+	</taskdef>
+
+	<!-- Add the target -->
+	<target name="sonar">
+		<!-- list of mandatories Sonar properties -->
+		<property name="sonar.sources" value="src/main/java/" />
+
+	    <sonar:sonar key="org.example:example" version="0.1-SNAPSHOT" xmlns:sonar="antlib:org.sonar.ant"/>
+	</target>
+
 </project>

@@ -3,3 +3,4 @@ build/
 chico.properties
 WebContent/template/
 target/
+.sonar/
