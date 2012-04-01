@@ -58,12 +58,12 @@ public class Project {
 
 	private void setupInitialTasks() {
 		Task cloneTask = new Task(this, "Clone SCM", GitCloneTaskFactory.class,
-				taskCount());
+				0);
 		Task parseLogTask = new Task(this, "Parse SCM logs",
-				ParseGitLogTaskFactory.class, taskCount());
+				ParseGitLogTaskFactory.class, 1);
 		Task removeDirecotryTask = new Task(this,
 				"Remove source code directory",
-				RemoveSourceDirectoryTaskFactory.class, taskCount());
+				RemoveSourceDirectoryTaskFactory.class, 2);
 
 		parseLogTask.addDependency(cloneTask);
 		removeDirecotryTask.addDependency(parseLogTask);
