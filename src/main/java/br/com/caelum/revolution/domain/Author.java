@@ -4,11 +4,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+import org.hibernate.annotations.Index;
+
 @Entity
 public class Author {
 	@Id
 	@GeneratedValue
 	private int id;
+	@Index(name = "author_name")
 	private String name;
 	private String email;
 
@@ -16,8 +19,9 @@ public class Author {
 		name = author;
 		this.email = email;
 	}
-	
-	public Author() {}
+
+	public Author() {
+	}
 
 	public String getName() {
 		return name;
