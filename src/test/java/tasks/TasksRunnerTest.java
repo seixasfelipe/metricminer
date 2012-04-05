@@ -3,6 +3,8 @@ package tasks;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import tasks.runner.TasksRunner;
+
 public class TasksRunnerTest {
 
 	@Test

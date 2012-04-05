@@ -1,5 +1,6 @@
 package tasks;
 
+import tasks.runner.RunnableTask;
 import br.com.caelum.revolution.persistence.runner.SCMLogParser;
 
 public class ParseGitLogTask implements RunnableTask {

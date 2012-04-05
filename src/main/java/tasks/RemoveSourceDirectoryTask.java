@@ -1,5 +1,6 @@
 package tasks;
 
+import tasks.runner.RunnableTask;
 import model.Project;
 import br.com.caelum.revolution.executor.CommandExecutor;
 

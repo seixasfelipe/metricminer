@@ -15,30 +15,30 @@ import br.com.caelum.vraptor.ioc.Component;
 @Component
 public class TaskDao {
 
-	private Session session;
+    private Session session;
 
-	public TaskDao(Session session) {
-		this.session = session;
-	}
+    public TaskDao(Session session) {
+        this.session = session;
+    }
 
-	public void save(Task task) {
-		session.save(task);
-	}
+    public void save(Task task) {
+        session.save(task);
+    }
 
-	@SuppressWarnings("rawtypes")
-	public Task getFirstQueuedTask() {
-		List tasks = session.createCriteria(Task.class)
-				.add(Restrictions.eq("status", TaskStatus.QUEUED))
-				.addOrder(Order.asc("position")).setMaxResults(1).list();
-		if (tasks.isEmpty())
-			return null;
-		return (Task) tasks.get(0);
+    @SuppressWarnings("rawtypes")
+    public Task getFirstQueuedTask() {
+        List tasks = session.createCriteria(Task.class).add(
+                Restrictions.eq("status", TaskStatus.QUEUED)).addOrder(Order.asc("position"))
+                .setMaxResults(1).list();
+        if (tasks.isEmpty())
+            return null;
+        return (Task) tasks.get(0);
 
-	}
+    }
 
-	public void update(Task task) {
-		Transaction tx = session.beginTransaction();
-		session.saveOrUpdate(task);
-		tx.commit();
-	}
+    public void update(Task task) {
+        Transaction tx = session.beginTransaction();
+        session.saveOrUpdate(task);
+        tx.commit();
+    }
 }

@@ -4,6 +4,9 @@ import model.Project;
 
 import org.hibernate.Session;
 
+import tasks.runner.RunnableTask;
+import tasks.runner.RunnableTaskFactory;
+
 import br.com.caelum.revolution.scm.git.Git;
 import br.com.caelum.revolution.scm.git.GitFactory;
 

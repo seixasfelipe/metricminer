@@ -4,6 +4,9 @@ import model.Project;
 
 import org.hibernate.Session;
 
+import tasks.runner.RunnableTask;
+import tasks.runner.RunnableTaskFactory;
+
 import br.com.caelum.revolution.persistence.runner.SCMLogParser;
 import br.com.caelum.revolution.persistence.runner.SCMLogParserFactory;
 

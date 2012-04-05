@@ -4,6 +4,8 @@ import model.Project;
 
 import org.apache.log4j.Logger;
 
+import tasks.runner.RunnableTask;
+
 import br.com.caelum.revolution.scm.git.Git;
 
 public class GitCloneTask implements RunnableTask {
