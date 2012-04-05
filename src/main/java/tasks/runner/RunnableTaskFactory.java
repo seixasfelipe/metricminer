@@ -1,9 +1,9 @@
 package tasks.runner;
 
-import model.Project;
+import model.Task;
 
 import org.hibernate.Session;
 
 public interface RunnableTaskFactory {
-	public RunnableTask build(Project project, Session session);
+    public RunnableTask build(Task task, Session session);
 }
