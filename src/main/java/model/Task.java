@@ -16,6 +16,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import tasks.runner.RunnableTaskFactory;
+
 @SuppressWarnings("rawtypes")
 @Entity
 public class Task implements Comparable {
@@ -40,6 +42,17 @@ public class Task implements Comparable {
     public Task() {
         this.depends = new ArrayList<Task>();
         this.configurationEntries = new ArrayList<TaskConfigurationEntry>();
+    }
+
+    public Task(Project project, String name, RunnableTaskFactory runnableTaskFactory,
+            Integer position) {
+        this();
+        this.project = project;
+        this.name = name;
+        this.runnableTaskFactoryClass = runnableTaskFactory.getClass();
+        this.submitDate = new GregorianCalendar();
+        this.status = TaskStatus.QUEUED;
+        this.position = position;
     }
 
     public Task(Project project, String name, Class runnableTaskFactoryClass, Integer position) {

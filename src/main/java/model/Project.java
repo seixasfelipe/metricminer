@@ -12,7 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import tasks.CalculateMetricTask;
+import tasks.CalculateMetricTaskFactory;
 import tasks.GitCloneTaskFactory;
 import tasks.ParseGitLogTaskFactory;
 import tasks.RemoveSourceDirectoryTaskFactory;
@@ -58,11 +58,12 @@ public class Project {
     }
 
     private void setupInitialTasks() {
-        Task cloneTask = new Task(this, "Clone SCM", GitCloneTaskFactory.class, 0);
-        Task parseLogTask = new Task(this, "Parse SCM logs", ParseGitLogTaskFactory.class, 1);
+        Task cloneTask = new Task(this, "Clone SCM", new GitCloneTaskFactory(), 0);
+        Task parseLogTask = new Task(this, "Parse SCM logs", new ParseGitLogTaskFactory(), 1);
         Task removeDirecotryTask = new Task(this, "Remove source code directory",
-                RemoveSourceDirectoryTaskFactory.class, 2);
-        Task ccMetricTask = new Task(this, "Calculate CC metric", CalculateMetricTask.class, 3);
+                new RemoveSourceDirectoryTaskFactory(), 2);
+        Task ccMetricTask = new Task(this, "Calculate CC metric", new CalculateMetricTaskFactory(),
+                3);
         ccMetricTask.addTaskConfigurationEntry("metricFactoryClass", "CCMetricFactory");
         ccMetricTask.addDependency(removeDirecotryTask);
         parseLogTask.addDependency(cloneTask);
