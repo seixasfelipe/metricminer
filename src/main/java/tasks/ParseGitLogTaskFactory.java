@@ -13,7 +13,7 @@ public class ParseGitLogTaskFactory implements RunnableTaskFactory {
 	public RunnableTask build(Project project, Session session) {
 		SCMLogParser logParser = new SCMLogParserFactory().basedOn(
 				project.getMapConfig(), session, project);
-		return new ParseGitLogTask(logParser, project);
+		return new ParseGitLogTask(logParser);
 	}
 
 }

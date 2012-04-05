@@ -25,6 +25,7 @@ public class TaskDao {
 		session.save(task);
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Task getFirstQueuedTask() {
 		List tasks = session.createCriteria(Task.class)
 				.add(Restrictions.eq("status", TaskStatus.QUEUED))

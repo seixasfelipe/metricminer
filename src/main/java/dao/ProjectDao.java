@@ -27,6 +27,7 @@ public class ProjectDao {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<Project> listAll() {
 		return session.createCriteria(Project.class).list();
 	}

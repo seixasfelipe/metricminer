@@ -17,9 +17,6 @@ public class TasksRunner implements br.com.caelum.vraptor.tasks.Task {
 
 	private static Logger log = Logger.getLogger(TasksRunner.class);
 
-	private SessionFactory sessionFactory;
-	private TaskDao taskDao;
-
 	@Override
 	public void execute() {
 		SessionFactory sessionFactory = new Configuration().configure()
