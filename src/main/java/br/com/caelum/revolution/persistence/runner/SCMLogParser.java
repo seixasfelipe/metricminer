@@ -15,38 +15,41 @@ import br.com.caelum.revolution.scm.SCM;
 
 public class SCMLogParser implements PersistenceRunner {
 
-	private Session session;
-	private PersistedCommitConverter converter;
-	private SCM scm;
-	private final ChangeSetCollection collection;
-	private static Logger log = Logger.getLogger(SCMLogParser.class);
-	private final Project project;
+    private Session session;
+    private PersistedCommitConverter converter;
+    private SCM scm;
+    private final ChangeSetCollection collection;
+    private static Logger log = Logger.getLogger(SCMLogParser.class);
+    private final Project project;
 
-	public SCMLogParser(PersistedCommitConverter converter, SCM scm,
-			ChangeSetCollection collection, Session session, Project project) {
-		this.converter = converter;
-		this.scm = scm;
-		this.collection = collection;
-		this.session = session;
-		this.project = project;
-	}
+    public SCMLogParser(PersistedCommitConverter converter, SCM scm,
+            ChangeSetCollection collection, Session session, Project project) {
+        this.converter = converter;
+        this.scm = scm;
+        this.collection = collection;
+        this.session = session;
+        this.project = project;
+    }
 
-	public void start() {
-		for (ChangeSet changeSet : collection.get()) {
-			CommitData commitData = scm.detail(changeSet.getId());
-			try {
-				log.info("--------------------------");
-				log.info("Persisting change set " + changeSet.getId());
-				log.info("Author: " + commitData.getAuthor() + " on "
-						+ commitData.getDate());
-				converter.toDomain(commitData, session, project);
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-		}
-		log.info("");
-		log.info("--------------------------");
-		log.info("Finished persisting commit data.");
-	}
-
+    public void start() {
+        for (ChangeSet changeSet : collection.get()) {
+            log.info("--------------------------");
+            CommitData commitData;
+            try {
+                commitData = scm.detail(changeSet.getId());
+                log.info("Persisting change set " + changeSet.getId());
+                log.info("Author: " + commitData.getAuthor() + " on " + commitData.getDate());
+                converter.toDomain(commitData, session, project);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            } catch (OutOfMemoryError e) {
+                log.info("Too big changeset, unable to persist");
+                commitData = null;
+                System.gc();
+            }
+        }
+        log.info("");
+        log.info("--------------------------");
+        log.info("Finished persisting commit data.");
+    }
 }

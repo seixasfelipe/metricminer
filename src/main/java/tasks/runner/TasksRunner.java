@@ -26,6 +26,7 @@ public class TasksRunner implements br.com.caelum.vraptor.tasks.Task {
         if (task != null) {
             if (!task.isDependenciesFinished()) {
                 log.info("Waiting for task to finish...");
+                daoSession.close();
                 return;
             }
             log.info("Starting task: " + task.getName());
@@ -40,6 +41,7 @@ public class TasksRunner implements br.com.caelum.vraptor.tasks.Task {
                 task.finish();
                 taskDao.update(task);
                 taskSession.getTransaction().commit();
+                log.info("Finished running task: " + task.getName());
 
             } catch (Exception e) {
                 task.fail();
@@ -49,6 +51,8 @@ public class TasksRunner implements br.com.caelum.vraptor.tasks.Task {
                 daoSession.close();
                 taskSession.close();
             }
+        } else {
+            daoSession.close();
         }
     }
 }
