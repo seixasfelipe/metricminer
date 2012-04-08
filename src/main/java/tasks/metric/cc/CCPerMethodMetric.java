@@ -6,6 +6,7 @@ import japa.parser.ast.CompilationUnit;
 import java.io.InputStream;
 import java.util.Map.Entry;
 
+import tasks.metric.CalculatedMetricResultBuilder;
 import tasks.metric.ClassInfoVisitor;
 import tasks.metric.Metric;
 
@@ -45,6 +46,12 @@ public class CCPerMethodMetric implements Metric {
     @Override
     public boolean shouldCalculateMetricOf(String fileName) {
         return fileName.endsWith(".java");
+    }
+
+    @Override
+    public CalculatedMetricResultBuilder result() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }

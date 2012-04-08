@@ -5,6 +5,7 @@ import japa.parser.ast.CompilationUnit;
 
 import java.io.InputStream;
 
+import tasks.metric.CalculatedMetricResultBuilder;
 import tasks.metric.ClassInfoVisitor;
 import tasks.metric.Metric;
 
@@ -17,8 +18,8 @@ public class CCMetric implements Metric {
         return "path;project;class;cc;average cc";
     }
 
-    public String content(String path, String project) {
-        return path + ";" + project + ";" + classInfo.getName() + ";" + cc() + ";" + avgCc() + "\n";
+    public CalculatedMetricResultBuilder result() {
+        return new CalculatedCCMetricBuilder().withAverageCC(avgCc()).withCC(cc());
     }
 
     public void calculate(InputStream is) {

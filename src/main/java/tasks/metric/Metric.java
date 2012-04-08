@@ -5,7 +5,7 @@ import java.io.InputStream;
 public interface Metric {
     String header();
 
-    String content(String path, String project);
+    CalculatedMetricResultBuilder result();
 
     void calculate(InputStream is);
 

@@ -6,6 +6,9 @@ import java.util.List;
 import model.Project;
 import model.SourceCode;
 import model.Task;
+
+import org.hibernate.Session;
+
 import tasks.metric.Metric;
 import tasks.runner.RunnableTask;
 import br.com.caelum.revolution.domain.Artifact;
@@ -14,10 +17,12 @@ public class CalculateMetricTask implements RunnableTask {
 
     private Task task;
     private Metric metric;
+    private final Session session;
 
-    public CalculateMetricTask(Task task, Metric metric) {
+    public CalculateMetricTask(Task task, Metric metric, Session session) {
         this.task = task;
         this.metric = metric;
+        this.session = session;
     }
 
     @Override
@@ -29,7 +34,7 @@ public class CalculateMetricTask implements RunnableTask {
             for (SourceCode sourceCode : sources) {
                 if (metric.shouldCalculateMetricOf(sourceCode.getName())) {
                     metric.calculate(new ByteArrayInputStream(sourceCode.getSourceBytesArray()));
-                    System.out.println(metric.content(sourceCode.getName(), project.getName()));
+                    session.save(metric.result().withSource(sourceCode).build());
                 }
             }
         }
