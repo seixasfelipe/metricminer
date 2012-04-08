@@ -106,8 +106,13 @@ public class Task implements Comparable {
         return position;
     }
 
-    public List<TaskConfigurationEntry> getConfigurationEntries() {
-        return configurationEntries;
+    public String getTaskConfigurationValueFor(TaskConfigurationEntryKey key) {
+        for (TaskConfigurationEntry entry : this.configurationEntries) {
+            if (entry.getKey().equals(key)) {
+                return entry.getValue();
+            }
+        }
+        return null;
     }
 
     public void addDependency(Task task) {
