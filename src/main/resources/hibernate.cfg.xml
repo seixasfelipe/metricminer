@@ -28,8 +28,6 @@
         <mapping class="model.Project" />
         <mapping class="model.SourceCode" />
         
-        <mapping class="tasks.metric.cc.CalculatedCCMetric" />
-        
         <mapping class="br.com.caelum.revolution.domain.Artifact"/>  
         <mapping class="br.com.caelum.revolution.domain.Author"/>
         <mapping class="br.com.caelum.revolution.domain.Commit"/>
