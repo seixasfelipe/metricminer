@@ -32,6 +32,7 @@
 		<copy todir="${tmp.classes.dir}">
 			<fileset dir="${resources.dir}" />
 		</copy>
+		<move file="${tmp.classes.dir}/log4j.server.xml" tofile="${tmp.classes.dir}/log4j.xml"/>
 
 		<war destfile="${artifacts.dir}/${war.file}" webxml="${webapp.dir}/WEB-INF/web.xml" compress="true">
 			<fileset dir="${webapp.dir}">
