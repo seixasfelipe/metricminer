@@ -21,7 +21,7 @@ public class CalculateMetricTaskFactory implements RunnableTaskFactory {
                     .newInstance();
 
             Metric metricToCalculate = metricFactory.build();
-            return new CalculateMetricTask(task, metricToCalculate);
+            return new CalculateMetricTask(task, metricToCalculate, session);
         } catch (Exception e) {
             e.printStackTrace();
         }

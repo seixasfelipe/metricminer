@@ -32,6 +32,8 @@
         <mapping class="br.com.caelum.revolution.domain.Author"/>
         <mapping class="br.com.caelum.revolution.domain.Commit"/>
         <mapping class="br.com.caelum.revolution.domain.Modification"/>  
+        
+        <mapping class="tasks.metric.cc.CCMetricResultToPersist" />
 
 
     </session-factory>

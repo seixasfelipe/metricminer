@@ -2,10 +2,12 @@ package tasks.metric;
 
 import java.io.InputStream;
 
+import model.SourceCode;
+
 public interface Metric {
     String header();
 
-    String content(String path, String project);
+    Object resultToPersistOf(SourceCode source);
 
     void calculate(InputStream is);
 

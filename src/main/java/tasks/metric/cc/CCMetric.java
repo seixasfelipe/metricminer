@@ -5,6 +5,7 @@ import japa.parser.ast.CompilationUnit;
 
 import java.io.InputStream;
 
+import model.SourceCode;
 import tasks.metric.ClassInfoVisitor;
 import tasks.metric.Metric;
 
@@ -17,8 +18,8 @@ public class CCMetric implements Metric {
         return "path;project;class;cc;average cc";
     }
 
-    public String content(String path, String project) {
-        return path + ";" + project + ";" + classInfo.getName() + ";" + cc() + ";" + avgCc() + "\n";
+    public Object resultToPersistOf(SourceCode sourceCode) {
+        return new CCMetricResultToPersist(sourceCode, cc(), avgCc());
     }
 
     public void calculate(InputStream is) {
@@ -37,7 +38,10 @@ public class CCMetric implements Metric {
     }
 
     public double avgCc() {
-        return visitor.getAvgCc();
+        double avgCc = visitor.getAvgCc();
+        if (Double.isNaN(avgCc))
+            avgCc = -1.0;
+        return avgCc;
     }
 
     public int cc() {
