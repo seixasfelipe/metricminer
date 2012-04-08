@@ -1,6 +1,7 @@
 package model;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -17,6 +18,7 @@ public class TaskConfigurationEntry {
     @ManyToOne(cascade = CascadeType.PERSIST)
     private Task task;
     @Enumerated(EnumType.STRING)
+    @Column(name = "task_key")
     private TaskConfigurationEntryKey key;
     private String value;
 

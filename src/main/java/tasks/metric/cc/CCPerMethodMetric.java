@@ -42,4 +42,9 @@ public class CCPerMethodMetric implements Metric {
         }
     }
 
+    @Override
+    public boolean shouldCalculateMetricOf(String fileName) {
+        return fileName.endsWith(".java");
+    }
+
 }

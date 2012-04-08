@@ -19,6 +19,7 @@ public class CalculateMetricTaskFactory implements RunnableTaskFactory {
         try {
             MetricFactory metricFactory = (MetricFactory) Class.forName(metricFactoryName)
                     .newInstance();
+
             Metric metricToCalculate = metricFactory.build();
             return new CalculateMetricTask(task, metricToCalculate);
         } catch (Exception e) {
@@ -26,4 +27,5 @@ public class CalculateMetricTaskFactory implements RunnableTaskFactory {
         }
         return null;
     }
+
 }

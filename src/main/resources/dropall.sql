@@ -10,6 +10,7 @@ DROP TABLE  `Artifact` ,
 `Project` ,
 `SourceCode` ,
 `Task` ,
-`Task_Task` ;
+`Task_Task` ,
+`TaskConfigurationEntry`;
 
 SET foreign_key_checks = 1;

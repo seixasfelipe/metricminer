@@ -12,7 +12,7 @@ import br.com.caelum.vraptor.tasks.scheduler.Scheduled;
 import dao.TaskDao;
 
 @PrototypeScoped
-@Scheduled(cron = "0/30 * * * * ?")
+@Scheduled(cron = "0/10 * * * * ?")
 public class TasksRunner implements br.com.caelum.vraptor.tasks.Task {
 
     private static Logger log = Logger.getLogger(TasksRunner.class);

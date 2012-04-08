@@ -13,23 +13,35 @@ import br.com.caelum.revolution.domain.Commit;
 @Entity
 public class SourceCode {
 
-	@Id
-	@GeneratedValue
-	private Long id;
-	@ManyToOne
-	private Artifact artifact;
-	@ManyToOne
-	private Commit commit;
-	@Type(type = "text")
-	private String source;
+    @Id
+    @GeneratedValue
+    private Long id;
+    @ManyToOne
+    private Artifact artifact;
+    @ManyToOne
+    private Commit commit;
+    @Type(type = "text")
+    private String source;
 
-	public SourceCode() {
-	}
+    public SourceCode() {
+    }
 
-	public SourceCode(Artifact artifact, Commit commit, String source) {
-		this.artifact = artifact;
-		this.commit = commit;
-		this.source = source;
-	}
+    public SourceCode(Artifact artifact, Commit commit, String source) {
+        this.artifact = artifact;
+        this.commit = commit;
+        this.source = source;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public byte[] getSourceBytesArray() {
+        return source.getBytes();
+    }
+
+    public String getName() {
+        return artifact.getName();
+    }
 
 }

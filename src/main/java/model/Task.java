@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class Task implements Comparable {
     private Integer position;
     @OneToMany
     private List<Task> depends;
-    @OneToMany(mappedBy = "task")
+    @OneToMany(mappedBy = "task", cascade = CascadeType.PERSIST)
     private List<TaskConfigurationEntry> configurationEntries;
 
     public Task() {
@@ -137,4 +138,7 @@ public class Task implements Comparable {
         configurationEntries.add(new TaskConfigurationEntry(key, value, this));
     }
 
+    public List<TaskConfigurationEntry> getConfigurationEntries() {
+        return Collections.unmodifiableList(configurationEntries);
+    }
 }

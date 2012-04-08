@@ -23,8 +23,8 @@
         <property name="format_sql">false</property>
 		        
         <mapping class="model.ConfigurationEntry" />
-        <mapping class="model.Task" />
         <mapping class="model.TaskConfigurationEntry" />
+        <mapping class="model.Task" />
         <mapping class="model.Project" />
         <mapping class="model.SourceCode" />
         

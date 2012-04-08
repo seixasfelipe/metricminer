@@ -5,6 +5,7 @@ import java.util.List;
 import model.ConfigurationEntry;
 import model.Project;
 import model.Task;
+import model.TaskConfigurationEntry;
 
 import org.hibernate.Session;
 
@@ -12,31 +13,34 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Component
 public class ProjectDao {
-	private final Session session;
+    private final Session session;
 
-	public ProjectDao(Session session) {
-		this.session = session;
-	}
+    public ProjectDao(Session session) {
+        this.session = session;
+    }
 
-	public void save(Project project) {
-		session.save(project);
-		for (ConfigurationEntry entry : project.getConfigurationEntries())
-			session.save(entry);
-		for (Task task : project.getTasks()) {
-			session.save(task);
-		}
-	}
+    public void save(Project project) {
+        session.save(project);
+        for (ConfigurationEntry entry : project.getConfigurationEntries())
+            session.save(entry);
+        for (Task task : project.getTasks()) {
+            for (TaskConfigurationEntry entry : task.getConfigurationEntries()) {
+                session.save(entry);
+            }
+            session.save(task);
+        }
+    }
 
-	@SuppressWarnings("unchecked")
-	public List<Project> listAll() {
-		return session.createCriteria(Project.class).list();
-	}
+    @SuppressWarnings("unchecked")
+    public List<Project> listAll() {
+        return session.createCriteria(Project.class).list();
+    }
 
-	public Project findProjectBy(Long id) {
-		return (Project) session.load(Project.class, id);
-	}
+    public Project findProjectBy(Long id) {
+        return (Project) session.load(Project.class, id);
+    }
 
-	public Session getSession() {
-		return this.session;
-	}
+    public Session getSession() {
+        return this.session;
+    }
 }

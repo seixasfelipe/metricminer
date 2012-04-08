@@ -48,4 +48,8 @@ public class CCMetric implements Metric {
         return visitor.getCc(method);
     }
 
+    @Override
+    public boolean shouldCalculateMetricOf(String fileName) {
+        return fileName.endsWith(".java");
+    }
 }

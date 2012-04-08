@@ -65,7 +65,7 @@ public class Project {
         Task ccMetricTask = new Task(this, "Calculate CC metric", new CalculateMetricTaskFactory(),
                 3);
         ccMetricTask.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRICFACTORYCLASS,
-                "CCMetricFactory");
+                "tasks.metric.cc.CCMetricFactory");
         ccMetricTask.addDependency(removeDirecotryTask);
         parseLogTask.addDependency(cloneTask);
         removeDirecotryTask.addDependency(parseLogTask);
@@ -143,5 +143,9 @@ public class Project {
 
     public String getLocalPath() {
         return MetricMinerConfigs.metricMinerHome + "/projects/" + this.id;
+    }
+
+    public List<Artifact> getArtifacts() {
+        return artifacts;
     }
 }
