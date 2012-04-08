@@ -64,7 +64,8 @@ public class Project {
                 new RemoveSourceDirectoryTaskFactory(), 2);
         Task ccMetricTask = new Task(this, "Calculate CC metric", new CalculateMetricTaskFactory(),
                 3);
-        ccMetricTask.addTaskConfigurationEntry("metricFactoryClass", "CCMetricFactory");
+        ccMetricTask.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRICFACTORYCLASS,
+                "CCMetricFactory");
         ccMetricTask.addDependency(removeDirecotryTask);
         parseLogTask.addDependency(cloneTask);
         removeDirecotryTask.addDependency(parseLogTask);

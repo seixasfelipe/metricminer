@@ -106,6 +106,10 @@ public class Task implements Comparable {
         return position;
     }
 
+    public List<TaskConfigurationEntry> getConfigurationEntries() {
+        return configurationEntries;
+    }
+
     public void addDependency(Task task) {
         if (depends == null)
             depends = new ArrayList<Task>();
@@ -124,7 +128,7 @@ public class Task implements Comparable {
         return this.status == TaskStatus.FINISHED;
     }
 
-    public void addTaskConfigurationEntry(String key, String value) {
+    public void addTaskConfigurationEntry(TaskConfigurationEntryKey key, String value) {
         configurationEntries.add(new TaskConfigurationEntry(key, value, this));
     }
 
