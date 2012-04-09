@@ -3,14 +3,14 @@ package tasks;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import tasks.runner.TasksRunner;
+import tasks.runner.TaskRunner;
 
 public class TasksRunnerTest {
 
 	@Test
 	@Ignore
 	public void shouldRunAValidTask() throws Exception {
-		TasksRunner runner = new TasksRunner();
+		TaskRunner runner = new TaskRunner();
 		runner.execute();
 	}
 }
