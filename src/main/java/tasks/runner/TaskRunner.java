@@ -4,6 +4,7 @@ import model.Task;
 
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.classic.Session;
 
@@ -40,7 +41,10 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
                 runnableTaskFactory.build(task, taskSession).run();
                 task.finish();
                 taskDao.update(task);
-                taskSession.getTransaction().commit();
+                Transaction transaction = taskSession.getTransaction();
+                if (transaction.isActive()) {
+                    transaction.commit();
+                }
                 log.info("Finished running task: " + task.getName());
 
             } catch (Exception e) {

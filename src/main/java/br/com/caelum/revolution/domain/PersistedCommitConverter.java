@@ -33,10 +33,7 @@ public class PersistedCommitConverter {
 
         Commit commit = new Commit(data.getCommitId(), author, convertDate(data),
                 data.getMessage(), data.getDiff(), data.getPriorCommit());
-        try {
-            session.save(commit);
-        } catch (Exception e) {
-        }
+        session.save(commit);
 
         for (DiffData diff : data.getDiffs()) {
             Artifact artifact = new Artifact(diff.getName(), diff.getArtifactKind(), project);
