@@ -44,4 +44,7 @@ public class SourceCode {
         return artifact.getName();
     }
 
+    public Commit getCommit() {
+        return commit;
+    }
 }

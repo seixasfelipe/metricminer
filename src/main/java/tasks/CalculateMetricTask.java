@@ -7,6 +7,7 @@ import model.Project;
 import model.SourceCode;
 import model.Task;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
 import tasks.metric.Metric;
@@ -18,6 +19,7 @@ public class CalculateMetricTask implements RunnableTask {
     private Task task;
     private Metric metric;
     private Session session;
+    private static Logger log = Logger.getLogger(CalculateMetricTask.class);
 
     public CalculateMetricTask(Task task, Metric metric, Session session) {
         this.task = task;
@@ -33,8 +35,14 @@ public class CalculateMetricTask implements RunnableTask {
             List<SourceCode> sources = artifact.getSources();
             for (SourceCode sourceCode : sources) {
                 if (metric.shouldCalculateMetricOf(sourceCode.getName())) {
-                    metric.calculate(new ByteArrayInputStream(sourceCode.getSourceBytesArray()));
-                    session.save(metric.resultToPersistOf(sourceCode));
+                    log.info("Calculating metrics for: " + sourceCode.getName() + " - "
+                            + sourceCode.getCommit().getCommitId());
+                    try {
+                        metric.calculate(new ByteArrayInputStream(sourceCode.getSourceBytesArray()));
+                        session.save(metric.resultToPersistOf(sourceCode));
+                    } catch (Exception e) {
+                        log.error("Unable to calculate metric: ", e);
+                    }
                 }
             }
         }

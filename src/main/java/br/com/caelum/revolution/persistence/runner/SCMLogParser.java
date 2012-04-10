@@ -6,6 +6,7 @@ import model.Project;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
 import org.hibernate.exception.GenericJDBCException;
 
 import br.com.caelum.revolution.changesets.ChangeSet;
@@ -36,19 +37,28 @@ public class SCMLogParser implements PersistenceRunner {
         for (ChangeSet changeSet : collection.get()) {
             log.info("--------------------------");
             CommitData commitData;
+            session.clear();
+            Transaction transaction = session.getTransaction();
+            if (!transaction.isActive()) {
+                session.beginTransaction();
+            }
             try {
                 commitData = scm.detail(changeSet.getId());
                 log.info("Persisting change set " + changeSet.getId());
                 log.info("Author: " + commitData.getAuthor() + " on " + commitData.getDate());
                 converter.toDomain(commitData, session, project);
+                session.getTransaction().commit();
             } catch (ParseException e) {
+                session.getTransaction().rollback();
                 e.printStackTrace();
             } catch (OutOfMemoryError e) {
-                log.info("Too big changeset: " + e.getMessage());
+                session.getTransaction().rollback();
+                log.error("Too big changeset, out of memory", e);
                 commitData = null;
                 System.gc();
             } catch (GenericJDBCException e) {
-                log.info("Too big changeset: " + e.getMessage());
+                session.getTransaction().rollback();
+                log.error("Too big changeset, unable to persist", e);
                 commitData = null;
                 System.gc();
             }
