@@ -15,11 +15,6 @@
 		<appender-ref ref="logfile" />
 	</category>
 
-	<category name="org.hibernate">
-		<priority value="WARN" />
-		<appender-ref ref="logfile" />
-	</category>
-
 	<category name="com.mchange">
 		<priority value="WARN" />
 		<appender-ref ref="logfile" />
