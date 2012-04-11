@@ -32,20 +32,23 @@ public class CalculateMetricTask implements RunnableTask {
         Project project = task.getProject();
         List<Artifact> artifacts = project.getArtifacts();
         for (Artifact artifact : artifacts) {
-            List<SourceCode> sources = artifact.getSources();
-            for (SourceCode sourceCode : sources) {
+            for (SourceCode sourceCode : artifact.getSources()) {
                 if (metric.shouldCalculateMetricOf(sourceCode.getName())) {
-                    log.info("Calculating metrics for: " + sourceCode.getName() + " - "
-                            + sourceCode.getCommit().getCommitId());
-                    try {
-                        metric.calculate(new ByteArrayInputStream(sourceCode.getSourceBytesArray()));
-                        session.save(metric.resultToPersistOf(sourceCode));
-                    } catch (Exception e) {
-                        log.error("Unable to calculate metric: ", e);
-                    }
+                    calculateAndSaveResultsOf(sourceCode);
                 }
             }
         }
 
+    }
+
+    private void calculateAndSaveResultsOf(SourceCode sourceCode) {
+        log.info("Calculating metrics for: " + sourceCode.getName() + " - "
+                + sourceCode.getCommit().getCommitId());
+        try {
+            metric.calculate(new ByteArrayInputStream(sourceCode.getSourceBytesArray()));
+            session.save(metric.resultToPersistOf(sourceCode));
+        } catch (Exception e) {
+            log.error("Unable to calculate metric: ", e);
+        }
     }
 }
