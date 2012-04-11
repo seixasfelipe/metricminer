@@ -32,13 +32,17 @@ public class CalculateMetricTask implements RunnableTask {
         Project project = task.getProject();
         List<Artifact> artifacts = project.getArtifacts();
         for (Artifact artifact : artifacts) {
-            for (SourceCode sourceCode : artifact.getSources()) {
-                if (metric.shouldCalculateMetricOf(sourceCode.getName())) {
-                    calculateAndSaveResultsOf(sourceCode);
-                }
-            }
+            calculateMetricForAllVersionsOf(artifact);
         }
 
+    }
+
+    private void calculateMetricForAllVersionsOf(Artifact artifact) {
+        for (SourceCode sourceCode : artifact.getSources()) {
+            if (metric.shouldCalculateMetricOf(sourceCode.getName())) {
+                calculateAndSaveResultsOf(sourceCode);
+            }
+        }
     }
 
     private void calculateAndSaveResultsOf(SourceCode sourceCode) {
@@ -51,4 +55,5 @@ public class CalculateMetricTask implements RunnableTask {
             log.error("Unable to calculate metric: ", e);
         }
     }
+
 }
