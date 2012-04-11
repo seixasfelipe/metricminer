@@ -17,47 +17,65 @@ import dao.TaskDao;
 public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
 
     private static Logger log = Logger.getLogger(TaskRunner.class);
+    private TaskDao taskDao;
+    private Task taskToRun;
 
     @Override
     public void execute() {
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
         Session daoSession = sessionFactory.openSession();
-        TaskDao taskDao = new TaskDao(daoSession);
-        Task task = taskDao.getFirstQueuedTask();
-        if (task != null) {
-            if (!task.isDependenciesFinished()) {
+        taskDao = new TaskDao(daoSession);
+        taskToRun = taskDao.getFirstQueuedTask();
+        if (taskToRun != null) {
+            if (!taskToRun.isDependenciesFinished()) {
                 log.info("Waiting for task to finish...");
                 daoSession.close();
                 return;
             }
-            log.info("Starting task: " + task.getName());
-            task.start();
-            taskDao.update(task);
+            log.info("Starting task: " + taskToRun.getName());
+            taskToRun.start();
+            taskDao.update(taskToRun);
             Session taskSession = sessionFactory.openSession();
             try {
-                RunnableTaskFactory runnableTaskFactory = (RunnableTaskFactory) task
-                        .getRunnableTaskFactoryClass().newInstance();
-                taskSession.beginTransaction();
-                runnableTaskFactory.build(task, taskSession).run();
-                Transaction transaction = taskSession.getTransaction();
-                if (!transaction.isActive()) {
-                    transaction.begin();
-                }
-                task.finish();
-                taskDao.update(task);
-                transaction.commit();
-                log.info("Finished running task: " + task.getName());
-
+                runTask(taskSession);
             } catch (Exception e) {
-                task.fail();
-                taskDao.update(task);
-                log.error("Error when running a task", e);
+                handleError(e);
             } finally {
-                daoSession.close();
-                taskSession.close();
+                closeSessions(daoSession, taskSession);
             }
         } else {
             daoSession.close();
         }
     }
+
+    private void runTask(Session taskSession) throws InstantiationException, IllegalAccessException {
+        RunnableTaskFactory runnableTaskFactory = (RunnableTaskFactory) taskToRun
+                .getRunnableTaskFactoryClass().newInstance();
+        taskSession.beginTransaction();
+        runnableTaskFactory.build(taskToRun, taskSession).run();
+        Transaction transaction = taskSession.getTransaction();
+        if (!transaction.isActive()) {
+            transaction.begin();
+        }
+        finishTask(transaction);
+    }
+
+    private void finishTask(Transaction transaction) {
+        taskToRun.finish();
+        taskDao.update(taskToRun);
+        transaction.commit();
+        log.info("Finished running task: " + taskToRun.getName());
+    }
+
+    private void handleError(Exception e) {
+        taskToRun.fail();
+        taskDao.update(taskToRun);
+        log.error("Error when running a task", e);
+    }
+
+    private void closeSessions(Session daoSession, Session taskSession) {
+        daoSession.close();
+        taskSession.close();
+    }
+
 }
