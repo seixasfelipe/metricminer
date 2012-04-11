@@ -39,12 +39,13 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
                         .getRunnableTaskFactoryClass().newInstance();
                 taskSession.beginTransaction();
                 runnableTaskFactory.build(task, taskSession).run();
+                Transaction transaction = taskSession.getTransaction();
+                if (!transaction.isActive()) {
+                    transaction.begin();
+                }
                 task.finish();
                 taskDao.update(task);
-                Transaction transaction = taskSession.getTransaction();
-                if (transaction.isActive()) {
-                    transaction.commit();
-                }
+                transaction.commit();
                 log.info("Finished running task: " + task.getName());
 
             } catch (Exception e) {
