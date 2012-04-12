@@ -19,33 +19,34 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     private static Logger log = Logger.getLogger(TaskRunner.class);
     private TaskDao taskDao;
     private Task taskToRun;
+    private Session daoSession;
+    private Session taskSession;
 
     @Override
     public void execute() {
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-        Session daoSession = sessionFactory.openSession();
+        daoSession = sessionFactory.openSession();
         taskDao = new TaskDao(daoSession);
         taskToRun = taskDao.getFirstQueuedTask();
         if (taskToRun != null) {
             if (!taskToRun.isDependenciesFinished()) {
                 log.info("Waiting for task to finish...");
-                daoSession.close();
+                closeSessions();
                 return;
             }
             log.info("Starting task: " + taskToRun.getName());
             taskToRun.start();
             taskDao.update(taskToRun);
-            Session taskSession = sessionFactory.openSession();
+            taskSession = sessionFactory.openSession();
             try {
                 runTask(taskSession);
             } catch (Exception e) {
                 handleError(e);
             } finally {
-                closeSessions(daoSession, taskSession);
+                closeSessions();
             }
-        } else {
-            daoSession.close();
         }
+        closeSessions();
     }
 
     private void runTask(Session taskSession) throws InstantiationException, IllegalAccessException {
@@ -73,9 +74,15 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
         log.error("Error when running a task", e);
     }
 
-    private void closeSessions(Session daoSession, Session taskSession) {
-        daoSession.close();
-        taskSession.close();
+    private void closeSessions() {
+        if (daoSession.isOpen()) {
+            daoSession.disconnect();
+            daoSession.close();
+        }
+        if (taskSession!= null && taskSession.isConnected()) {
+            taskSession.disconnect();
+            taskSession.close();
+        }
     }
 
 }
