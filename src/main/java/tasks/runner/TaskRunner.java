@@ -19,14 +19,15 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     private static Logger log = Logger.getLogger(TaskRunner.class);
     private TaskDao taskDao;
     private Task taskToRun;
-    private Session daoSession;
-    private Session taskSession;
+    private Session session;
 
     @Override
     public void execute() {
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-        daoSession = sessionFactory.openSession();
-        taskDao = new TaskDao(daoSession);
+        session = sessionFactory.openSession();
+        Transaction tx = session.beginTransaction();
+        taskDao = new TaskDao(session);
+        tx.commit();
         taskToRun = taskDao.getFirstQueuedTask();
         if (taskToRun != null) {
             if (!taskToRun.isDependenciesFinished()) {
@@ -37,9 +38,8 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
             log.info("Starting task: " + taskToRun.getName());
             taskToRun.start();
             taskDao.update(taskToRun);
-            taskSession = sessionFactory.openSession();
             try {
-                runTask(taskSession);
+                runTask(session);
             } catch (Exception e) {
                 handleError(e);
             } finally {
@@ -75,13 +75,9 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     }
 
     private void closeSessions() {
-        if (daoSession.isOpen()) {
-            daoSession.disconnect();
-            daoSession.close();
-        }
-        if (taskSession!= null && taskSession.isConnected()) {
-            taskSession.disconnect();
-            taskSession.close();
+        if (session.isOpen()) {
+            session.disconnect();
+            session.close();
         }
     }
 
