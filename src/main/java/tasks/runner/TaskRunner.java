@@ -25,9 +25,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     public void execute() {
         SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
         session = sessionFactory.openSession();
-        Transaction tx = session.beginTransaction();
         taskDao = new TaskDao(session);
-        tx.commit();
         taskToRun = taskDao.getFirstQueuedTask();
         if (taskToRun != null) {
             if (!taskToRun.isDependenciesFinished()) {
@@ -37,7 +35,9 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
             }
             log.info("Starting task: " + taskToRun.getName());
             taskToRun.start();
+            Transaction tx = session.beginTransaction();
             taskDao.update(taskToRun);
+            tx.commit();
             try {
                 runTask(session);
             } catch (Exception e) {
