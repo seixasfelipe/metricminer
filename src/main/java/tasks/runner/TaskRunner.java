@@ -30,11 +30,11 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
         taskToRun = taskDao.getFirstQueuedTask();
         if (taskToRun != null) {
             if (!taskToRun.isDependenciesFinished()) {
-                log.info("Waiting for a task dependecy task to finish...");
+                log.info(taskToRun + ": Waiting for unresolved dependecies");
                 closeSessions();
                 return;
             }
-            log.info("Starting task: " + taskToRun.getName());
+            log.info("Starting task: " + taskToRun);
             taskToRun.start();
             Transaction tx = session.beginTransaction();
             taskDao.update(taskToRun);
@@ -66,13 +66,13 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
         taskToRun.finish();
         taskDao.update(taskToRun);
         transaction.commit();
-        log.info("Finished running task: " + taskToRun.getName());
+        log.info("Finished running task: " + taskToRun);
     }
 
     private void handleError(Exception e) {
         taskToRun.fail();
         taskDao.update(taskToRun);
-        log.error("Error while running task " + taskToRun.getName(), e);
+        log.error("Error while running task " + taskToRun, e);
     }
 
     private void closeSessions() {

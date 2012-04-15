@@ -133,12 +133,16 @@ public class Task implements Comparable {
     private boolean isFinished() {
         return this.status == TaskStatus.FINISHED;
     }
-
     public void addTaskConfigurationEntry(TaskConfigurationEntryKey key, String value) {
         configurationEntries.add(new TaskConfigurationEntry(key, value, this));
     }
 
     public List<TaskConfigurationEntry> getConfigurationEntries() {
         return Collections.unmodifiableList(configurationEntries);
+    }
+
+    @Override
+    public String toString() {
+        return project.getName() + " - " + name;
     }
 }
