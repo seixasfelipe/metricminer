@@ -33,7 +33,8 @@
         <mapping class="br.com.caelum.revolution.domain.Commit"/>
         <mapping class="br.com.caelum.revolution.domain.Modification"/>  
         
-        <mapping class="tasks.metric.cc.CCMetricResultToPersist" />
+        <mapping class="tasks.metric.cc.CCResult" />
+        <mapping class="tasks.metric.fanout.FanOutResult" />
 
 
     </session-factory>

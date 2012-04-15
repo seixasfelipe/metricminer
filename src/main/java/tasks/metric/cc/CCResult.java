@@ -8,7 +8,7 @@ import javax.persistence.OneToOne;
 import model.SourceCode;
 
 @Entity
-public class CCMetricResultToPersist {
+public class CCResult {
 
     @Id
     @GeneratedValue
@@ -18,7 +18,7 @@ public class CCMetricResultToPersist {
     private SourceCode sourceCode;
     private double avgCc;
 
-    public CCMetricResultToPersist(SourceCode sourceCode, int cc, double avgCc) {
+    public CCResult(SourceCode sourceCode, int cc, double avgCc) {
         this.sourceCode = sourceCode;
         this.cc = cc;
         this.avgCc = avgCc;

@@ -66,6 +66,11 @@ public class Project {
                 3);
         ccMetricTask.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRICFACTORYCLASS,
                 "tasks.metric.cc.CCMetricFactory");
+        Task fanOutMetricTask = new Task(this, "Calculate fan-out metric",
+                new CalculateMetricTaskFactory(), 4);
+        fanOutMetricTask.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRICFACTORYCLASS,
+                "tasks.metric.fanout.FanOutMetricFactory");
+        fanOutMetricTask.addDependency(ccMetricTask);
         ccMetricTask.addDependency(removeDirecotryTask);
         parseLogTask.addDependency(cloneTask);
         removeDirecotryTask.addDependency(parseLogTask);
@@ -73,6 +78,7 @@ public class Project {
         tasks.add(parseLogTask);
         tasks.add(removeDirecotryTask);
         tasks.add(ccMetricTask);
+        tasks.add(fanOutMetricTask);
     }
 
     public String getName() {

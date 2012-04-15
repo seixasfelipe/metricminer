@@ -12,6 +12,7 @@ DROP TABLE  `Artifact` ,
 `Task` ,
 `Task_Task` ,
 `TaskConfigurationEntry`,
-`CCMetricResultToPersist` ;
+`CCResult`,
+`FanOutResult`;
 
 SET foreign_key_checks = 1;

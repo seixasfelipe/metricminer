@@ -19,7 +19,7 @@ public class CCMetric implements Metric {
     }
 
     public Object resultToPersistOf(SourceCode sourceCode) {
-        return new CCMetricResultToPersist(sourceCode, cc(), avgCc());
+        return new CCResult(sourceCode, cc(), avgCc());
     }
 
     public void calculate(InputStream is) {
