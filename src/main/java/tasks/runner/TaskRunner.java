@@ -3,9 +3,9 @@ package tasks.runner;
 import model.Task;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.classic.Session;
 
 import br.com.caelum.vraptor.ioc.PrototypeScoped;
 import br.com.caelum.vraptor.tasks.scheduler.Scheduled;
@@ -14,10 +14,10 @@ import dao.TaskDao;
 @Scheduled(cron = "0/10 * * * * ?")
 public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
 
-    private TaskDao taskDao;
-    private Task taskToRun;
-    private Session session;
-    private Logger log;
+    TaskDao taskDao;
+    Task taskToRun;
+    Session session;
+    Logger log;
 
     public TaskRunner(SessionFactory sf) {
         this.session = sf.openSession();
@@ -27,10 +27,6 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
 
     @Override
     public void execute() {
-        // SessionFactory sessionFactory = new
-        // Configuration().configure().buildSessionFactory();
-        // session = sessionFactory.openSession();
-        // taskDao = new TaskDao(session);
         taskToRun = taskDao.getFirstQueuedTask();
         if (taskToRun != null) {
             if (!taskToRun.isDependenciesFinished()) {
