@@ -5,31 +5,36 @@ import model.Task;
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.classic.Session;
 
 import br.com.caelum.vraptor.ioc.PrototypeScoped;
 import br.com.caelum.vraptor.tasks.scheduler.Scheduled;
 import dao.TaskDao;
-
 @PrototypeScoped
 @Scheduled(cron = "0/10 * * * * ?")
 public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
 
-    private static Logger log = Logger.getLogger(TaskRunner.class);
     private TaskDao taskDao;
     private Task taskToRun;
     private Session session;
+    private Logger log;
+
+    public TaskRunner(SessionFactory sf) {
+        this.session = sf.openSession();
+        this.taskDao = new TaskDao(session);
+        log = Logger.getLogger(TaskRunner.class);
+    }
 
     @Override
     public void execute() {
-        SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-        session = sessionFactory.openSession();
-        taskDao = new TaskDao(session);
+        // SessionFactory sessionFactory = new
+        // Configuration().configure().buildSessionFactory();
+        // session = sessionFactory.openSession();
+        // taskDao = new TaskDao(session);
         taskToRun = taskDao.getFirstQueuedTask();
         if (taskToRun != null) {
             if (!taskToRun.isDependenciesFinished()) {
-                log.info("Waiting for task to finish...");
+                log.info("Waiting for a task dependecy task to finish...");
                 closeSessions();
                 return;
             }
@@ -71,7 +76,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     private void handleError(Exception e) {
         taskToRun.fail();
         taskDao.update(taskToRun);
-        log.error("Error when running a task", e);
+        log.error("Error while running task " + taskToRun.getName(), e);
     }
 
     private void closeSessions() {
