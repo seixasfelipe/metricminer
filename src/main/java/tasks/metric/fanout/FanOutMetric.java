@@ -33,10 +33,9 @@ public class FanOutMetric implements Metric {
 			visitor.visit(cunit, null);
 			
 			
-		}
-		catch(Exception e) {
-			throw new RuntimeException(e);
-		}
+        } catch (Throwable t) {
+            throw new RuntimeException(t);
+        }
 	}
 
 	public int fanOut() {
