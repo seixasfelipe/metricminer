@@ -34,6 +34,23 @@
 							<label for="project.scmRootDirectoryName">Git root directory name: </label><br />
 							<input type="text" class="text small" name="project.scmRootDirectoryName" />
 						</p>
+						
+						<h3>Metrics to calculate: </h3>
+						<table>
+							<tr>
+								<th><input type="checkbox" class="check_all"></th>
+								<th>Name</th>
+							</tr>
+							<c:forEach items="${metrics}" var="metric">
+								<tr>
+									<td>
+										<input type="checkbox" id="${metric.name}" name="metrics[${s.index}].metricFactoryClass" value="${metric.metricFactoryClass}" />
+									</td> 
+									<td>${metric.name}</td>
+								</tr>
+							</c:forEach>
+						</table>
+						
 						<p>
 							<input type="submit" class="submit small" value="Save" />
 						</p>

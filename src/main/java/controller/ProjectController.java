@@ -1,6 +1,10 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import model.Project;
+import model.RegisteredMetric;
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
@@ -20,6 +24,11 @@ public class ProjectController {
 
 	@Get("/projects/new")
 	public void form() {
+        List<RegisteredMetric> metrics = new ArrayList<RegisteredMetric>();
+        metrics.add(new RegisteredMetric("Ciclomatic Complexity",
+                "tasks.metric.cc.CCMetricFactory.class"));
+        metrics.add(new RegisteredMetric("Fan-out", "tasks.metric.fanout.FanOutMetricFactory.class"));
+        result.include("metrics", metrics);
 	}
 
 	@Get("/projects")
@@ -33,7 +42,8 @@ public class ProjectController {
 	}
 
 	@Post("/projects")
-	public void createProject(Project project) {
+    public void createProject(Project project, List<RegisteredMetric> metrics) {
+        System.out.println(metrics);
 		Project completeProject = new Project(project);
 		dao.save(completeProject);
 		completeProject.setupInitialConfigurationsEntries();
