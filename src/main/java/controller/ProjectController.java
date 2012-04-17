@@ -26,8 +26,8 @@ public class ProjectController {
 	public void form() {
         List<RegisteredMetric> metrics = new ArrayList<RegisteredMetric>();
         metrics.add(new RegisteredMetric("Ciclomatic Complexity",
-                "tasks.metric.cc.CCMetricFactory.class"));
-        metrics.add(new RegisteredMetric("Fan-out", "tasks.metric.fanout.FanOutMetricFactory.class"));
+ "tasks.metric.cc.CCMetricFactory"));
+        metrics.add(new RegisteredMetric("Fan-out", "tasks.metric.fanout.FanOutMetricFactory"));
         result.include("metrics", metrics);
 	}
 
@@ -45,7 +45,12 @@ public class ProjectController {
     public void createProject(Project project, List<RegisteredMetric> metrics) {
         System.out.println(metrics);
 		Project completeProject = new Project(project);
-		dao.save(completeProject);
+        if (metrics != null) {
+            for (RegisteredMetric metric : metrics) {
+                completeProject.addMetricToCalculate(metric.getMetricFactoryClass());
+            }
+        }
+        dao.save(completeProject);
 		completeProject.setupInitialConfigurationsEntries();
 		dao.save(completeProject);
 		result.redirectTo(ProjectController.class).list();
