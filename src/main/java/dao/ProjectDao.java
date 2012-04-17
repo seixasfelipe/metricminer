@@ -2,10 +2,7 @@ package dao;
 
 import java.util.List;
 
-import model.ConfigurationEntry;
 import model.Project;
-import model.Task;
-import model.TaskConfigurationEntry;
 
 import org.hibernate.Session;
 
@@ -21,14 +18,8 @@ public class ProjectDao {
 
     public void save(Project project) {
         session.save(project);
-        for (ConfigurationEntry entry : project.getConfigurationEntries())
-            session.save(entry);
-        for (Task task : project.getTasks()) {
-            for (TaskConfigurationEntry entry : task.getConfigurationEntries()) {
-                session.save(entry);
-            }
-            session.save(task);
-        }
+        project.setupInitialConfigurationsEntries();
+        session.save(project);
     }
 
     @SuppressWarnings("unchecked")

@@ -28,11 +28,11 @@ public class Project {
     private Long id;
     private String name;
     private String scmUrl;
-    @OneToMany(mappedBy = "project", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<ConfigurationEntry> configurationEntries;
-    @OneToMany(mappedBy = "project", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Artifact> artifacts;
-    @OneToMany(mappedBy = "project", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Task> tasks;
     private String scmRootDirectoryName;
 
@@ -62,24 +62,11 @@ public class Project {
         Task parseLogTask = new Task(this, "Parse SCM logs", new ParseGitLogTaskFactory(), 1);
         Task removeDirecotryTask = new Task(this, "Remove source code directory",
                 new RemoveSourceDirectoryTaskFactory(), 2);
-        // Task ccMetricTask = new Task(this, "Calculate CC metric", new
-        // CalculateMetricTaskFactory(),
-        // 3);
-        // ccMetricTask.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRICFACTORYCLASS,
-        // "tasks.metric.cc.CCMetricFactory");
-        // Task fanOutMetricTask = new Task(this, "Calculate fan-out metric",
-        // new CalculateMetricTaskFactory(), 4);
-        // fanOutMetricTask.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRICFACTORYCLASS,
-        // "tasks.metric.fanout.FanOutMetricFactory");
-        // fanOutMetricTask.addDependency(ccMetricTask);
-        // ccMetricTask.addDependency(removeDirecotryTask);
         parseLogTask.addDependency(cloneTask);
         removeDirecotryTask.addDependency(parseLogTask);
         tasks.add(cloneTask);
         tasks.add(parseLogTask);
         tasks.add(removeDirecotryTask);
-        // tasks.add(ccMetricTask);
-        // tasks.add(fanOutMetricTask);
     }
 
     public String getName() {
@@ -164,6 +151,5 @@ public class Project {
         Task lastTask = tasks.get(tasks.size() - 1);
         metricTask.addDependency(lastTask);
         tasks.add(metricTask);
-        System.out.println(metricFactoryClassName + " depenpent of " + lastTask);
     }
 }

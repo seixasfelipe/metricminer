@@ -43,7 +43,6 @@ public class ProjectController {
 
 	@Post("/projects")
     public void createProject(Project project, List<RegisteredMetric> metrics) {
-        System.out.println(metrics);
 		Project completeProject = new Project(project);
         if (metrics != null) {
             for (RegisteredMetric metric : metrics) {
@@ -51,8 +50,6 @@ public class ProjectController {
             }
         }
         dao.save(completeProject);
-		completeProject.setupInitialConfigurationsEntries();
-		dao.save(completeProject);
 		result.redirectTo(ProjectController.class).list();
 	}
 
