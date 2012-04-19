@@ -37,7 +37,7 @@ public class Task implements Comparable {
     private Integer position;
     @OneToMany
     private List<Task> depends;
-    @OneToMany(mappedBy = "task", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private List<TaskConfigurationEntry> configurationEntries;
 
     public Task() {
