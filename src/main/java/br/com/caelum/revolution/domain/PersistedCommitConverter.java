@@ -4,8 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import model.Project;
 import model.SourceCode;
@@ -17,10 +15,8 @@ import br.com.caelum.revolution.scm.CommitData;
 import br.com.caelum.revolution.scm.DiffData;
 
 public class PersistedCommitConverter {
-    private Map<String, Artifact> previouslySavedArtifactsByName;
 
     public PersistedCommitConverter() {
-        this.previouslySavedArtifactsByName = new HashMap<String, Artifact>();
     }
 
     public Commit toDomain(CommitData data, Session session, Project project) throws ParseException {
@@ -36,13 +32,11 @@ public class PersistedCommitConverter {
         session.save(commit);
 
         for (DiffData diff : data.getDiffs()) {
-            Artifact artifact = new Artifact(diff.getName(), diff.getArtifactKind(), project);
+            Artifact artifact = searchForPreviouslySavedArtifact(diff.getName(), project, session);
 
-            if (!previouslySavedArtifactsByName.containsKey(artifact.getName())) {
+            if (artifact == null) {
+                artifact = new Artifact(diff.getName(), diff.getArtifactKind(), project);
                 session.save(artifact);
-                previouslySavedArtifactsByName.put(artifact.getName(), artifact);
-            } else {
-                artifact = previouslySavedArtifactsByName.get(artifact.getName());
             }
 
             Modification modification = new Modification(diff.getDiff(), commit, artifact, diff
@@ -75,13 +69,6 @@ public class PersistedCommitConverter {
                 Restrictions.eq("name", name)).add(Restrictions.eq("project", project))
                 .uniqueResult();
         return artifact;
-    }
-
-    private Artifact searchForPreviouslySavedArtifact(Artifact artifact) {
-        if (previouslySavedArtifactsByName.containsKey(artifact.getName())) {
-            return artifact;
-        }
-        return null;
     }
 
     private Calendar convertDate(CommitData data) throws ParseException {

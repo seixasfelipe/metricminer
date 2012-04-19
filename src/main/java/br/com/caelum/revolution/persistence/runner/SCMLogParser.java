@@ -47,6 +47,9 @@ public class SCMLogParser implements PersistenceRunner {
                 log.info("Persisting change set " + changeSet.getId());
                 log.info("Author: " + commitData.getAuthor() + " on " + commitData.getDate());
                 converter.toDomain(commitData, session, project);
+                if (Runtime.getRuntime().freeMemory() < 10000l) {
+                    throw new OutOfMemoryError("Low memory, unable to commit transaction.");
+                }
                 session.getTransaction().commit();
             } catch (ParseException e) {
                 session.getTransaction().rollback();

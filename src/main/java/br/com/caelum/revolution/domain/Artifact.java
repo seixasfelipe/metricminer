@@ -16,12 +16,15 @@ import javax.persistence.OneToMany;
 import model.Project;
 import model.SourceCode;
 
+import org.hibernate.annotations.Index;
+
 @Entity
 public class Artifact {
 
     @Id
     @GeneratedValue
     private int id;
+    @Index(name = "name_index")
     private String name;
     @Enumerated(EnumType.STRING)
     private ArtifactKind kind;
@@ -30,6 +33,7 @@ public class Artifact {
     @OneToMany(mappedBy = "artifact", cascade = CascadeType.ALL)
     private List<Modification> modifications;
     @ManyToOne
+    @Index(name = "project_index")
     private Project project;
     @OneToMany(mappedBy = "artifact")
     private List<SourceCode> sources;
