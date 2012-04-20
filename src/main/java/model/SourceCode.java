@@ -1,6 +1,7 @@
 package model;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
@@ -18,7 +19,7 @@ public class SourceCode {
     private Long id;
     @ManyToOne
     private Artifact artifact;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Commit commit;
     @Type(type = "text")
     private String source;

@@ -7,6 +7,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -28,14 +29,14 @@ public class Artifact {
     private String name;
     @Enumerated(EnumType.STRING)
     private ArtifactKind kind;
-    @ManyToMany(mappedBy = "artifacts")
+    @ManyToMany(mappedBy = "artifacts", fetch = FetchType.LAZY)
     private List<Commit> commits;
     @OneToMany(mappedBy = "artifact", cascade = CascadeType.ALL)
     private List<Modification> modifications;
     @ManyToOne
     @Index(name = "project_index")
     private Project project;
-    @OneToMany(mappedBy = "artifact")
+    @OneToMany(mappedBy = "artifact", fetch = FetchType.LAZY)
     private List<SourceCode> sources;
 
     public Artifact() {
