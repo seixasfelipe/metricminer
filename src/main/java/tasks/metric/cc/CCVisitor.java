@@ -1,6 +1,6 @@
 package tasks.metric.cc;
 
-import static tasks.metric.FullMethodName.fullMethodName;
+import static tasks.metric.common.FullMethodName.fullMethodName;
 import japa.parser.ast.body.ConstructorDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.InitializerDeclaration;
@@ -20,7 +20,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Stack;
 
-import tasks.metric.ClassInfoVisitor;
+import tasks.metric.common.ClassInfoVisitor;
 
 public class CCVisitor extends ClassInfoVisitor {
 

@@ -5,8 +5,8 @@ import model.TaskConfigurationEntryKey;
 
 import org.hibernate.Session;
 
-import tasks.metric.Metric;
-import tasks.metric.MetricFactory;
+import tasks.metric.common.Metric;
+import tasks.metric.common.MetricFactory;
 import tasks.runner.RunnableTask;
 import tasks.runner.RunnableTaskFactory;
 

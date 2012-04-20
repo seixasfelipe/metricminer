@@ -1,4 +1,4 @@
-package tasks.metric.cc;
+package tasks.metric.lines;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,8 +8,8 @@ import javax.persistence.OneToOne;
 import model.SourceCode;
 import tasks.metric.common.MetricResult;
 
-@Entity
-public class CCResult implements MetricResult {
+@Entity(name = "LinesOfCodeResult")
+public class LinesOfCodeResult implements MetricResult {
 
     @Id
     @GeneratedValue
@@ -17,16 +17,13 @@ public class CCResult implements MetricResult {
     @OneToOne
     private SourceCode sourceCode;
 
-    private int cc;
-    private double avgCc;
+    private String methodName;
+    private int linesOfCode;
 
-    public CCResult() {
-    }
-
-    public CCResult(SourceCode sourceCode, int cc, double avgCc) {
+    public LinesOfCodeResult(SourceCode sourceCode, String method, int lines) {
         this.sourceCode = sourceCode;
-        this.cc = cc;
-        this.avgCc = avgCc;
+        this.methodName = method;
+        this.linesOfCode = lines;
     }
 
 }

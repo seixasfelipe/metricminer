@@ -1,4 +1,4 @@
-package tasks.metric;
+package tasks.metric.common;
 
 import java.io.InputStream;
 import java.util.Collection;

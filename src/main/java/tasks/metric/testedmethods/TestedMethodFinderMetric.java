@@ -1,4 +1,4 @@
-package tasks.metric.invocation;
+package tasks.metric.testedmethods;
 
 import japa.parser.JavaParser;
 import japa.parser.ast.CompilationUnit;
@@ -15,18 +15,20 @@ import tasks.metric.common.ClassInfoVisitor;
 import tasks.metric.common.Metric;
 import tasks.metric.common.MetricResult;
 
-public class MethodsInvocationMetric implements Metric{
+public class TestedMethodFinderMetric implements Metric{
 
-	private MethodsInvocationVisitor visitor;
-	private ClassInfoVisitor info;
-	
+	private ClassInfoVisitor classInfo;
+	private TestedMethodVisitor visitor;
+
 	public String header() {
-		return "path;project;class;method;invocations";
+		return "path;project;class;test method; production method";
 	}
 
 	public String content(String path, String project) {
-		for(Entry<String, Set<String>> e : visitor.getMethods().entrySet()) {
-			System.out.println(path + ";" + project + ";" + info.getName() + ";" + e.getKey() + ";" + e.getValue().size() + "\r\n");
+		for(Entry<String, Set<String>> testMethod : getMethods().entrySet()) {
+			for(String productionMethod : testMethod.getValue()) {
+				System.out.println(path + ";" + project + ";" + classInfo.getName() + ";" + testMethod.getKey()  +";" + productionMethod);
+			}
 		}
 		return null;
 	}
@@ -35,26 +37,29 @@ public class MethodsInvocationMetric implements Metric{
 		try {
 			CompilationUnit cunit = JavaParser.parse(is);
 			
-			info = new ClassInfoVisitor();
-			info.visit(cunit, null);
-			
-			visitor = new MethodsInvocationVisitor();
+			classInfo = new ClassInfoVisitor();
+			classInfo.visit(cunit, null);
+
+			visitor = new TestedMethodVisitor(classInfo.getName());
 			visitor.visit(cunit, null);
 		}
 		catch(Exception e) {
 			throw new RuntimeException(e);
-		}
+		}		
 	}
-	
+
 	public Map<String, Set<String>> getMethods() {
-		return visitor.getMethods();
+		return visitor.getInvokedMethods();
 	}
 
     @Override
     public Collection<MetricResult> resultsToPersistOf(SourceCode source) {
         ArrayList<MetricResult> results = new ArrayList<MetricResult>();
-        for (Entry<String, Set<String>> e : visitor.getMethods().entrySet()) {
-            results.add(new MethodsInvocationResult(source, e.getValue().size(), e.getKey()));
+        for(Entry<String, Set<String>> testMethod : getMethods().entrySet()) {
+            for(String productionMethod : testMethod.getValue()) {
+                results.add(new TestedMethodFinderResult(source, testMethod.getKey(),
+                        productionMethod));
+            }
         }
         return results;
     }
@@ -63,4 +68,5 @@ public class MethodsInvocationMetric implements Metric{
     public boolean shouldCalculateMetricOf(String fileName) {
         return fileName.endsWith(".java");
     }
+
 }

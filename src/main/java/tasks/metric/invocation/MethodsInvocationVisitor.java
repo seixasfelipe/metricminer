@@ -1,6 +1,6 @@
 package tasks.metric.invocation;
 
-import static tasks.metric.FullMethodName.fullMethodName;
+import static tasks.metric.common.FullMethodName.fullMethodName;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.expr.MethodCallExpr;
 import japa.parser.ast.visitor.VoidVisitorAdapter;

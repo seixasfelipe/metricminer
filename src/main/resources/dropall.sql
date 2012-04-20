@@ -13,6 +13,11 @@ DROP TABLE  `Artifact` ,
 `Task_Task` ,
 `TaskConfigurationEntry`,
 `CCResult`,
-`FanOutResult`;
+`FanOutResult`, 
+`LComResult`,
+`MethodsInvocationResult`,
+`LinesOfCodeResult`,
+`TestedMethodFinderResult`,
+`MethodsCountResult`;
 
 SET foreign_key_checks = 1;

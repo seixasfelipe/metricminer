@@ -11,8 +11,8 @@ import model.Task;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
-import tasks.metric.Metric;
-import tasks.metric.MetricResult;
+import tasks.metric.common.Metric;
+import tasks.metric.common.MetricResult;
 import tasks.runner.RunnableTask;
 import br.com.caelum.revolution.domain.Artifact;
 

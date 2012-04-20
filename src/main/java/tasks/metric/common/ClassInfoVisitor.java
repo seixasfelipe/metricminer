@@ -1,4 +1,4 @@
-package tasks.metric;
+package tasks.metric.common;
 
 import japa.parser.ast.body.AnnotationDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;

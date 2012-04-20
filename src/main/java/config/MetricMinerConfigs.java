@@ -20,6 +20,15 @@ public class MetricMinerConfigs {
         this.registeredMetrics.add(new RegisteredMetric("Fan-out", "tasks.metric.fanout.FanOutMetricFactory"));
         this.registeredMetrics.add(new RegisteredMetric("Invocation",
                 "tasks.metric.invocation.MethodsInvocationMetricFactory"));
+        this.registeredMetrics.add(new RegisteredMetric("LCom",
+                "tasks.metric.lcom.LComMetricFactory"));
+        this.registeredMetrics.add(new RegisteredMetric("Lines of Code",
+                "tasks.metric.lines.LinesOfCodeMetricFactory"));
+        this.registeredMetrics.add(new RegisteredMetric("Methods Count",
+                "tasks.metric.methods.MethodsCountMetricFactory"));
+        this.registeredMetrics.add(new RegisteredMetric("Tested Methods Finder",
+                "tasks.metric.testedmethods.TestedMethodsFinderMetricFactory"));
+
     }
 
     public String getMetricMinerHome() {

@@ -1,4 +1,4 @@
-package tasks.metric;
+package tasks.metric.common;
 
 public interface MetricResult {
 

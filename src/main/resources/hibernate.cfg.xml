@@ -33,9 +33,13 @@
         <mapping class="br.com.caelum.revolution.domain.Commit"/>
         <mapping class="br.com.caelum.revolution.domain.Modification"/>  
         
+        <mapping class="tasks.metric.lcom.LComResult" />
         <mapping class="tasks.metric.cc.CCResult" />
         <mapping class="tasks.metric.fanout.FanOutResult" />
         <mapping class="tasks.metric.invocation.MethodsInvocationResult" />
+        <mapping class="tasks.metric.lines.LinesOfCodeResult" />
+        <mapping class="tasks.metric.methods.MethodsCountResult" />
+        <mapping class="tasks.metric.testedmethods.TestedMethodFinderResult" />
 
 
     </session-factory>

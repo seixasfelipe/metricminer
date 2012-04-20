@@ -6,7 +6,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import model.SourceCode;
-import tasks.metric.MetricResult;
+import tasks.metric.common.MetricResult;
 
 @Entity
 public class MethodsInvocationResult implements MetricResult {

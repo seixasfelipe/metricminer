@@ -1,7 +1,7 @@
 package tasks.metric.invocation;
 
-import tasks.metric.Metric;
-import tasks.metric.MetricFactory;
+import tasks.metric.common.Metric;
+import tasks.metric.common.MetricFactory;
 
 public class MethodsInvocationMetricFactory implements MetricFactory {
 

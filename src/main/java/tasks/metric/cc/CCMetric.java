@@ -8,9 +8,9 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import model.SourceCode;
-import tasks.metric.ClassInfoVisitor;
-import tasks.metric.Metric;
-import tasks.metric.MetricResult;
+import tasks.metric.common.ClassInfoVisitor;
+import tasks.metric.common.Metric;
+import tasks.metric.common.MetricResult;
 
 public class CCMetric implements Metric {
 
