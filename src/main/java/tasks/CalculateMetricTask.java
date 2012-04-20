@@ -48,7 +48,7 @@ public class CalculateMetricTask implements RunnableTask {
     }
 
     private void calculateAndSaveResultsOf(SourceCode sourceCode) {
-        log.info("Calculating metrics for: " + sourceCode.getName() + " - "
+        log.info("Calculating " + metric.getClass() + " for: " + sourceCode.getName() + " - "
                 + sourceCode.getCommit().getCommitId());
         try {
             metric.calculate(new ByteArrayInputStream(sourceCode.getSourceBytesArray()));
