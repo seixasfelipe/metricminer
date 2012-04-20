@@ -12,6 +12,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 import tasks.CalculateMetricTaskFactory;
 import tasks.GitCloneTaskFactory;
@@ -36,25 +37,35 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Task> tasks;
     private String scmRootDirectoryName;
+    private String projectPath;
+
+    @Transient
+    private MetricMinerConfigs metricMinerConfigs;
 
     public Project() {
         this.configurationEntries = new ArrayList<ConfigurationEntry>();
         this.tasks = new ArrayList<Task>();
     }
 
-    public Project(String name, String scmUrl) {
-        this.name = name;
-        this.scmUrl = scmUrl;
-        this.configurationEntries = new ArrayList<ConfigurationEntry>();
-        this.tasks = new ArrayList<Task>();
+    public Project(MetricMinerConfigs metricMinerConfigs) {
+        this();
+        this.metricMinerConfigs = metricMinerConfigs;
+        projectPath = this.metricMinerConfigs.getMetricMinerHome() + "/projects/";
     }
 
-    public Project(Project baseProject) {
+    public Project(String name, String scmUrl, MetricMinerConfigs metricMinerConfigs) {
+        this(metricMinerConfigs);
+        this.name = name;
+        this.scmUrl = scmUrl;
+
+    }
+
+    public Project(Project baseProject, MetricMinerConfigs metricMinerConfigs) {
+        this(metricMinerConfigs);
+        this.metricMinerConfigs = metricMinerConfigs;
         this.name = baseProject.getName();
         this.scmUrl = baseProject.getScmUrl();
         this.scmRootDirectoryName = baseProject.getScmRootDirectoryName();
-        this.configurationEntries = new ArrayList<ConfigurationEntry>();
-        this.tasks = new ArrayList<Task>();
         setupInitialTasks();
     }
 
@@ -87,7 +98,7 @@ public class Project {
     }
 
     public void setupInitialConfigurationsEntries() {
-        String metricMinerHome = MetricMinerConfigs.metricMinerHome;
+        String metricMinerHome = this.metricMinerConfigs.getMetricMinerHome();
 
         configurationEntries.add(new ConfigurationEntry("scm",
                 "br.com.caelum.revolution.scm.git.GitFactory", this));
@@ -137,7 +148,7 @@ public class Project {
     }
 
     public String getLocalPath() {
-        return MetricMinerConfigs.metricMinerHome + "/projects/" + this.id;
+        return projectPath + this.id;
     }
 
     public List<Artifact> getArtifacts() {

@@ -14,6 +14,7 @@ import org.mockito.ArgumentCaptor;
 
 import tasks.GitCloneTaskFactory;
 import br.com.caelum.vraptor.util.test.MockResult;
+import config.MetricMinerConfigs;
 import dao.ProjectDao;
 import dao.TaskDao;
 
@@ -33,7 +34,7 @@ public class TaskControllerTest {
 
 	@Test
 	public void shouldAddTaskToProject() throws ClassNotFoundException {
-		Project p = new Project();
+        Project p = new Project(new MetricMinerConfigs());
 		ArgumentCaptor<Task> argument = ArgumentCaptor.forClass(Task.class);
 		when(projectDao.findProjectBy(1L)).thenReturn(p);
 		controller = new TaskController(result, projectDao, taskDao);

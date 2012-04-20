@@ -9,6 +9,7 @@ import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
+import config.MetricMinerConfigs;
 import dao.ProjectDao;
 
 @Resource
@@ -16,20 +17,18 @@ public class ProjectController {
 
 	private final Result result;
 	private final ProjectDao dao;
+    private final MetricMinerConfigs metricMinerConfigs;
 
-	public ProjectController(Result result, ProjectDao dao) {
+    public ProjectController(Result result, ProjectDao dao, MetricMinerConfigs metricMinerConfigs) {
 		this.result = result;
 		this.dao = dao;
+        this.metricMinerConfigs = metricMinerConfigs;
 	}
 
 	@Get("/projects/new")
 	public void form() {
         List<RegisteredMetric> metrics = new ArrayList<RegisteredMetric>();
-        metrics.add(new RegisteredMetric("Ciclomatic Complexity", "tasks.metric.cc.CCMetricFactory"));
-        metrics.add(new RegisteredMetric("Fan-out", "tasks.metric.fanout.FanOutMetricFactory"));
-        metrics.add(new RegisteredMetric("Invocation",
-                "tasks.metric.invocation.MethodsInvocationMetricFactory"));
-        result.include("metrics", metrics);
+        result.include("metrics", metricMinerConfigs.getRegisteredMetrics());
 	}
 
 	@Get("/projects")
@@ -44,7 +43,7 @@ public class ProjectController {
 
 	@Post("/projects")
     public void createProject(Project project, List<RegisteredMetric> metrics) {
-		Project completeProject = new Project(project);
+        Project completeProject = new Project(project, metricMinerConfigs);
         if (metrics != null) {
             for (RegisteredMetric metric : metrics) {
                 completeProject.addMetricToCalculate(metric.getMetricFactoryClass());
