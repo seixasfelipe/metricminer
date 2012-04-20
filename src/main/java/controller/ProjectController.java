@@ -25,9 +25,10 @@ public class ProjectController {
 	@Get("/projects/new")
 	public void form() {
         List<RegisteredMetric> metrics = new ArrayList<RegisteredMetric>();
-        metrics.add(new RegisteredMetric("Ciclomatic Complexity",
- "tasks.metric.cc.CCMetricFactory"));
+        metrics.add(new RegisteredMetric("Ciclomatic Complexity", "tasks.metric.cc.CCMetricFactory"));
         metrics.add(new RegisteredMetric("Fan-out", "tasks.metric.fanout.FanOutMetricFactory"));
+        metrics.add(new RegisteredMetric("Invocation",
+                "tasks.metric.invocation.MethodsInvocationMetricFactory"));
         result.include("metrics", metrics);
 	}
 

@@ -1,6 +1,7 @@
 package tasks;
 
 import java.io.ByteArrayInputStream;
+import java.util.Collection;
 import java.util.List;
 
 import model.Project;
@@ -11,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 
 import tasks.metric.Metric;
+import tasks.metric.MetricResult;
 import tasks.runner.RunnableTask;
 import br.com.caelum.revolution.domain.Artifact;
 
@@ -50,9 +52,12 @@ public class CalculateMetricTask implements RunnableTask {
                 + sourceCode.getCommit().getCommitId());
         try {
             metric.calculate(new ByteArrayInputStream(sourceCode.getSourceBytesArray()));
-            session.save(metric.resultToPersistOf(sourceCode));
-        } catch (Exception e) {
-            log.error("Unable to calculate metric: ", e);
+            Collection<MetricResult> results = metric.resultsToPersistOf(sourceCode);
+            for (MetricResult result : results) {
+                session.save(result);
+            }
+        } catch (Throwable t) {
+            log.error("Unable to calculate metric: ", t);
         }
     }
 

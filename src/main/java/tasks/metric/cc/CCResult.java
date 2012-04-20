@@ -6,9 +6,10 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
 import model.SourceCode;
+import tasks.metric.MetricResult;
 
 @Entity
-public class CCResult {
+public class CCResult implements MetricResult {
 
     @Id
     @GeneratedValue

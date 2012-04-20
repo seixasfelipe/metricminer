@@ -4,11 +4,13 @@ import japa.parser.JavaParser;
 import japa.parser.ast.CompilationUnit;
 
 import java.io.InputStream;
+import java.util.Collection;
 import java.util.Map.Entry;
 
 import model.SourceCode;
 import tasks.metric.ClassInfoVisitor;
 import tasks.metric.Metric;
+import tasks.metric.MetricResult;
 
 public class CCPerMethodMetric implements Metric {
 
@@ -49,7 +51,7 @@ public class CCPerMethodMetric implements Metric {
     }
 
     @Override
-    public Object resultToPersistOf(SourceCode source) {
+    public Collection<MetricResult> resultsToPersistOf(SourceCode source) {
         // TODO Auto-generated method stub
         return null;
     }

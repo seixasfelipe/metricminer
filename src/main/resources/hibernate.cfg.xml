@@ -22,9 +22,6 @@
         <property name="show_sql">false</property>
         <property name="format_sql">false</property>
         
-        <property name="hibernate.cache.use_second_level_cache">false</property>
-        <property name="hibernate.cache.use_query_cache">false</property>
-		        
         <mapping class="model.ConfigurationEntry" />
         <mapping class="model.TaskConfigurationEntry" />
         <mapping class="model.Task" />
@@ -38,6 +35,7 @@
         
         <mapping class="tasks.metric.cc.CCResult" />
         <mapping class="tasks.metric.fanout.FanOutResult" />
+        <mapping class="tasks.metric.invocation.MethodsInvocationResult" />
 
 
     </session-factory>

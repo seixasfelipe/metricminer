@@ -4,10 +4,13 @@ import japa.parser.JavaParser;
 import japa.parser.ast.CompilationUnit;
 
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collection;
 
 import model.SourceCode;
 import tasks.metric.ClassInfoVisitor;
 import tasks.metric.Metric;
+import tasks.metric.MetricResult;
 
 public class CCMetric implements Metric {
 
@@ -18,8 +21,8 @@ public class CCMetric implements Metric {
         return "path;project;class;cc;average cc";
     }
 
-    public Object resultToPersistOf(SourceCode sourceCode) {
-        return new CCResult(sourceCode, cc(), avgCc());
+    public Collection<MetricResult> resultsToPersistOf(SourceCode sourceCode) {
+        return Arrays.asList((MetricResult) new CCResult(sourceCode, cc(), avgCc()));
     }
 
     public void calculate(InputStream is) {

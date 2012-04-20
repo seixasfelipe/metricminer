@@ -4,10 +4,13 @@ import japa.parser.JavaParser;
 import japa.parser.ast.CompilationUnit;
 
 import java.io.InputStream;
+import java.util.Arrays;
+import java.util.Collection;
 
 import model.SourceCode;
 import tasks.metric.ClassInfoVisitor;
 import tasks.metric.Metric;
+import tasks.metric.MetricResult;
 
 public class FanOutMetric implements Metric {
 
@@ -48,8 +51,8 @@ public class FanOutMetric implements Metric {
     }
 
     @Override
-    public Object resultToPersistOf(SourceCode source) {
-        return new FanOutResult(source, fanOut());
+    public Collection<MetricResult> resultsToPersistOf(SourceCode source) {
+        return Arrays.asList((MetricResult) new FanOutResult(source, fanOut()));
     }
 
 }

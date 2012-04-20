@@ -106,7 +106,6 @@ public class Git implements SCM {
         message = message + "]]>";
         response = response.substring(0, response.indexOf("<message>") + 9) + message
                 + response.substring(response.indexOf("</message>"), response.length());
-        System.out.println(response);
         return response;
     }
 

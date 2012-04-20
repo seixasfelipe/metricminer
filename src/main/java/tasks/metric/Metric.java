@@ -1,13 +1,14 @@
 package tasks.metric;
 
 import java.io.InputStream;
+import java.util.Collection;
 
 import model.SourceCode;
 
 public interface Metric {
     String header();
 
-    Object resultToPersistOf(SourceCode source);
+    Collection<MetricResult> resultsToPersistOf(SourceCode source);
 
     void calculate(InputStream is);
 
