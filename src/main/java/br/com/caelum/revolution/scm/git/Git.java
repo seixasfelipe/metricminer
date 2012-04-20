@@ -76,6 +76,7 @@ public class Git implements SCM {
 									+ id
 									+ " --pretty=format:<Commit><commitId>%H</commitId><author><![CDATA[%an]]></author><email><![CDATA[%ae]]></email><date>%ai</date><message><![CDATA[%s]]></message></Commit>",
 							getRepoPath());
+			response = cleanCDATA(response);
 			XStream xs = new XStream(new DomDriver());
 			xs.alias("Commit", CommitData.class);
 			CommitData parsedCommit = (CommitData) xs.fromXML(response
@@ -98,7 +99,18 @@ public class Git implements SCM {
 		}
 	}
 
-	public String blame(String commitId, String file, int line) {
+	private String cleanCDATA(String response) {
+        String message = response.substring(response.indexOf("<message>") + 9,
+                response.indexOf("</message>"));
+        message = message.replaceAll("\\]\\]>", "");
+        message = message + "]]>";
+        response = response.substring(0, response.indexOf("<message>") + 9) + message
+                + response.substring(response.indexOf("</message>"), response.length());
+        System.out.println(response);
+        return response;
+    }
+
+    public String blame(String commitId, String file, int line) {
 		goTo(commitId);
 		String response = exec.execute("git blame " + file + " -L " + line
 				+ "," + line + " -l", getRepoPath());

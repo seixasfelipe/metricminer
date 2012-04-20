@@ -88,4 +88,17 @@ public class GitTest {
 		list.add(new ChangeSet("9999999999999999999999999999999999999999", Calendar.getInstance()));
 		return list;
 	}
+
+    @Test
+    public void shouldCleanCDATA() throws Exception {
+        when(exec.execute(any(String.class), any(String.class)))
+                .thenReturn(
+                        "<Commit><commitId>%H</commitId>"
+                                + "<author><![CDATA[author]]></author>"
+                                + "<email><![CDATA[author@gmal.com]]></email>"
+                                + "<date>%ai</date>"
+                                + "<message><![CDATA[Don't allow ]]> within ]]> CDATA sections.]]></message>"
+                        + "</Commit>");
+        new Git(repository, logParser, diffParser, blameParser, exec).detail("123");
+    }
 }
