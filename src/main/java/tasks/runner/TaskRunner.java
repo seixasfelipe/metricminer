@@ -64,13 +64,14 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
         if (!transaction.isActive()) {
             transaction.begin();
         }
-        finishTask(transaction);
+        finishTask();
     }
 
-    private void finishTask(Transaction transaction) {
+    private void finishTask() {
         taskToRun.finish();
+        Transaction tx = daoSession.beginTransaction();
         taskDao.update(taskToRun);
-        transaction.commit();
+        tx.commit();
         log.info("Finished running task: " + taskToRun);
     }
 
