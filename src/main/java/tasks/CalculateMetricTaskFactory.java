@@ -4,6 +4,7 @@ import model.Task;
 import model.TaskConfigurationEntryKey;
 
 import org.hibernate.Session;
+import org.hibernate.StatelessSession;
 
 import tasks.metric.common.Metric;
 import tasks.metric.common.MetricFactory;
@@ -13,7 +14,7 @@ import tasks.runner.RunnableTaskFactory;
 public class CalculateMetricTaskFactory implements RunnableTaskFactory {
 
     @Override
-    public RunnableTask build(Task task, Session session) {
+    public RunnableTask build(Task task, Session session, StatelessSession statelessSession) {
         String metricFactoryName = task
                 .getTaskConfigurationValueFor(TaskConfigurationEntryKey.METRICFACTORYCLASS);
         try {

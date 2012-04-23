@@ -5,6 +5,7 @@ import model.Task;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
 
 import br.com.caelum.vraptor.ioc.PrototypeScoped;
@@ -16,12 +17,16 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
 
     TaskDao taskDao;
     Task taskToRun;
-    Session session;
+    Session daoSession;
+    Session taskSession;
+    StatelessSession statelessSession;
     Logger log;
 
     public TaskRunner(SessionFactory sf) {
-        this.session = sf.openSession();
-        this.taskDao = new TaskDao(session);
+        this.daoSession = sf.openSession();
+        this.taskSession = sf.openSession();
+        this.statelessSession = sf.openStatelessSession();
+        this.taskDao = new TaskDao(daoSession);
         log = Logger.getLogger(TaskRunner.class);
     }
 
@@ -36,11 +41,11 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
             }
             log.info("Starting task: " + taskToRun);
             taskToRun.start();
-            Transaction tx = session.beginTransaction();
+            Transaction tx = daoSession.beginTransaction();
             taskDao.update(taskToRun);
             tx.commit();
             try {
-                runTask(session);
+                runTask(taskSession);
             } catch (Exception e) {
                 handleError(e);
             } finally {
@@ -54,7 +59,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
         RunnableTaskFactory runnableTaskFactory = (RunnableTaskFactory) taskToRun
                 .getRunnableTaskFactoryClass().newInstance();
         taskSession.beginTransaction();
-        runnableTaskFactory.build(taskToRun, taskSession).run();
+        runnableTaskFactory.build(taskToRun, taskSession, statelessSession).run();
         Transaction transaction = taskSession.getTransaction();
         if (!transaction.isActive()) {
             transaction.begin();
@@ -76,9 +81,9 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     }
 
     private void closeSessions() {
-        if (session.isOpen()) {
-            session.disconnect();
-            session.close();
+        if (daoSession.isOpen()) {
+            daoSession.disconnect();
+            daoSession.close();
         }
     }
 

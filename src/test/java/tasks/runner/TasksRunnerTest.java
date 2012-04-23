@@ -26,7 +26,7 @@ public class TasksRunnerTest {
         taskRunner = new TaskRunner(sf);
         mockedSession = mock(Session.class);
         mockedDao = mock(TaskDao.class);
-        taskRunner.session = mockedSession;
+        taskRunner.daoSession = mockedSession;
         taskRunner.taskDao = mockedDao;
     }
 
