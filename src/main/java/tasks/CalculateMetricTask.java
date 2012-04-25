@@ -9,6 +9,7 @@ import model.Task;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
+import org.hibernate.ScrollMode;
 import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.StatelessSession;
@@ -40,7 +41,7 @@ public class CalculateMetricTask implements RunnableTask {
                 + "join source.artifact as artifact where artifact.project.id = :project_id");
         query.setParameter("project_id", project.getId());
 
-        ScrollableResults sources = query.scroll();
+        ScrollableResults sources = query.scroll(ScrollMode.FORWARD_ONLY);
         while (sources.next()) {
             SourceCode source = (SourceCode) sources.get(0);
             calculateAndSaveResultsOf(source);
@@ -48,8 +49,7 @@ public class CalculateMetricTask implements RunnableTask {
     }
 
     private void calculateAndSaveResultsOf(SourceCode sourceCode) {
-        log.info("Calculating " + metric.getClass() + " for: " + sourceCode.getName() + " - "
-                + sourceCode.getCommit().getCommitId());
+        log.info("Calculating " + metric.getClass() + " for: " + sourceCode.getName());
         try {
             metric.calculate(new ByteArrayInputStream(sourceCode.getSourceBytesArray()));
             Collection<MetricResult> results = metric.resultsToPersistOf(sourceCode);
