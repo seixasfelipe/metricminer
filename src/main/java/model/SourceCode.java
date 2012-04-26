@@ -1,14 +1,19 @@
 package model;
 
+import java.util.Collections;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 import org.hibernate.annotations.Type;
 
 import br.com.caelum.revolution.domain.Artifact;
+import br.com.caelum.revolution.domain.Author;
 import br.com.caelum.revolution.domain.Commit;
 
 @Entity
@@ -23,6 +28,8 @@ public class SourceCode {
     private Commit commit;
     @Type(type = "text")
     private String source;
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="sourceCode")
+    private List<BlamedLine> blamedLines;
 
     public SourceCode() {
     }
@@ -48,4 +55,18 @@ public class SourceCode {
     public Commit getCommit() {
         return commit;
     }
+
+	public List<BlamedLine> getBlamedLines() {
+		return Collections.unmodifiableList(blamedLines);
+	}
+	
+	public BlamedLine blame(int line, Author author) {
+		BlamedLine blamedLine = new BlamedLine(author, line, this);
+		blamedLines.add(blamedLine);
+		return blamedLine;
+	}
+
+	public Long getId() {
+		return id;
+	}
 }

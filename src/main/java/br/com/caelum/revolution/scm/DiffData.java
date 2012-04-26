@@ -1,5 +1,8 @@
 package br.com.caelum.revolution.scm;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import br.com.caelum.revolution.domain.ArtifactKind;
 import br.com.caelum.revolution.domain.ModificationKind;
 
@@ -9,7 +12,8 @@ public class DiffData {
 	private String diff;
 	private ModificationKind modificationKind;
 	private ArtifactKind artifactKind;
-	private String modifedSource;
+	private String fullSourceCode;
+	private Map<Integer, String> blameLines;
 
 	public DiffData(String name, String diff,
 			ModificationKind modificationKind, ArtifactKind artifactKind) {
@@ -17,6 +21,7 @@ public class DiffData {
 		this.diff = diff;
 		this.modificationKind = modificationKind;
 		this.artifactKind = artifactKind;
+		this.blameLines = new HashMap<Integer, String>();
 	}
 
 	public String getName() {
@@ -51,12 +56,20 @@ public class DiffData {
 		this.artifactKind = artifactKind;
 	}
 
-	public void setModifedSource(String sourceCode) {
-		this.modifedSource = sourceCode;
+	public void setFullSourceCode(String sourceCode) {
+		this.fullSourceCode = sourceCode;
 	}
 
-	public String getModifedSource() {
-		return modifedSource;
+	public String getFullSourceCode() {
+		return fullSourceCode;
+	}
+
+	public void blame(int line, String author) {
+		blameLines.put(line, author);
+	}
+	
+	public Map<Integer, String> getBlameLines() {
+		return blameLines;
 	}
 
 }
