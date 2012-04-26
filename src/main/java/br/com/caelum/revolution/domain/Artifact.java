@@ -97,4 +97,11 @@ public class Artifact {
     public List<SourceCode> getSources() {
         return sources;
     }
+    public Project getProject() {
+		return project;
+	}
+    
+    public boolean isSourceCode() {
+    	return getKind() != ArtifactKind.BINARY;
+    }
 }

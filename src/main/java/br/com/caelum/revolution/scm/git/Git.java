@@ -89,7 +89,12 @@ public class Git implements SCM {
 			parsedCommit.setPriorCommit(priorCommit.trim());
 
 			for (DiffData diffData : diffParser.parse(parsedCommit.getDiff())) {
-				diffData.setModifedSource(sourceOf(id, diffData.getName()));
+				diffData.setFullSourceCode(sourceOf(id, diffData.getName()));
+				
+				for(int line = 1; line <= linesIn(diffData.getFullSourceCode()); line++) {
+					diffData.blame(line, blame(id, diffData.getName(), line));
+				}
+				
 				parsedCommit.addDiff(diffData);
 			}
 
@@ -97,6 +102,10 @@ public class Git implements SCM {
 		} catch (Exception e) {
 			throw new SCMException(e);
 		}
+	}
+
+	private int linesIn(String modifedSource) {
+		return modifedSource.split("\n").length+1;
 	}
 
 	private String cleanCDATA(String response) {

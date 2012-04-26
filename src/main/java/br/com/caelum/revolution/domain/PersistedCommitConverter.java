@@ -4,7 +4,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Map;
 
+import model.BlamedLine;
 import model.Project;
 import model.SourceCode;
 
@@ -21,33 +23,17 @@ public class PersistedCommitConverter {
 
     public Commit toDomain(CommitData data, Session session, Project project) throws ParseException {
 
-        Author author = searchForPreviouslySavedAuthor(data.getAuthor(), session);
-        if (author == null) {
-            author = new Author(data.getAuthor(), data.getEmail());
-            session.save(author);
-        }
-
-        Commit commit = new Commit(data.getCommitId(), author, convertDate(data),
-                data.getMessage(), data.getDiff(), data.getPriorCommit());
-        session.save(commit);
+        Author author = convertAuthor(data, session);
+        Commit commit = convertCommit(data, session, author);
 
         for (DiffData diff : data.getDiffs()) {
-            Artifact artifact = searchForPreviouslySavedArtifact(diff.getName(), project, session);
+            Artifact artifact = convertArtifact(session, project, diff);
+            createModification(session, commit, diff, artifact);
 
-            if (artifact == null) {
-                artifact = new Artifact(diff.getName(), diff.getArtifactKind(), project);
-                session.save(artifact);
-            }
-
-            Modification modification = new Modification(diff.getDiff(), commit, artifact, diff
-                    .getModificationKind());
-            artifact.addModification(modification);
-            commit.addModification(modification);
-            commit.addArtifact(artifact);
-            session.save(modification);
-
-            if (artifact.getKind() != ArtifactKind.BINARY) {
-                SourceCode sourceCode = new SourceCode(artifact, commit, diff.getModifedSource());
+            if (artifact.isSourceCode()) {
+                SourceCode sourceCode = new SourceCode(artifact, commit, diff.getFullSourceCode());
+                convertBlameInformation(session, diff, sourceCode);
+                
                 artifact.addSource(sourceCode);
                 commit.addSource(sourceCode);
                 session.save(sourceCode);
@@ -57,6 +43,52 @@ public class PersistedCommitConverter {
 
         return commit;
     }
+
+	private void convertBlameInformation(Session session, DiffData diff, SourceCode sourceCode) {
+		for(Map.Entry<Integer, String> entry :  diff.getBlameLines().entrySet()) {
+			Author blamedAuthor = searchForPreviouslySavedAuthor(entry.getValue(), session);
+			BlamedLine blamedLine = sourceCode.blame(entry.getKey(), blamedAuthor);
+			
+			session.save(blamedLine);
+		}
+	}
+
+	private void createModification(Session session, Commit commit, DiffData diff,
+			Artifact artifact) {
+		Modification modification = new Modification(diff.getDiff(), commit, artifact, diff
+		        .getModificationKind());
+		artifact.addModification(modification);
+		commit.addModification(modification);
+		commit.addArtifact(artifact);
+		session.save(modification);
+	}
+
+	private Artifact convertArtifact(Session session, Project project, DiffData diff) {
+		Artifact artifact = searchForPreviouslySavedArtifact(diff.getName(), project, session);
+
+		if (artifact == null) {
+		    artifact = new Artifact(diff.getName(), diff.getArtifactKind(), project);
+		    session.save(artifact);
+		}
+		return artifact;
+	}
+
+	private Commit convertCommit(CommitData data, Session session, Author author)
+			throws ParseException {
+		Commit commit = new Commit(data.getCommitId(), author, convertDate(data),
+                data.getMessage(), data.getDiff(), data.getPriorCommit());
+        session.save(commit);
+		return commit;
+	}
+
+	private Author convertAuthor(CommitData data, Session session) {
+		Author author = searchForPreviouslySavedAuthor(data.getAuthor(), session);
+        if (author == null) {
+            author = new Author(data.getAuthor(), data.getEmail());
+            session.save(author);
+        }
+		return author;
+	}
 
     private Author searchForPreviouslySavedAuthor(String name, Session session) {
         Author author = (Author) session.createCriteria(Author.class).add(
