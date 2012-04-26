@@ -172,7 +172,7 @@ public class Project {
     }
 
     public List<Tag> getTags() {
-		return tags;
+		return Collections.unmodifiableList(tags);
 	}
 
 	public void removeTag(String tagName) {
