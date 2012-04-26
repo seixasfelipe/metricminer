@@ -16,4 +16,6 @@
 <script type="text/javascript" src="<c:url value="/js/ajaxupload.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/jquery.pngfix.js"/>"></script>
 <script type="text/javascript" src="<c:url value="/js/custom.js"/>"></script>
+<script type="text/javascript" src="<c:url value='/js/jquery.tagsinput.js' />"></script>
+<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.13/jquery-ui.min.js'></script>
 

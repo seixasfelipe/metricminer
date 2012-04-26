@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
@@ -38,6 +40,8 @@ public class Project {
     private List<Task> tasks;
     private String scmRootDirectoryName;
     private String projectPath;
+    @ManyToMany(fetch=FetchType.LAZY)
+    private List<Tag> tags;
 
     @Transient
     private MetricMinerConfigs metricMinerConfigs;
@@ -45,6 +49,7 @@ public class Project {
     public Project() {
         this.configurationEntries = new ArrayList<ConfigurationEntry>();
         this.tasks = new ArrayList<Task>();
+        this.tags = new ArrayList<Tag>();
     }
 
     public Project(MetricMinerConfigs metricMinerConfigs) {
@@ -67,18 +72,6 @@ public class Project {
         this.scmUrl = baseProject.getScmUrl();
         this.scmRootDirectoryName = baseProject.getScmRootDirectoryName();
         setupInitialTasks();
-    }
-
-    private void setupInitialTasks() {
-        Task cloneTask = new Task(this, "Clone SCM", new GitCloneTaskFactory(), 0);
-        Task parseLogTask = new Task(this, "Parse SCM logs", new ParseGitLogTaskFactory(), 1);
-        Task removeDirecotryTask = new Task(this, "Remove source code directory",
-                new RemoveSourceDirectoryTaskFactory(), 2);
-        parseLogTask.addDependency(cloneTask);
-        removeDirecotryTask.addDependency(parseLogTask);
-        tasks.add(cloneTask);
-        tasks.add(parseLogTask);
-        tasks.add(removeDirecotryTask);
     }
 
     public String getName() {
@@ -164,4 +157,36 @@ public class Project {
         metricTask.addDependency(lastTask);
         tasks.add(metricTask);
     }
+    
+
+    private void setupInitialTasks() {
+        Task cloneTask = new Task(this, "Clone SCM", new GitCloneTaskFactory(), 0);
+        Task parseLogTask = new Task(this, "Parse SCM logs", new ParseGitLogTaskFactory(), 1);
+        Task removeDirecotryTask = new Task(this, "Remove source code directory",
+                new RemoveSourceDirectoryTaskFactory(), 2);
+        parseLogTask.addDependency(cloneTask);
+        removeDirecotryTask.addDependency(parseLogTask);
+        tasks.add(cloneTask);
+        tasks.add(parseLogTask);
+        tasks.add(removeDirecotryTask);
+    }
+
+    public List<Tag> getTags() {
+		return tags;
+	}
+
+	public void removeTag(String tagName) {
+		Iterator<Tag> it = tags.iterator();
+		while(it.hasNext()) {
+			Tag tag = it.next();
+			if(tag.getName().equals(tagName)) {
+				it.remove();
+				break;
+			}
+		}
+	}
+
+	public void addTag(Tag tag) {
+		tags.add(tag);
+	}
 }
