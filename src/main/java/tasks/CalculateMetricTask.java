@@ -43,7 +43,9 @@ public class CalculateMetricTask implements RunnableTask {
         List<SourceCode> sources = listSources(page);
         while (!sources.isEmpty()) {
             for (SourceCode sourceCode : sources) {
-                calculateAndSaveResultsOf(sourceCode);
+                if (metric.shouldCalculateMetricOf(sourceCode.getName())) {
+                    calculateAndSaveResultsOf(sourceCode);
+                }
             }
             page++;
         }
