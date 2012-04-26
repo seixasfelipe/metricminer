@@ -1,68 +1,49 @@
 package model;
 
-import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.transform.AliasToEntityMapResultTransformer;
+
+import br.com.caelum.vraptor.ioc.Component;
+
+@Component
 public class QueryExecutor {
-    private Query query;
-    private Connection connection;
-    private ResultSet resultSet;
-    private ResultSetMetaData metaData;
+    private Session session;
     
-    public QueryExecutor(Query query, Connection connection) {
-        this.query = query;
-        this.connection = connection;
+    public QueryExecutor(Session session) {
+        this.session = session;
+    }
+    
+    public void execute(Query query, OutputStream csvOutputStream) {
+        SQLQuery sqlQuery = session.createSQLQuery(query.getSql());
+        sqlQuery.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
+        List<Map<String, Object>> results = sqlQuery.list();
+        writeCSVTo(csvOutputStream, results);
     }
 
-    public QueryExecutor(Query query, Connection connection, ResultSet resultSet,
-            ResultSetMetaData metaData) {
-        this(query, connection);
-        this.resultSet = resultSet;
-        this.metaData = metaData;
-    }
-
-    public void execute() {
-        try {
-            PreparedStatement statement = connection.prepareStatement(query.getSql());
-            this.resultSet = statement.executeQuery();
-            metaData = resultSet.getMetaData();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public void writeCSVTo(OutputStream csvOutputStream) {
-        try {
-            writeResultSetTo(csvOutputStream);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    private void writeResultSetTo(OutputStream csvOutputStream) throws SQLException, IOException {
+    private void writeCSVTo(OutputStream csvOutputStream, List<Map<String,Object>> results) {
         PrintStream csvPrint = new PrintStream(csvOutputStream);
-        int total = rowCount();
-
-        for (int i = 0; i < total; i++) {
-            for (int j = 0; j < metaData.getColumnCount(); j++) {
-                csvPrint.print(resultSet.getString(j + 1) + ";");
+        Map<String, Object> first = results.get(0);
+        printHeader(csvPrint, first);
+        for (Map<String,Object> row : results) {
+            for (Entry<String, Object> entry : row.entrySet()) {
+                csvPrint.print(entry.getValue() + ";");
             }
-            resultSet.next();
             csvPrint.print("\n");
         }
-        csvPrint.close();
     }
 
-    private int rowCount() throws SQLException {
-        resultSet.last();
-        int total = resultSet.getRow();
-        resultSet.first();
-        return total;
+    private void printHeader(PrintStream csvPrint, Map<String, Object> first) {
+        for (Entry<String, Object> entry : first.entrySet()) {
+            csvPrint.print(entry.getKey() + ";");
+        }
+        csvPrint.print("\n");
     }
+
 }
