@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@taglib tagdir="/WEB-INF/tags" prefix="metricminer"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -23,6 +24,29 @@
 				</div>		<!-- .block_head ends -->
 				
 				<div class="block_content">
+				
+					<h3>Details</h3>
+					
+					<table>
+						<tr>
+							<td>Name</td>
+							<td>${project.name} <input type="hidden" name="id" id="projectId" value="${project.id}" /></td>
+						</tr>
+						
+						<tr>
+							<td>Repo's path</td>
+							<td>${project.scmUrl}</td>
+						</tr>
+						
+						<tr>
+							<td>Tags</td>
+							<td>
+								<input type="text" class="tags" name="tags" id="tags" value="${tags}" style="display: none;" />
+							</td>
+						</tr>
+					</table>
+				
+				
 					<h3>Scheduled Tasks</h3>
 					<table>
 						<tr>

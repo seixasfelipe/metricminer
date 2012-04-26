@@ -29,7 +29,8 @@
 						<thead>
 							<tr>
 								<th>Name</th>
-								<th>SCM URL</th>
+								<th>Repo's URL</th>
+								<th>Tags</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -37,6 +38,11 @@
 								<tr>
 									<td><a href="<c:url value="/projects/${project.id}" />">${project.name}</a></td>
 									<td>${project.scmUrl}</td>
+									<td>
+										<c:forEach items="${project.tags}" var="tag">
+											${tag.name}&nbsp;
+										</c:forEach>
+									</td>
 								</tr>
 							</c:forEach>
 							

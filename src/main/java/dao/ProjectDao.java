@@ -34,4 +34,9 @@ public class ProjectDao {
     public Session getSession() {
         return this.session;
     }
+
+	public void update(Project project) {
+		session.update(project);
+	}
+    
 }
