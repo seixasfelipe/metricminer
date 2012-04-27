@@ -14,7 +14,7 @@ public class MetricMinerConfigs {
     private List<RegisteredMetric> registeredMetrics;
     
     public MetricMinerConfigs() {
-        this.metricMinerHome = "/Users/mauricioaniche/dev/lixo-mm/";
+        this.metricMinerHome = "/tmp/metricminer";
         this.registeredMetrics = new ArrayList<RegisteredMetric>();
         this.registeredMetrics.add(new RegisteredMetric("Ciclomatic Complexity", "tasks.metric.cc.CCMetricFactory"));
         this.registeredMetrics.add(new RegisteredMetric("Fan-out", "tasks.metric.fanout.FanOutMetricFactory"));

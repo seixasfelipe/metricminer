@@ -27,7 +27,8 @@
         <mapping class="model.Task" />
         <mapping class="model.Project" />
         <mapping class="model.SourceCode" />
-        <mapping class="model.Tag"/>  
+        <mapping class="model.Tag"/>
+        <mapping class="model.BlamedLine"/>    
         
         <mapping class="br.com.caelum.revolution.domain.Artifact"/>  
         <mapping class="br.com.caelum.revolution.domain.Author"/>

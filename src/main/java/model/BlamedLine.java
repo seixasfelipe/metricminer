@@ -2,9 +2,8 @@ package model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.ManyToOne;
-
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import br.com.caelum.revolution.domain.Author;
 
@@ -13,6 +12,7 @@ public class BlamedLine {
 	@Id
 	@GeneratedValue
 	private int id;
+	@ManyToOne
 	private Author author;
 	private int line;
 	@ManyToOne

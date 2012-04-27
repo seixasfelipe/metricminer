@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class SourceCode {
     @Type(type = "text")
     private String source;
     @OneToMany(fetch=FetchType.LAZY, mappedBy="sourceCode")
-    private List<BlamedLine> blamedLines;
+    private List<BlamedLine> blamedLines = new ArrayList<BlamedLine>();
 
     public SourceCode() {
     }

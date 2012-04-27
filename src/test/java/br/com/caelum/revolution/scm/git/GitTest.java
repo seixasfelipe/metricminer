@@ -11,6 +11,8 @@ import static org.mockito.Mockito.when;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -101,4 +103,16 @@ public class GitTest {
                         + "</Commit>");
         new Git(repository, logParser, diffParser, blameParser, exec).detail("123");
     }
+    
+    @Test
+    public void shouldMatchName() throws Exception {
+        String out ="^fecdebaa9388cec408eddb0e73267664f0a87b9 (Francisco Sokol 2012-04-26 18:11:55 -0300 1) public class Main {";
+
+        Pattern pattern = Pattern.compile("\\S+\\s+\\(([\\w\\s]+)\\d{4}-\\d{2}-\\d{2}.*\\).*");
+        Matcher matcher = pattern.matcher(out);
+        matcher.find();
+        System.out.println(matcher.group(1));
+ 
+    }
+    
 }

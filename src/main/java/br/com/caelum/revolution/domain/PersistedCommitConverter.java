@@ -32,6 +32,7 @@ public class PersistedCommitConverter {
 
             if (artifact.isSourceCode()) {
                 SourceCode sourceCode = new SourceCode(artifact, commit, diff.getFullSourceCode());
+                session.save(sourceCode);
                 convertBlameInformation(session, diff, sourceCode);
                 
                 artifact.addSource(sourceCode);
@@ -47,6 +48,7 @@ public class PersistedCommitConverter {
 	private void convertBlameInformation(Session session, DiffData diff, SourceCode sourceCode) {
 		for(Map.Entry<Integer, String> entry :  diff.getBlameLines().entrySet()) {
 			Author blamedAuthor = searchForPreviouslySavedAuthor(entry.getValue(), session);
+			System.out.println(entry.getValue());
 			BlamedLine blamedLine = sourceCode.blame(entry.getKey(), blamedAuthor);
 			
 			session.save(blamedLine);

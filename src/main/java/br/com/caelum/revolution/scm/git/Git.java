@@ -104,8 +104,9 @@ public class Git implements SCM {
 		}
 	}
 
-	private int linesIn(String modifedSource) {
-		return modifedSource.split("\n").length+1;
+	private int linesIn(String modifiedSource) {
+		char lastChar = modifiedSource.charAt(modifiedSource.length() - 1);
+		return lastChar == '\n' ? modifiedSource.split("\n").length : modifiedSource.split("\n").length+1; 
 	}
 
 	private String cleanCDATA(String response) {
@@ -118,10 +119,13 @@ public class Git implements SCM {
         return response;
     }
 
+	//TODO: arrumar isso aqui, vai precisar de uma regex
     public String blame(String commitId, String file, int line) {
 		goTo(commitId);
 		String response = exec.execute("git blame " + file + " -L " + line
 				+ "," + line + " -l", getRepoPath());
+		
+		//return blameParser.getAuthor(response);
 		return blameParser.getHash(response);
 	}
 

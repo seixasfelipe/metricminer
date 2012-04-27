@@ -49,6 +49,7 @@ public class CalculateMetricTask implements RunnableTask {
                 }
             }
             page++;
+            sources = listSources(page);
         }
     }
 
@@ -57,7 +58,7 @@ public class CalculateMetricTask implements RunnableTask {
                 + "join source.artifact as artifact where artifact.project.id = :project_id");
         query.setParameter("project_id", project.getId());
         query.setFirstResult(page * pageSize);
-        query.setMaxResults(page * pageSize + pageSize);
+        query.setMaxResults(pageSize);
         List<SourceCode> sources = query.list();
         return sources;
     }
