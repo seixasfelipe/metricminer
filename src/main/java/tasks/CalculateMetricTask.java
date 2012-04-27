@@ -67,11 +67,11 @@ public class CalculateMetricTask implements RunnableTask {
         try {
             metric.calculate(new ByteArrayInputStream(sourceCode.getSourceBytesArray()));
             Collection<MetricResult> results = metric.resultsToPersistOf(sourceCode);
+            session.getTransaction().begin();
             for (MetricResult result : results) {
                 session.save(result);
-                session.flush();
-                session.clear();
             }
+            session.getTransaction().commit();
         } catch (Throwable t) {
             log.error("Unable to calculate metric: ", t);
         }
