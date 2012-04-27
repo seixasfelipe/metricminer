@@ -43,12 +43,12 @@ public class CalculateMetricTask implements RunnableTask {
         List<SourceCode> sources = listSources(page);
         while (!sources.isEmpty()) {
             for (SourceCode sourceCode : sources) {
-                log.info("Trying to calculate metric for: " + sourceCode.getName());
                 if (metric.shouldCalculateMetricOf(sourceCode.getName())) {
                     calculateAndSaveResultsOf(sourceCode);
                 }
             }
             page++;
+            log.info("Calculated metric for " + page * pageSize + " sources.");
             sources = listSources(page);
         }
     }
@@ -64,7 +64,6 @@ public class CalculateMetricTask implements RunnableTask {
     }
 
     private void calculateAndSaveResultsOf(SourceCode sourceCode) {
-        log.info("Calculating " + metric.getClass() + " for: " + sourceCode.getName());
         try {
             metric.calculate(new ByteArrayInputStream(sourceCode.getSourceBytesArray()));
             Collection<MetricResult> results = metric.resultsToPersistOf(sourceCode);
