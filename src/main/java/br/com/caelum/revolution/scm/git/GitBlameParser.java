@@ -6,7 +6,6 @@ import java.util.regex.Pattern;
 public class GitBlameParser {
 
     public String getHash(String line) {
-        System.out.println(line);
         return line.substring(0, line.indexOf(" "));
     }
 

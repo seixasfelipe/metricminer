@@ -12,8 +12,10 @@ import br.com.caelum.vraptor.ioc.Component;
 public class MetricMinerConfigs {
     private String metricMinerHome;
     private List<RegisteredMetric> registeredMetrics;
+    private int maxConcurrentTasks;
     
     public MetricMinerConfigs() {
+        this.maxConcurrentTasks = 1;
         this.metricMinerHome = "/tmp/metricminer";
         this.registeredMetrics = new ArrayList<RegisteredMetric>();
         this.registeredMetrics.add(new RegisteredMetric("Ciclomatic Complexity", "tasks.metric.cc.CCMetricFactory"));
@@ -37,6 +39,10 @@ public class MetricMinerConfigs {
 
     public List<RegisteredMetric> getRegisteredMetrics() {
         return registeredMetrics;
+    }
+    
+    public int getMaxConcurrentTasks() {
+        return maxConcurrentTasks;
     }
 
 }

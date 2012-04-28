@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 
 import br.com.caelum.vraptor.ioc.PrototypeScoped;
 import br.com.caelum.vraptor.tasks.scheduler.Scheduled;
+import config.MetricMinerStatus;
 import dao.TaskDao;
 @PrototypeScoped
 @Scheduled(cron = "0/10 * * * * ?")
@@ -21,8 +22,10 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     Session taskSession;
     StatelessSession statelessSession;
     Logger log;
+    private final MetricMinerStatus status;
 
-    public TaskRunner(SessionFactory sf) {
+    public TaskRunner(SessionFactory sf, MetricMinerStatus status) {
+        this.status = status;
         this.daoSession = sf.openSession();
         this.taskSession = sf.openSession();
         this.statelessSession = sf.openStatelessSession();
@@ -33,24 +36,23 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     @Override
     public void execute() {
         taskToRun = taskDao.getFirstQueuedTask();
-        if (taskToRun != null) {
-            if (!taskToRun.isDependenciesFinished()) {
-                log.info(taskToRun + ": Waiting for unresolved dependecies");
-                closeSessions();
-                return;
-            }
-            log.info("Starting task: " + taskToRun);
-            taskToRun.start();
-            Transaction tx = daoSession.beginTransaction();
-            taskDao.update(taskToRun);
-            tx.commit();
-            try {
-                runTask(taskSession);
-            } catch (Exception e) {
-                handleError(e);
-            } finally {
-                closeSessions();
-            }
+        if (!status.mayStartTask() || taskToRun == null || !taskToRun.isDependenciesFinished()) {
+            closeSessions();
+            log.info(status);
+            return;
+        }
+        log.info("Starting task: " + taskToRun);
+        taskToRun.start();
+        status.addRunningTask(taskToRun);
+        Transaction tx = daoSession.beginTransaction();
+        taskDao.update(taskToRun);
+        tx.commit();
+        try {
+            runTask(taskSession);
+        } catch (Exception e) {
+            handleError(e);
+        } finally {
+            closeSessions();
         }
         closeSessions();
     }
@@ -69,15 +71,19 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
 
     private void finishTask() {
         taskToRun.finish();
+        status.finishCurrentTask();
         Transaction tx = daoSession.beginTransaction();
         taskDao.update(taskToRun);
-        tx.commit();
         log.info("Finished running task: " + taskToRun);
+        tx.commit();
     }
 
     private void handleError(Exception e) {
         taskToRun.fail();
+        status.finishCurrentTask();
+        Transaction tx = daoSession.beginTransaction();
         taskDao.update(taskToRun);
+        tx.commit();
         log.error("Error while running task " + taskToRun, e);
     }
 

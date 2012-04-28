@@ -37,7 +37,7 @@ public class CalculateMetricTask implements RunnableTask {
 
     @Override
     public void run() {
-        pageSize = 10;
+        pageSize = 5;
         int page = 0;
         project = task.getProject();
         List<SourceCode> sources = listSources(page);
@@ -50,6 +50,7 @@ public class CalculateMetricTask implements RunnableTask {
             page++;
             log.info("Calculated metric for " + page * pageSize + " sources.");
             sources = listSources(page);
+            System.gc();
         }
     }
 

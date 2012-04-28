@@ -91,9 +91,9 @@ public class Git implements SCM {
 			for (DiffData diffData : diffParser.parse(parsedCommit.getDiff())) {
 				diffData.setFullSourceCode(sourceOf(id, diffData.getName()));
 				
-				for(int line = 1; line <= linesIn(diffData.getFullSourceCode()); line++) {
-					diffData.blame(line, blame(id, diffData.getName(), line));
-				}
+				//for(int line = 1; line <= linesIn(diffData.getFullSourceCode()); line++) {
+					//diffData.blame(line, blame(id, diffData.getName(), line));
+				//}
 				
 				parsedCommit.addDiff(diffData);
 			}

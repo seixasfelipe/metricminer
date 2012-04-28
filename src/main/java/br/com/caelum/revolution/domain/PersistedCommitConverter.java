@@ -33,7 +33,7 @@ public class PersistedCommitConverter {
             if (artifact.isSourceCode()) {
                 SourceCode sourceCode = new SourceCode(artifact, commit, diff.getFullSourceCode());
                 session.save(sourceCode);
-                convertBlameInformation(session, diff, sourceCode);
+                //convertBlameInformation(session, diff, sourceCode);
                 
                 artifact.addSource(sourceCode);
                 commit.addSource(sourceCode);
