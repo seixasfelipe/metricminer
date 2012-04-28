@@ -10,6 +10,8 @@ import model.Task;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
+import org.hibernate.ScrollMode;
+import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.StatelessSession;
 
@@ -40,18 +42,35 @@ public class CalculateMetricTask implements RunnableTask {
         pageSize = 5;
         int page = 0;
         project = task.getProject();
-        List<SourceCode> sources = listSources(page);
-        while (!sources.isEmpty()) {
-            for (SourceCode sourceCode : sources) {
-                if (metric.shouldCalculateMetricOf(sourceCode.getName())) {
-                    calculateAndSaveResultsOf(sourceCode);
-                }
+        boolean notFinishedPage;
+        
+        ScrollableResults sources = scrollableSources(page);
+        boolean notFinishedAllSources = sources.first();
+        
+        while (notFinishedAllSources) {
+            notFinishedPage = true;
+            while (notFinishedPage) {
+                SourceCode source = (SourceCode) sources.get(0);
+                calculateAndSaveResultsOf(source);
+                notFinishedPage = sources.next();
             }
             page++;
-            log.info("Calculated metric for " + page * pageSize + " sources.");
-            sources = listSources(page);
+            log.info("Calculated " + metric.getClass() + " for " + page * pageSize + " sources.");
+            sources = scrollableSources(page);
+            notFinishedAllSources = sources.first();
             System.gc();
         }
+    }
+
+    private ScrollableResults scrollableSources(int page) {
+        Project project = task.getProject();
+        Query query = statelessSession.createQuery("select source from SourceCode source "
+                + "join source.artifact as artifact where artifact.project.id = :project_id");
+        query.setParameter("project_id", project.getId());
+        query.setFirstResult(page * pageSize);
+        query.setMaxResults(pageSize);
+        ScrollableResults sources = query.scroll(ScrollMode.FORWARD_ONLY);
+        return sources;
     }
 
     private List<SourceCode> listSources(int page) {

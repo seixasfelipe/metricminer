@@ -18,6 +18,8 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import config.MetricMinerConfigs;
+import config.MetricMinerStatus;
 import dao.TaskDao;
 
 public class TasksRunnerTest {
@@ -29,7 +31,7 @@ public class TasksRunnerTest {
     @Before
     public void setUp() {
         SessionFactory sf = mock(SessionFactory.class);
-        taskRunner = new TaskRunner(sf);
+        taskRunner = new TaskRunner(sf, new MetricMinerStatus(new MetricMinerConfigs()));
         mockedSession = mock(Session.class);
         mockedDao = mock(TaskDao.class);
         taskRunner.daoSession = mockedSession;
