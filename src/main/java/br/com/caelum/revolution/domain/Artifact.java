@@ -104,4 +104,8 @@ public class Artifact {
     public boolean isSourceCode() {
     	return getKind() != ArtifactKind.BINARY;
     }
+    
+    public int getCommitCount() {
+        return commits.size();
+    }
 }

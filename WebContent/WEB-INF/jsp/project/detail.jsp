@@ -39,6 +39,11 @@
 							<td>Repo's path</td>
 							<td>${project.scmUrl}</td>
 						</tr>
+						
+						<tr>
+							<td>Commit count</td>
+							<td>${project.commitCount}</td>
+						</tr>
 
 						<tr>
 							<td>Tags</td>

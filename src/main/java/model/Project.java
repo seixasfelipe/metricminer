@@ -40,7 +40,7 @@ public class Project {
     private List<Task> tasks;
     private String scmRootDirectoryName;
     private String projectPath;
-    @ManyToMany(fetch=FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Tag> tags;
 
     @Transient
@@ -157,7 +157,6 @@ public class Project {
         metricTask.addDependency(lastTask);
         tasks.add(metricTask);
     }
-    
 
     private void setupInitialTasks() {
         Task cloneTask = new Task(this, "Clone SCM", new GitCloneTaskFactory(), 0);
@@ -172,25 +171,26 @@ public class Project {
     }
 
     public List<Tag> getTags() {
-		return Collections.unmodifiableList(tags);
-	}
+        return Collections.unmodifiableList(tags);
+    }
 
-	public void removeTag(String tagName) {
-		Iterator<Tag> it = tags.iterator();
-		while(it.hasNext()) {
-			Tag tag = it.next();
-			if(tag.getName().equals(tagName)) {
-				it.remove();
-				break;
-			}
-		}
-	}
+    public void removeTag(String tagName) {
+        Iterator<Tag> it = tags.iterator();
+        while (it.hasNext()) {
+            Tag tag = it.next();
+            if (tag.getName().equals(tagName)) {
+                it.remove();
+                break;
+            }
+        }
+    }
 
-	public void addTag(Tag tag) {
-		tags.add(tag);
-	}
+    public void addTag(Tag tag) {
+        tags.add(tag);
+    }
 
-    public List<RegisteredMetric> avaiableMetricsToAddBasedOn(List<RegisteredMetric> registeredMetrics) {
+    public List<RegisteredMetric> avaiableMetricsToAddBasedOn(
+            List<RegisteredMetric> registeredMetrics) {
         ArrayList<RegisteredMetric> avaiableMetrics = new ArrayList<RegisteredMetric>();
         for (RegisteredMetric registeredMetric : registeredMetrics) {
             if (!this.containsTaskWith(registeredMetric)) {
@@ -211,5 +211,13 @@ public class Project {
 
     public void addTask(Task task) {
         this.tasks.add(task);
+    }
+
+    public int getCommitCount() {
+        int total = 0;
+        for (Artifact artifact : this.artifacts) {
+            total += artifact.getCommitCount();
+        }
+        return total;
     }
 }

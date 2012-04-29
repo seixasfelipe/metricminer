@@ -38,7 +38,6 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
         taskToRun = taskDao.getFirstQueuedTask();
         if (!status.mayStartTask() || taskToRun == null || !taskToRun.isDependenciesFinished()) {
             closeSessions();
-            log.info(status);
             return;
         }
         log.info("Starting task: " + taskToRun);
