@@ -18,6 +18,10 @@ public class MetricMinerConfigs {
         this.maxConcurrentTasks = 1;
         this.metricMinerHome = "/tmp/metricminer";
         this.registeredMetrics = new ArrayList<RegisteredMetric>();
+        registerMetrics();
+    }
+
+    private void registerMetrics() {
         this.registeredMetrics.add(new RegisteredMetric("Ciclomatic Complexity", "tasks.metric.cc.CCMetricFactory"));
         this.registeredMetrics.add(new RegisteredMetric("Fan-out", "tasks.metric.fanout.FanOutMetricFactory"));
         this.registeredMetrics.add(new RegisteredMetric("Invocation",
@@ -30,7 +34,6 @@ public class MetricMinerConfigs {
                 "tasks.metric.methods.MethodsCountMetricFactory"));
         this.registeredMetrics.add(new RegisteredMetric("Tested Methods Finder",
                 "tasks.metric.testedmethods.TestedMethodsFinderMetricFactory"));
-
     }
 
     public String getMetricMinerHome() {
@@ -44,5 +47,5 @@ public class MetricMinerConfigs {
     public int getMaxConcurrentTasks() {
         return maxConcurrentTasks;
     }
-
+    
 }

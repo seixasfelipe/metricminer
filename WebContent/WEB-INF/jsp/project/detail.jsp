@@ -44,28 +44,54 @@
 							</td>
 						</tr>
 					</table>
+				</div>
+				<div class="bendl"></div>
+				<div class="bendr"></div>
+			</div>
+			
+			<div class="block small left">
+				<div class="block_head">
+					<div class="bheadl"></div>
+					<div class="bheadr"></div>
+					<h2>Avaiable metrics to calculate</h2>
+				</div>		<!-- .block_head ends -->
+				<div class="block_content">
+					<h3></h3>
+					<table>
+						<c:forEach items="${avaiableMetrics}" var="metric">
+							<tr>
+								<td>${metric.name}</td>
+								<td><button>Calculate</button></td>
+							</tr>
+						</c:forEach>
+					</table>
+				</div>
+				<div class="bendl"></div>
+				<div class="bendr"></div>
+			</div>
+			<div class="block small right">
+				<div class="block_head">
+					<div class="bheadl"></div>
+					<div class="bheadr"></div>
+					<h2>Scheduled Tasks</h2>
+				</div>		<!-- .block_head ends -->	
 				
-				
-					<h3>Scheduled Tasks</h3>
+				<div class="block_content">
 					<table>
 						<tr>
 							<th></th>
-							<th>Submit date</th>
 							<th>Name</th>
-							<th>Task Factory Class</th>
 							<th>Task Status</th>
 						</tr>
 						<c:forEach items="${project.tasks}" var="task">
 							<tr>
 								<td>#${task.position}</td>
-								<td>${task.submitDate.time}</td>							
 								<td>${task.name}</td>
-								<td>${task.runnableTaskFactoryClass}</td>
 								<td class="${fn:toLowerCase(task.status)} task-status">${task.status}</td>
 							</tr>
 						</c:forEach>
 					</table>
-				</div>		<!-- .block_content ends -->
+				</div>
 				<div class="bendl"></div>
 				<div class="bendr"></div>
 			</div>		<!-- .block ends -->

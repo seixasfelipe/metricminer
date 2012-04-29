@@ -145,4 +145,12 @@ public class Task implements Comparable {
     public String toString() {
         return project.getName() + " - " + name;
     }
+
+    public boolean willCalculate(RegisteredMetric registeredMetric) {
+        for (TaskConfigurationEntry entry : this.configurationEntries) {
+            if (entry.isEqualToMetric(registeredMetric))
+                return true;
+        }
+        return false;
+    }
 }

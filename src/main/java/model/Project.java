@@ -189,4 +189,27 @@ public class Project {
 	public void addTag(Tag tag) {
 		tags.add(tag);
 	}
+
+    public List<RegisteredMetric> avaiableMetricsToAddBasedOn(List<RegisteredMetric> registeredMetrics) {
+        ArrayList<RegisteredMetric> avaiableMetrics = new ArrayList<RegisteredMetric>();
+        for (RegisteredMetric registeredMetric : registeredMetrics) {
+            if (!this.containsTaskWith(registeredMetric)) {
+                avaiableMetrics.add(registeredMetric);
+            }
+        }
+        return avaiableMetrics;
+    }
+
+    private boolean containsTaskWith(RegisteredMetric registeredMetric) {
+        for (Task task : this.tasks) {
+            if (task.willCalculate(registeredMetric)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void addTask(Task task) {
+        this.tasks.add(task);
+    }
 }

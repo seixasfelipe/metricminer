@@ -1005,3 +1005,24 @@ a:hover {
 task-status {
 	font-weight: bold;
 }
+
+button {
+	width: 85px;
+	height: 30px;
+	line-height: 30px;
+	background: url(../images/btns.gif) top center no-repeat;
+	border: 0;
+	font-family: "Titillium800", "Trebuchet MS", Arial, sans-serif;
+	font-size: 14px;
+	font-weight: normal;
+	text-transform: uppercase;
+	color: #fff;
+	text-shadow: 1px 1px 0 #0a5482;
+	cursor: pointer;
+	margin-right: 10px;
+	vertical-align: middle;
+}
+button:hover {
+	background: url(../images/btns_.gif) top center no-repeat;
+	text-shadow: 1px 1px 0 #b55f10;
+}

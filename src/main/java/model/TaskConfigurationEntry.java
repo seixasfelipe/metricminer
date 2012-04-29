@@ -39,4 +39,9 @@ public class TaskConfigurationEntry {
         return value;
     }
 
+    public boolean isEqualToMetric(RegisteredMetric registeredMetric) {
+        return this.key.equals(TaskConfigurationEntryKey.METRICFACTORYCLASS)
+                && registeredMetric.getMetricFactoryClass().equals(this.value);
+    }
+
 }
