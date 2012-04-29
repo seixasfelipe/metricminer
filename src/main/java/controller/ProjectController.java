@@ -49,6 +49,13 @@ public class ProjectController {
         result.include("avaiableMetrics", project.avaiableMetricsToAddBasedOn(configs.getRegisteredMetrics()));
         result.include("project", project);
     }
+    
+    @Post("/projects/{projectId}/metrics")
+    public void addMetricToCalculate(Long projectId, RegisteredMetric metric) {
+        Project project = dao.findProjectBy(projectId);
+        project.addMetricToCalculate(metric.getMetricFactoryClass());
+        result.nothing();
+    }
 
     @Post("/projects/{projectId}/tags/remove")
     public void removeTag(Long projectId, String tagName) {
