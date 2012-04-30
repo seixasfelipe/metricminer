@@ -12,6 +12,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import model.Project;
 import model.SourceCode;
 
 import org.hibernate.annotations.Type;
@@ -37,9 +38,11 @@ public class Commit {
 	private String priorCommitId;
 	@OneToMany(mappedBy = "commit")
 	private List<SourceCode> sources;
+	@ManyToOne
+	private Project project;
 
 	public Commit(String commitId, Author author, Calendar date,
-			String message, String diff, String priorCommitId) {
+			String message, String diff, String priorCommitId, Project project) {
 		this();
 		this.commitId = commitId;
 		this.author = author;
@@ -47,6 +50,7 @@ public class Commit {
 		this.message = message;
 		this.diff = diff;
 		this.priorCommitId = priorCommitId;
+        this.project = project;
 	}
 
 	public Commit() {

@@ -22,6 +22,7 @@ import tasks.ParseGitLogTaskFactory;
 import tasks.RemoveSourceDirectoryTaskFactory;
 import br.com.caelum.revolution.config.MapConfig;
 import br.com.caelum.revolution.domain.Artifact;
+import br.com.caelum.revolution.domain.Commit;
 import config.MetricMinerConfigs;
 
 @Entity
@@ -42,6 +43,8 @@ public class Project {
     private String projectPath;
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Tag> tags;
+    @OneToMany(mappedBy = "project")
+    private List<Commit> commits;
 
     @Transient
     private MetricMinerConfigs metricMinerConfigs;
@@ -214,10 +217,6 @@ public class Project {
     }
 
     public int getCommitCount() {
-        int total = 0;
-        for (Artifact artifact : this.artifacts) {
-            total += artifact.getCommitCount();
-        }
-        return total;
+        return commits.size();
     }
 }

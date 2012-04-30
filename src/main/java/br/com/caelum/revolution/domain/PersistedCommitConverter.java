@@ -24,7 +24,7 @@ public class PersistedCommitConverter {
     public Commit toDomain(CommitData data, Session session, Project project) throws ParseException {
 
         Author author = convertAuthor(data, session);
-        Commit commit = convertCommit(data, session, author);
+        Commit commit = convertCommit(data, session, author, project);
 
         for (DiffData diff : data.getDiffs()) {
             Artifact artifact = convertArtifact(session, project, diff);
@@ -75,10 +75,10 @@ public class PersistedCommitConverter {
 		return artifact;
 	}
 
-	private Commit convertCommit(CommitData data, Session session, Author author)
+	private Commit convertCommit(CommitData data, Session session, Author author, Project project)
 			throws ParseException {
 		Commit commit = new Commit(data.getCommitId(), author, convertDate(data),
-                data.getMessage(), data.getDiff(), data.getPriorCommit());
+                data.getMessage(), data.getDiff(), data.getPriorCommit(), project);
         session.save(commit);
 		return commit;
 	}
