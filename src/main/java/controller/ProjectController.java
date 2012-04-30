@@ -48,6 +48,7 @@ public class ProjectController {
         result.include("tags", tokenize.tags(project.getTags()));
         result.include("avaiableMetrics", project.avaiableMetricsToAddBasedOn(configs.getRegisteredMetrics()));
         result.include("project", project);
+        result.include("commitCount", dao.commitCountFor(project));
     }
     
     @Post("/projects/{projectId}/metrics")

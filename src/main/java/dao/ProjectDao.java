@@ -4,6 +4,7 @@ import java.util.List;
 
 import model.Project;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 
 import br.com.caelum.vraptor.ioc.Component;
@@ -29,6 +30,13 @@ public class ProjectDao {
 
     public Project findProjectBy(Long id) {
         return (Project) session.load(Project.class, id);
+    }
+    
+    public Long commitCountFor(Project project) {
+        Query query = session.createQuery("select count(commit.id) from Commit commit "
+                + "join commit.project as project where project.id = :project_id");
+        query.setParameter("project_id", project.getId());
+        return (Long) query.uniqueResult();
     }
 
     public Session getSession() {

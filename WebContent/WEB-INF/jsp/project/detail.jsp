@@ -42,7 +42,7 @@
 						
 						<tr>
 							<td>Commit count</td>
-							<td>${project.commitCount}</td>
+							<td>${commitCount}</td>
 						</tr>
 
 						<tr>
