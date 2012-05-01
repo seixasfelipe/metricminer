@@ -44,8 +44,13 @@
 						</tr>
 						
 						<tr>
-							<td>Commit count</td>
+							<td>Total commits</td>
 							<td>${commitCount}</td>
+						</tr>
+						
+						<tr>
+							<td>Total commiters</td>
+							<td>${commiterCount}</td>
 						</tr>
 
 						<tr>

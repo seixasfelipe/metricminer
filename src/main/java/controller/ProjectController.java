@@ -49,6 +49,7 @@ public class ProjectController {
         result.include("avaiableMetrics", project.avaiableMetricsToAddBasedOn(configs.getRegisteredMetrics()));
         result.include("project", project);
         result.include("commitCount", dao.commitCountFor(project));
+        result.include("commiterCount", dao.commitersCountFor(project));
     }
     
     @Get("/projects/{id}/delete")
