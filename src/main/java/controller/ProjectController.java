@@ -52,6 +52,7 @@ public class ProjectController {
         result.include("commiterCount", dao.commitersCountFor(project));
         result.include("lastCommit", dao.lastCommitFor(project));
         result.include("firstCommit", dao.firstCommitFor(project));
+        result.include("lastSixMonthsCommitCountMap", dao.commitCountForLastSixMonths(project));
     }
     
     @Get("/projects/{id}/delete")

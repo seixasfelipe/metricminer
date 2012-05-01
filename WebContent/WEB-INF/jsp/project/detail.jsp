@@ -67,6 +67,11 @@
 							<td><input type="text" class="tags" name="tags" id="tags"
 								value="${tags}" style="display: none;" /></td>
 						</tr>
+						
+						<c:forEach items="${lastSixMonthsCommitCountMap}" var="entry">
+						    <tr><td><td><fmt:formatDate value="${entry.key.time}" pattern="yyyy/MM/dd"/></td></td> <td>value = ${entry.value}</td></tr>
+						</c:forEach>
+						
 					</table>
 				</div>
 				<div class="bendl"></div>
