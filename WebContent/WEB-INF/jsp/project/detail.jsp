@@ -61,38 +61,38 @@
 
 					<table id="details">
 						<tr>
-							<td>Name</td>
+							<th>Name</th>
 							<td>${project.name} <input type="hidden" name="id"
 								id="projectId" value="${project.id}" /></td>
 						</tr>
 
 						<tr>
-							<td>Repo's path</td>
+							<th>Repo's path</th>
 							<td>${project.scmUrl}</td>
 						</tr>
 						
 						<tr>
-							<td>Total commits</td>
+							<th>Total commits</th>
 							<td>${commitCount}</td>
 						</tr>
 						
 						<tr>
-							<td>Total commiters</td>
+							<th>Total commiters</th>
 							<td>${commiterCount}</td>
 						</tr>
 						
 						<tr>
-							<td>First commit</td>
+							<th>First commit</th>
 							<td><fmt:formatDate value="${firstCommit.date.time}" pattern="yyyy/MM/dd"/></td>
 						</tr>
 						
 						<tr>
-							<td>Last commit</td>
+							<th>Last commit</th>
 							<td><fmt:formatDate value="${lastCommit.date.time}" pattern="yyyy/MM/dd"/></td>
 						</tr>
 
 						<tr>
-							<td>Tags</td>
+							<th>Tags</th>
 							<td><input type="text" class="tags" name="tags" id="tags"
 								value="${tags}" style="display: none;" /></td>
 						</tr>
