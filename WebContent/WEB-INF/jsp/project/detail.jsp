@@ -21,6 +21,9 @@
 					<div class="bheadl"></div>
 					<div class="bheadr"></div>
 					<h2>${project.name}</h2>
+					<ul class="tabs">
+						<li><a href="<c:url value="/projects/${project.id}/delete" />">Delete project</a></li>
+					</ul>
 				</div>
 				<!-- .block_head ends -->
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -29,7 +30,7 @@ public class SourceCode {
     private Commit commit;
     @Type(type = "text")
     private String source;
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="sourceCode")
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="sourceCode", cascade = CascadeType.ALL)
     private List<BlamedLine> blamedLines = new ArrayList<BlamedLine>();
 
     public SourceCode() {

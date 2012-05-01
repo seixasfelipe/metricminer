@@ -46,5 +46,10 @@ public class ProjectDao {
 	public void update(Project project) {
 		session.update(project);
 	}
+
+    public void delete(Long id) {
+        Project project = findProjectBy(id);
+        session.delete(project);
+    }
     
 }

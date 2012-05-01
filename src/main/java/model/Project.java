@@ -43,7 +43,7 @@ public class Project {
     private String projectPath;
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Tag> tags;
-    @OneToMany(mappedBy = "project")
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Commit> commits;
 
     @Transient

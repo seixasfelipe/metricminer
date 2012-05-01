@@ -23,6 +23,9 @@ public class Modification {
 	@Enumerated(EnumType.STRING)
 	private ModificationKind kind;
 	
+	public Modification() {
+	}
+	
 	public Modification(String diff, Commit commit, Artifact artifact,
 			ModificationKind kind) {
 		this.diff = diff;

@@ -36,7 +36,7 @@ public class Artifact {
     @ManyToOne
     @Index(name = "project_index")
     private Project project;
-    @OneToMany(mappedBy = "artifact", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "artifact", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<SourceCode> sources;
 
     public Artifact() {

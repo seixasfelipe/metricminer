@@ -51,6 +51,12 @@ public class ProjectController {
         result.include("commitCount", dao.commitCountFor(project));
     }
     
+    @Get("/projects/{id}/delete")
+    public void delete(Long id) {
+        dao.delete(id);
+        result.redirectTo(ProjectController.class).list();
+    }
+    
     @Post("/projects/{projectId}/metrics")
     public void addMetricToCalculate(Long projectId, RegisteredMetric metric) {
         Project project = dao.findProjectBy(projectId);
