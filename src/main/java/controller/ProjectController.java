@@ -50,6 +50,8 @@ public class ProjectController {
         result.include("project", project);
         result.include("commitCount", dao.commitCountFor(project));
         result.include("commiterCount", dao.commitersCountFor(project));
+        result.include("lastCommit", dao.lastCommitFor(project));
+        result.include("firstCommit", dao.firstCommitFor(project));
     }
     
     @Get("/projects/{id}/delete")

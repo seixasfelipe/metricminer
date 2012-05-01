@@ -7,6 +7,7 @@ import model.Project;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
+import br.com.caelum.revolution.domain.Commit;
 import br.com.caelum.vraptor.ioc.Component;
 
 @Component
@@ -45,6 +46,24 @@ public class ProjectDao {
         		"where commit.project.id = :id group by author.id)");
         query.setParameter("id", project.getId());
         return (Long) query.uniqueResult();
+    }
+    
+    public Commit firstCommitFor(Project project) {
+        Query query = session.createQuery("select commit From Commit as commit where " +
+                "commit.project.id=:id order by date asc ");
+        query.setMaxResults(1);
+        query.setParameter("id", project.getId());
+        Commit commit = (Commit) query.uniqueResult();
+        return commit;
+    }
+    
+    public Commit lastCommitFor(Project project) {
+        Query query = session.createQuery("select commit From Commit as commit where " +
+                "commit.project.id=:id order by date desc ");
+        query.setMaxResults(1);
+        query.setParameter("id", project.getId());
+        Commit commit = (Commit) query.uniqueResult();
+        return commit;
     }
 
     public Session getSession() {

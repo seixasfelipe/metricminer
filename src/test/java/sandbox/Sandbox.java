@@ -1,5 +1,7 @@
 package sandbox;
 
+import java.util.Calendar;
+
 import model.SourceCode;
 
 import org.hibernate.Query;
@@ -9,6 +11,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.cfg.Configuration;
 import org.junit.Test;
+
+import br.com.caelum.revolution.domain.Commit;
 
 public class Sandbox {
     @Test
@@ -40,6 +44,22 @@ public class Sandbox {
             Long count = (Long) results.get(0);
             System.out.println(count);
         }
+    }
+    
+    @Test
+    public void testFirstCommit() throws Exception {
+        SessionFactory sf = new Configuration().configure().buildSessionFactory();
+        Session session = sf.openSession();
+        Query query = session.createQuery("select commit From Commit as commit where " +
+        		"commit.project.id=:id order by date asc ");
+        
+        query.setMaxResults(1);
+        
+        query.setParameter("id", 4l);
+        
+        Commit commit = (Commit) query.uniqueResult();
+        
+        System.out.println(commit.getDate().get(Calendar.YEAR));
     }
     
     
