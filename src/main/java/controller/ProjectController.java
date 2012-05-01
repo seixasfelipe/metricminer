@@ -55,6 +55,7 @@ public class ProjectController {
         result.include("lastSixMonthsCommitCountMap", dao.commitCountForLastSixMonths(project));
     }
     
+
     @Get("/projects/{id}/delete")
     public void delete(Long id) {
         dao.delete(id);

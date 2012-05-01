@@ -9,6 +9,35 @@
 
 <head>
 <c:import url="../import/head.jsp" />
+<style type="text/css">
+#commit_chart {
+	width: 850px;
+	height: 350px;
+	position: relative;
+	float: right;
+}
+</style>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([["Month", "count"]
+			<c:forEach items="${lastSixMonthsCommitCountMap}" var="entry">
+		    ,["<fmt:formatDate value="${entry.key.time}" pattern="yyyy/MM/dd"/>",
+		    ${entry.value}]
+			</c:forEach>
+		]);
+
+        var options = {
+          title: 'Commits of the last six months'
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('commit_chart'));
+        chart.draw(data, options);
+      }
+    </script>
+
 <title>Metric Miner</title>
 </head>
 
@@ -30,7 +59,7 @@
 
 				<div class="block_content">
 
-					<table>
+					<table id="details">
 						<tr>
 							<td>Name</td>
 							<td>${project.name} <input type="hidden" name="id"
@@ -68,9 +97,7 @@
 								value="${tags}" style="display: none;" /></td>
 						</tr>
 						
-						<c:forEach items="${lastSixMonthsCommitCountMap}" var="entry">
-						    <tr><td><td><fmt:formatDate value="${entry.key.time}" pattern="yyyy/MM/dd"/></td></td> <td>value = ${entry.value}</td></tr>
-						</c:forEach>
+					    <div id="commit_chart"></div>
 						
 					</table>
 				</div>
