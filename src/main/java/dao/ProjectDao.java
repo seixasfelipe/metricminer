@@ -5,6 +5,7 @@ import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import model.Project;
 
@@ -72,7 +73,7 @@ public class ProjectDao {
     }
 
     public Map<Calendar, Long> commitCountForLastMonths(Project project) {
-        Map<Calendar, Long> map = new HashMap<Calendar, Long>();
+        Map<Calendar, Long> map = new TreeMap<Calendar, Long>();
         Commit lastCommit = lastCommitFor(project);
         if (lastCommit == null)
             return map;
@@ -94,8 +95,10 @@ public class ProjectDao {
             
             map.put(start, count);
 
-            if (startMonth == 1) {
-                nextMonth = 12;
+            System.out.println(start.get(Calendar.YEAR) + "/" + start.get(Calendar.MONTH));
+            
+            if (startMonth == 0) {
+                nextMonth = 11;
                 nextYear = startYear - 1;
             } else {
                 nextMonth = startMonth - 1;
