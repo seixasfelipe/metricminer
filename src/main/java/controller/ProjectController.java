@@ -52,9 +52,20 @@ public class ProjectController {
         result.include("commiterCount", dao.commitersCountFor(project));
         result.include("lastCommit", dao.lastCommitFor(project));
         result.include("firstCommit", dao.firstCommitFor(project));
-        result.include("lastSixMonthsCommitCountMap", dao.commitCountForLastSixMonths(project));
+        result.include("lastSixMonthsCommitCountMap", dao.commitCountForLastMonths(project));
     }
     
+    @Get("/projects/{id}/commitChartData")
+    public void commitChartData(Long id) {
+        Project project = dao.findProjectBy(id);
+        result.include("lastSixMonthsCommitCountMap", dao.commitCountForLastMonths(project));
+    }
+    
+    @Get("/projects/{id}/fileCountChartData")
+    public void fileCountChartData(Long id) {
+        Project project = dao.findProjectBy(id);
+        result.include("fileCountPerCommit", dao.fileCountPerCommitForLastSixMonths(project));
+    }
 
     @Get("/projects/{id}/delete")
     public void delete(Long id) {

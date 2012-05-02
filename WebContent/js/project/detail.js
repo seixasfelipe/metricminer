@@ -31,7 +31,78 @@ function sendMetric(metricClass) {
 	});
 }
 
+function drawCommitChart() {
+	var id = $('#projectId').val();
+	$.ajax({
+		type : 'GET',
+		url : CONTEXT_ROOT + '/projects/' + id + '/commitChartData',
+		dataType : 'json',
+		success : function(commitData) {
+			var data = google.visualization.arrayToDataTable(commitData);
+
+			var options = {
+				title : 'Commits of the last twelve months',
+				hAxis : {
+					textColor : '#ffffff'
+				},
+				legend : {
+					position : 'none'
+				}
+			};
+
+			var chart = new google.visualization.LineChart(document
+					.getElementById('commit_chart'));
+			chart.draw(data, options);
+
+		},
+		error : function() {
+			alert("Could load chart data");
+		}
+	});
+}
+
+function drawFileCountChart() {
+	var id = $('#projectId').val();
+	$
+			.ajax({
+				type : 'GET',
+				url : CONTEXT_ROOT + '/projects/' + id + '/fileCountChartData',
+				dataType : 'json',
+				success : function(fileCountData) {
+					var data = google.visualization
+							.arrayToDataTable(fileCountData);
+
+					var options = {
+						title : 'Number of modified files per commit for the last six months',
+						hAxis : {
+							textColor : '#ffffff'
+						},
+						legend : {
+							position : 'none'
+						}
+					};
+
+					var chart = new google.visualization.LineChart(document
+							.getElementById('fileCount_chart'));
+					chart.draw(data, options);
+
+				},
+				error : function() {
+					alert("Could load chart data");
+				}
+			});
+}
+
+function drawCharts() {
+	drawCommitChart();
+	drawFileCountChart();
+}
+
 $(document).ready(function() {
+	google.load("visualization", "1", {
+		packages : [ "corechart" ]
+	});
+	google.setOnLoadCallback(drawCharts);
 	$('#tags').tagsInput({
 		width : 'auto',
 		'onAddTag' : addTag,

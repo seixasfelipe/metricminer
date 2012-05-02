@@ -18,6 +18,9 @@ DROP TABLE  `Artifact` ,
 `MethodsInvocationResult`,
 `LinesOfCodeResult`,
 `TestedMethodFinderResult`,
-`MethodsCountResult`;
+`MethodsCountResult`,
+`BlamedLine`,
+`Project_Tag`,
+`Tag`;
 
 SET foreign_key_checks = 1;

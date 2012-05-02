@@ -9,6 +9,7 @@ import java.util.Map;
 import model.Project;
 
 import org.hibernate.Query;
+import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 
 import br.com.caelum.revolution.domain.Commit;
@@ -70,12 +71,12 @@ public class ProjectDao {
         return commit;
     }
 
-    public Map<Calendar, Long> commitCountForLastSixMonths(Project project) {
+    public Map<Calendar, Long> commitCountForLastMonths(Project project) {
         Map<Calendar, Long> map = new HashMap<Calendar, Long>();
         Commit lastCommit = lastCommitFor(project);
         if (lastCommit == null)
             return map;
-        int totalMonths = 6;
+        int totalMonths = 12;
 
         int lastMonth = lastCommit.getDate().get(Calendar.MONTH);
         int lastYear = lastCommit.getDate().get(Calendar.YEAR);
@@ -103,6 +104,51 @@ public class ProjectDao {
             start = new GregorianCalendar(nextYear, nextMonth, 1);
         }
 
+        return map;
+    }
+    
+    public Map<Commit, Long> fileCountPerCommitForLastSixMonths(Project project) {
+        Commit lastCommit = lastCommitFor(project);
+        if (lastCommit == null)
+            return new HashMap<Commit, Long>();
+
+        int lastMonth = lastCommit.getDate().get(Calendar.MONTH);
+        int lastYear = lastCommit.getDate().get(Calendar.YEAR);
+
+        Calendar end = lastCommit.getDate();
+        
+        int startMonth = lastMonth - 6;
+        int startYear = lastYear; 
+        if (startMonth <= 0) {
+            startMonth += 12;
+            startYear--;
+        }
+        
+        Calendar start = new GregorianCalendar(startYear, startMonth, 1);
+        
+        return fileCountPerCommitByInterval(end, start);
+    }
+
+    private Map<Commit, Long> fileCountPerCommitByInterval(Calendar end, Calendar start) {
+        Map<Commit, Long> map = new HashMap<Commit, Long>();
+        Query query = session
+                .createQuery("select count(source.id),commit from SourceCode as source "
+                        + " join source.commit as commit "
+                        + "where commit.project.id=:id and (commit.date >= :start AND commit.date <= :end) " +
+                        "group by commit.id");
+        
+        query.setParameter("id", 1l);
+        query.setParameter("start", start);
+        query.setParameter("end", end);
+        
+        ScrollableResults results = query.scroll();
+        
+        while (results.next()) {
+            Long count = (Long) results.get(0);
+            Commit commit = (Commit) results.get(1);
+            map.put(commit, count);
+        }
+        
         return map;
     }
 

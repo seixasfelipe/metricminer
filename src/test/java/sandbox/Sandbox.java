@@ -66,6 +66,29 @@ public class Sandbox {
             System.out.println(count);
         }
     }
+    
+    @Test
+    public void testCommitFileCountForInterval() throws Exception {
+        SessionFactory sf = new Configuration().configure().buildSessionFactory();
+        Session session = sf.openSession();
+        Query query = session
+                .createQuery("select count(source.id),commit from SourceCode as source "
+                        + " join source.commit as commit "
+                        + "where commit.project.id=:id and (commit.date >= :start AND commit.date <= :end) " +
+                        "group by commit.id");
+        
+        query.setParameter("id", 1l);
+        query.setParameter("start", new GregorianCalendar(2012, 01, 24));
+        query.setParameter("end", new GregorianCalendar(2012, 03, 26));
+        
+        ScrollableResults results = query.scroll();
+        while (results.next()) {
+            Long count = (Long) results.get(0);
+            Commit commit = (Commit) results.get(1);
+            System.out.println(count);
+            System.out.println(commit.getCommitId());
+        }
+    }
 
     @Test
     public void testDateIntervals() throws Exception {

@@ -10,9 +10,13 @@
 <head>
 <c:import url="../import/head.jsp" />
 <style type="text/css">
-#commit_chart {
-	width: 850px;
-	height: 350px;
+#details {
+	float: left;
+	width:400px;
+}
+.googlechart {
+	width: 750px;
+	height: 250px;
 	position: relative;
 	float: right;
 }
@@ -22,12 +26,7 @@
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawChart);
       function drawChart() {
-        var data = google.visualization.arrayToDataTable([["Month", "count"]
-			<c:forEach items="${lastSixMonthsCommitCountMap}" var="entry">
-		    ,["<fmt:formatDate value="${entry.key.time}" pattern="yyyy/MM/dd"/>",
-		    ${entry.value}]
-			</c:forEach>
-		]);
+        var data = google.visualization.arrayToDataTable();
 
         var options = {
           title: 'Commits of the last six months'
@@ -57,49 +56,52 @@
 				</div>
 				<!-- .block_head ends -->
 
-				<div class="block_content">
+				<div class="block_content" id="project-content">
 
-					<table id="details">
-						<tr>
-							<th>Name</th>
-							<td>${project.name} <input type="hidden" name="id"
-								id="projectId" value="${project.id}" /></td>
-						</tr>
-
-						<tr>
-							<th>Repo's path</th>
-							<td>${project.scmUrl}</td>
-						</tr>
-						
-						<tr>
-							<th>Total commits</th>
-							<td>${commitCount}</td>
-						</tr>
-						
-						<tr>
-							<th>Total commiters</th>
-							<td>${commiterCount}</td>
-						</tr>
-						
-						<tr>
-							<th>First commit</th>
-							<td><fmt:formatDate value="${firstCommit.date.time}" pattern="yyyy/MM/dd"/></td>
-						</tr>
-						
-						<tr>
-							<th>Last commit</th>
-							<td><fmt:formatDate value="${lastCommit.date.time}" pattern="yyyy/MM/dd"/></td>
-						</tr>
-
-						<tr>
-							<th>Tags</th>
-							<td><input type="text" class="tags" name="tags" id="tags"
-								value="${tags}" style="display: none;" /></td>
-						</tr>
-						
-					    <div id="commit_chart"></div>
-						
-					</table>
+					<div id="details">
+						<table>
+							<tr>
+								<th>Name</th>
+								<td>${project.name} <input type="hidden" name="id"
+									id="projectId" value="${project.id}" /></td>
+							</tr>
+	
+							<tr>
+								<th>Repo's path</th>
+								<td>${project.scmUrl}</td>
+							</tr>
+							
+							<tr>
+								<th>Total commits</th>
+								<td>${commitCount}</td>
+							</tr>
+							
+							<tr>
+								<th>Total commiters</th>
+								<td>${commiterCount}</td>
+							</tr>
+							
+							<tr>
+								<th>First commit</th>
+								<td><fmt:formatDate value="${firstCommit.date.time}" pattern="yyyy/MM/dd"/></td>
+							</tr>
+							
+							<tr>
+								<th>Last commit</th>
+								<td><fmt:formatDate value="${lastCommit.date.time}" pattern="yyyy/MM/dd"/></td>
+							</tr>
+	
+							<tr>
+								<th>Tags</th>
+								<td><input type="text" class="tags" name="tags" id="tags"
+									value="${tags}" style="display: none;" /></td>
+							</tr>
+							
+						</table>
+					</div>
+					
+				    <div id="commit_chart" class="googlechart"></div>
+				    <div id="fileCount_chart" class="googlechart"></div>
 				</div>
 				<div class="bendl"></div>
 				<div class="bendr"></div>
