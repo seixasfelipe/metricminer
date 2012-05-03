@@ -105,5 +105,9 @@ public class LComMetric implements Metric {
         return fileName.endsWith(".java");
     }
 	
+    @Override
+    public String fileNameSQLRegex() {
+        return "%.java";
+    }
 	
 }

@@ -13,4 +13,6 @@ public interface Metric {
     void calculate(InputStream is);
 
     boolean shouldCalculateMetricOf(String fileName);
+    
+    String fileNameSQLRegex();
 }

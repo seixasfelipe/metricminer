@@ -43,10 +43,10 @@ public class CalculateMetricTask implements RunnableTask {
         int page = 0;
         project = task.getProject();
         boolean notFinishedPage;
-        
-        ScrollableResults sources = scrollableSources(page);
+
+        ScrollableResults sources = scrollableSources(page, metric.fileNameSQLRegex());
         boolean notFinishedAllSources = sources.first();
-        
+
         while (notFinishedAllSources) {
             notFinishedPage = true;
             while (notFinishedPage) {
@@ -56,16 +56,17 @@ public class CalculateMetricTask implements RunnableTask {
             }
             page++;
             log.info("Calculated " + metric.getClass() + " for " + page * pageSize + " sources.");
-            sources = scrollableSources(page);
+            sources = scrollableSources(page, metric.fileNameSQLRegex());
             notFinishedAllSources = sources.first();
             System.gc();
         }
     }
 
-    private ScrollableResults scrollableSources(int page) {
+    private ScrollableResults scrollableSources(int page, String fileNameRegex) {
         Project project = task.getProject();
         Query query = statelessSession.createQuery("select source from SourceCode source "
-                + "join source.artifact as artifact where artifact.project.id = :project_id");
+                        + "join source.artifact as artifact where artifact.project.id = :project_id " +
+                        "and artifact.name like " + fileNameRegex);
         query.setParameter("project_id", project.getId());
         query.setFirstResult(page * pageSize);
         query.setMaxResults(pageSize);

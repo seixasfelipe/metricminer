@@ -63,4 +63,9 @@ public class MethodsInvocationMetric implements Metric{
     public boolean shouldCalculateMetricOf(String fileName) {
         return fileName.endsWith(".java");
     }
+    
+    @Override
+    public String fileNameSQLRegex() {
+        return "%.java";
+    }
 }

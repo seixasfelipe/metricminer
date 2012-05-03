@@ -56,4 +56,10 @@ public class CCPerMethodMetric implements Metric {
         return null;
     }
 
+    @Override
+    public String fileNameSQLRegex() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
 }

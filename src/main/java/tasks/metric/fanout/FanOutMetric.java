@@ -55,4 +55,9 @@ public class FanOutMetric implements Metric {
         return Arrays.asList((MetricResult) new FanOutResult(source, fanOut()));
     }
 
+    @Override
+    public String fileNameSQLRegex() {
+        return "%.java";
+    }
+    
 }
