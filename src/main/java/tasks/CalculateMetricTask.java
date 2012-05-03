@@ -66,7 +66,7 @@ public class CalculateMetricTask implements RunnableTask {
         Project project = task.getProject();
         Query query = statelessSession.createQuery("select source from SourceCode source "
                         + "join source.artifact as artifact where artifact.project.id = :project_id " +
-                        "and artifact.name like " + fileNameRegex);
+                        "and artifact.name like '" + fileNameRegex + "'");
         query.setParameter("project_id", project.getId());
         query.setFirstResult(page * pageSize);
         query.setMaxResults(pageSize);
