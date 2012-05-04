@@ -30,6 +30,7 @@ public class SourceCode {
     private Commit commit;
     @Type(type = "text")
     private String source;
+    private Long sourceSize;
     @OneToMany(fetch=FetchType.LAZY, mappedBy="sourceCode", cascade = CascadeType.ALL)
     private List<BlamedLine> blamedLines = new ArrayList<BlamedLine>();
 
@@ -40,6 +41,7 @@ public class SourceCode {
         this.artifact = artifact;
         this.commit = commit;
         this.source = source;
+        sourceSize = (long) source.length();
     }
 
     public String getSource() {
