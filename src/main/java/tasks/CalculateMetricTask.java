@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.util.Collection;
 import java.util.List;
 
-import model.Project;
 import model.SourceCode;
 import model.Task;
 
@@ -27,7 +26,7 @@ public class CalculateMetricTask implements RunnableTask {
     private static Logger log = Logger.getLogger(CalculateMetricTask.class);
     private final StatelessSession statelessSession;
     private int pageSize;
-    private Project project;
+    private Long projectId;
 
     public CalculateMetricTask(Task task, Metric metric, Session session,
             StatelessSession statelessSession) {
@@ -41,10 +40,12 @@ public class CalculateMetricTask implements RunnableTask {
     public void run() {
         pageSize = 5;
         int page = 0;
-        project = task.getProject();
+        projectId = task.getProject().getId();
+        long maxSourceSize = 10000;
         boolean notFinishedPage;
 
-        ScrollableResults sources = scrollableSources(page, metric.fileNameSQLRegex());
+        ScrollableResults sources = scrollableSources(page, metric.fileNameSQLRegex(),
+                maxSourceSize);
         boolean notFinishedAllSources = sources.first();
 
         while (notFinishedAllSources) {
@@ -56,18 +57,19 @@ public class CalculateMetricTask implements RunnableTask {
             }
             page++;
             log.info("Calculated " + metric.getClass() + " for " + page * pageSize + " sources.");
-            sources = scrollableSources(page, metric.fileNameSQLRegex());
+            sources = scrollableSources(page, metric.fileNameSQLRegex(), maxSourceSize);
             notFinishedAllSources = sources.first();
             System.gc();
         }
     }
 
-    private ScrollableResults scrollableSources(int page, String fileNameRegex) {
-        Project project = task.getProject();
+    private ScrollableResults scrollableSources(int page, String fileNameRegex, long maxSourceSize) {
+        session.clear();
         Query query = statelessSession.createQuery("select source from SourceCode source "
-                        + "join source.artifact as artifact where artifact.project.id = :project_id " +
-                        "and artifact.name like '" + fileNameRegex + "'");
-        query.setParameter("project_id", project.getId());
+                + "join source.artifact as artifact where artifact.project.id = :project_id "
+                + "and artifact.name like '" + fileNameRegex + "'" + " and source.sourceSize < "
+                + maxSourceSize);
+        query.setParameter("project_id", projectId);
         query.setFirstResult(page * pageSize);
         query.setMaxResults(pageSize);
         ScrollableResults sources = query.scroll(ScrollMode.FORWARD_ONLY);
@@ -77,7 +79,7 @@ public class CalculateMetricTask implements RunnableTask {
     private List<SourceCode> listSources(int page) {
         Query query = session.createQuery("select source from SourceCode source "
                 + "join source.artifact as artifact where artifact.project.id = :project_id");
-        query.setParameter("project_id", project.getId());
+        query.setParameter("project_id", projectId);
         query.setFirstResult(page * pageSize);
         query.setMaxResults(pageSize);
         List<SourceCode> sources = query.list();
