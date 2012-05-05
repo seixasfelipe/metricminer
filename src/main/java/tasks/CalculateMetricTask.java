@@ -38,7 +38,7 @@ public class CalculateMetricTask implements RunnableTask {
 
     @Override
     public void run() {
-        pageSize = 5;
+        pageSize = 20;
         int page = 0;
         projectId = task.getProject().getId();
         long maxSourceSize = 10000;
