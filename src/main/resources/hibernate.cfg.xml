@@ -22,26 +22,25 @@
         <property name="show_sql">yes</property>
         <property name="format_sql">false</property>
         
-        <mapping class="model.ConfigurationEntry" />
-        <mapping class="model.TaskConfigurationEntry" />
-        <mapping class="model.Task" />
-        <mapping class="model.Project" />
-        <mapping class="model.SourceCode" />
-        <mapping class="model.Tag"/>
-        <mapping class="model.BlamedLine"/>    
+        <mapping class="org.metricminer.model.ConfigurationEntry" />
+        <mapping class="org.metricminer.model.TaskConfigurationEntry" />
+        <mapping class="org.metricminer.model.Task" />
+        <mapping class="org.metricminer.model.Project" />
+        <mapping class="org.metricminer.model.SourceCode" />
+        <mapping class="org.metricminer.model.Tag"/>
+        <mapping class="org.metricminer.model.BlamedLine"/>    
+        <mapping class="org.metricminer.model.Artifact"/>  
+        <mapping class="org.metricminer.model.Author"/>
+        <mapping class="org.metricminer.model.Commit"/>
+        <mapping class="org.metricminer.model.Modification"/>  
         
-        <mapping class="br.com.caelum.revolution.domain.Artifact"/>  
-        <mapping class="br.com.caelum.revolution.domain.Author"/>
-        <mapping class="br.com.caelum.revolution.domain.Commit"/>
-        <mapping class="br.com.caelum.revolution.domain.Modification"/>  
-        
-        <mapping class="tasks.metric.lcom.LComResult" />
-        <mapping class="tasks.metric.cc.CCResult" />
-        <mapping class="tasks.metric.fanout.FanOutResult" />
-        <mapping class="tasks.metric.invocation.MethodsInvocationResult" />
-        <mapping class="tasks.metric.lines.LinesOfCodeResult" />
-        <mapping class="tasks.metric.methods.MethodsCountResult" />
-        <mapping class="tasks.metric.testedmethods.TestedMethodFinderResult" />
+        <mapping class="org.metricminer.tasks.metric.lcom.LComResult" />
+        <mapping class="org.metricminer.tasks.metric.cc.CCResult" />
+        <mapping class="org.metricminer.tasks.metric.fanout.FanOutResult" />
+        <mapping class="org.metricminer.tasks.metric.invocation.MethodsInvocationResult" />
+        <mapping class="org.metricminer.tasks.metric.lines.LinesOfCodeResult" />
+        <mapping class="org.metricminer.tasks.metric.methods.MethodsCountResult" />
+        <mapping class="org.metricminer.tasks.metric.testedmethods.TestedMethodFinderResult" />
 
 
     </session-factory>

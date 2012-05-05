@@ -13,17 +13,17 @@
 		<appender-ref ref="stdout" />
 	</category>
 
-<!-- 	<category name="org.hibernate"> -->
-<!-- 		<priority value="WARN" /> -->
-<!-- 		<appender-ref ref="stdout" /> -->
-<!-- 	</category> -->
+	<category name="org.hibernate">
+		<priority value="WARN" />
+		<appender-ref ref="stdout" />
+	</category>
 
 	<category name="com.mchange">
 		<priority value="WARN" />
 		<appender-ref ref="stdout" />
 	</category>
 
-	<category name="br.com.caelum.revolution">
+	<category name="org.metricminer">
 		<priority value="INFO" />
 		<appender-ref ref="stdout" />
 	</category>
@@ -33,10 +33,5 @@
 		<appender-ref ref="stdout" />
 	</category>
 	
-	<category name="tasks">
-		<priority value="INFO" />
-		<appender-ref ref="stdout" />
-	</category>
-
 
 </log4j:configuration>
