@@ -129,10 +129,10 @@ public class ProjectDao {
         
         Calendar start = new GregorianCalendar(startYear, startMonth, 1);
         
-        return fileCountPerCommitByInterval(end, start);
+        return fileCountPerCommitByInterval(end, start, project);
     }
 
-    private Map<Commit, Long> fileCountPerCommitByInterval(Calendar end, Calendar start) {
+    private Map<Commit, Long> fileCountPerCommitByInterval(Calendar end, Calendar start, Project project) {
         Map<Commit, Long> map = new HashMap<Commit, Long>();
         Query query = session
                 .createQuery("select count(source.id),commit from SourceCode as source "
@@ -140,7 +140,7 @@ public class ProjectDao {
                         + "where commit.project.id=:id and (commit.date >= :start AND commit.date <= :end) " +
                         "group by commit.id");
         
-        query.setParameter("id", 1l);
+        query.setParameter("id", project.getId());
         query.setParameter("start", start);
         query.setParameter("end", end);
         
