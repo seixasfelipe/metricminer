@@ -6,11 +6,11 @@
 	<div class="hdrl"></div>
 	<div class="hdrr"></div>
 	
-	<h1><a href="<c:url value="/projects" />">MetricMiner</a></h1>
+	<h1><a href="${linkTo[ProjectController].list}">MetricMiner</a></h1>
 	<ul id="nav">
-		<li class="active"><a href="<c:url value="/projects" />">Projects</a>
+		<li class="active"><a href="${linkTo[ProjectController].list}">Projects</a>
 			<ul>
-				<li><a href="<c:url value="/projects" />">List</a></li>
+				<li><a href="${linkTo[ProjectController].list}">List</a></li>
 				<li><a href="<c:url value="/projects/new" />">New project</a></li>
 			</ul>
 		</li>
