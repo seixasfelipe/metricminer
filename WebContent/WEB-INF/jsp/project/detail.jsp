@@ -111,7 +111,7 @@
 				<div class="block_head">
 					<div class="bheadl"></div>
 					<div class="bheadr"></div>
-					<h2>Avaiable metrics to calculate</h2>
+					<h2>Available metrics to calculate</h2>
 				</div>
 				<!-- .block_head ends -->
 				<div class="block_content">
