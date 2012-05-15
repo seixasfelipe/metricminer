@@ -8,7 +8,7 @@ import org.metricminer.runner.RunnableTask;
 import org.metricminer.runner.RunnableTaskFactory;
 
 
-public class GitCloneTaskFactory implements RunnableTaskFactory {
+public class SCMCloneTaskFactory implements RunnableTaskFactory {
 
     @Override
     public RunnableTask build(Task task, Session session, StatelessSession statelessSession) {

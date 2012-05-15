@@ -13,7 +13,7 @@ import org.metricminer.dao.ProjectDao;
 import org.metricminer.dao.TaskDao;
 import org.metricminer.model.Project;
 import org.metricminer.model.Task;
-import org.metricminer.tasks.GitCloneTaskFactory;
+import org.metricminer.tasks.SCMCloneTaskFactory;
 import org.mockito.ArgumentCaptor;
 
 import br.com.caelum.vraptor.util.test.MockResult;
@@ -41,7 +41,7 @@ public class TaskControllerTest {
 		controller.addTaskTo(1L, "org.metricminer.tasks.GitCloneTaskFactory", "clone");
 
 		verify(taskDao).save(argument.capture());
-		assertEquals(GitCloneTaskFactory.class, argument.getValue()
+		assertEquals(SCMCloneTaskFactory.class, argument.getValue()
 				.getRunnableTaskFactoryClass());
 	}
 
