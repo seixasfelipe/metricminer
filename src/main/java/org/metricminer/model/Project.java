@@ -20,7 +20,7 @@ import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.projectconfig.MapConfig;
 import org.metricminer.tasks.CalculateMetricTaskFactory;
 import org.metricminer.tasks.SCMCloneTaskFactory;
-import org.metricminer.tasks.ParseGitLogTaskFactory;
+import org.metricminer.tasks.ParseSCMLogTaskFactory;
 import org.metricminer.tasks.RemoveSourceDirectoryTaskFactory;
 
 
@@ -160,7 +160,7 @@ public class Project {
 
     private void setupInitialTasks() {
         Task cloneTask = new Task(this, "Clone SCM", new SCMCloneTaskFactory(), 0);
-        Task parseLogTask = new Task(this, "Parse SCM logs", new ParseGitLogTaskFactory(), 1);
+        Task parseLogTask = new Task(this, "Parse SCM logs", new ParseSCMLogTaskFactory(), 1);
         Task removeDirecotryTask = new Task(this, "Remove source code directory",
                 new RemoveSourceDirectoryTaskFactory(), 2);
         parseLogTask.addDependency(cloneTask);

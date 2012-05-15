@@ -4,11 +4,11 @@ import org.metricminer.runner.RunnableTask;
 import org.metricminer.tasks.parsegit.SCMLogParser;
 
 
-public class ParseGitLogTask implements RunnableTask {
+public class ParseSCMLogTask implements RunnableTask {
 
 	private SCMLogParser logParser;
 
-	public ParseGitLogTask(SCMLogParser logParser) {
+	public ParseSCMLogTask(SCMLogParser logParser) {
 		this.logParser = logParser;
 	}
 
