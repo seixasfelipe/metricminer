@@ -21,7 +21,6 @@ public class TaskController {
 		this.taskDao = taskDao;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Get("/tasks")
 	public void listTasks() {
 		List<Task> tasks = taskDao.listTasks();

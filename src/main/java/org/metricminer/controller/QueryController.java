@@ -1,5 +1,8 @@
 package org.metricminer.controller;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.metricminer.builder.TaskBuilder;
 import org.metricminer.dao.QueryDao;
 import org.metricminer.dao.TaskDao;
@@ -44,7 +47,9 @@ public class QueryController {
     
     @Get("/queries")
     public void listQueries() {
-        result.include("queries", queryDao.list());
+        List<Query> queries = queryDao.list();
+        Collections.sort(queries);
+		result.include("queries", queries);
     }
     
     @Get("/query/{queryId}")

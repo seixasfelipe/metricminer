@@ -1,0 +1,31 @@
+<ivy-module version="2.0">
+	<info organisation="caelum" module="revolution" />
+
+	<configurations>
+		<conf name="default" description="dependencies used for compile" />
+		<conf name="test" description="dependencies used for tests" visibility="public" />
+	</configurations>
+
+	<dependencies>
+		<dependency org="com.thoughtworks.xstream" name="xstream" rev="1.3.1"/>
+		<dependency org="org.hibernate" name="hibernate-core" rev="3.6.3.Final" conf="default" />
+		<dependency org="org.hibernate.javax.persistence" name="hibernate-jpa-2.0-api" rev="1.0.0.Final" conf="default" />
+		<dependency org="javassist" name="javassist" rev="3.12.1.GA"/>
+        <dependency org="org.slf4j" name="slf4j-api" rev="1.6.1"/>
+        <dependency org="log4j" name="log4j" rev="1.2.16"/>
+		<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.1"/>
+		<dependency org="mysql" name="mysql-connector-java" rev="5.1.13"/>
+		<dependency org="commons-io" name="commons-io" rev="2.0.1"/>
+		<dependency org="com.google.guava" name="guava" rev="r09"/>
+		<dependency org="c3p0" name="c3p0" rev="0.9.1" conf="default" />
+		<dependency org="org.hibernate" name="hibernate-c3p0" rev="3.6.3.Final" conf="default" />
+
+		<dependency org="jfree" name="jfreechart" rev="1.0.13"/>
+		<dependency org="org.apache.ant" name="ant" rev="1.8.2"/>
+
+								
+		<!-- Test dependencies -->
+		<dependency org="junit" name="junit" rev="4.8.2" conf="test->default" />
+		<dependency org="org.mockito" name="mockito-all" rev="1.8.5" conf="test->default" />
+	</dependencies>
+</ivy-module>

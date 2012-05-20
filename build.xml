@@ -1,4 +1,4 @@
-<project name="Metric Miner" default="war">
+<project name="Metric Miner" default="war" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
 
 	<property file="build.properties" />
 
@@ -21,6 +21,18 @@
 
 	<target name="clean">
 		<delete dir="target/" />
+	</target>
+	
+	<!-- resolve dependencies -->
+	<target name="resolve" description="--> retrieve dependencies with ivy">
+		<path id="ivy.lib.path">
+			<pathelement location="${ivy.jar.file}" />
+		</path>
+		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path" />
+
+		<delete dir="${libs.dir}" includes="**/*.*" />
+		<ivy:settings file="${ivy.file}" />
+		<ivy:retrieve pattern="lib/[artifact](-[classifier]).[ext]" sync="true" />
 	</target>
 
 	<target name="compile" depends="prepare">
@@ -58,19 +70,6 @@
 			<arg value="root@${server.address}"/>
 			<arg value="/root/deploy.sh"/>
 		</exec>
-	</target>
-
-	<!-- Define the Sonar task if this hasn't been done in a common script -->
-	<taskdef uri="antlib:org.sonar.ant" resource="org/sonar/ant/antlib.xml">
-		<classpath path="/home/csokol/downloads/lib-sonar/" />
-	</taskdef>
-
-	<!-- Add the target -->
-	<target name="sonar">
-		<!-- list of mandatories Sonar properties -->
-		<property name="sonar.sources" value="src/main/java/" />
-
-	    <sonar:sonar key="org.example:example" version="0.1-SNAPSHOT" xmlns:sonar="antlib:org.sonar.ant"/>
 	</target>
 
 </project>
