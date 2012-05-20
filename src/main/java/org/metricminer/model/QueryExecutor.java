@@ -20,8 +20,8 @@ public class QueryExecutor {
         this.session = session;
     }
     
+    @SuppressWarnings("unchecked")
     public void execute(Query query, OutputStream csvOutputStream) {
-        System.out.println(query.getSqlQuery());
         SQLQuery sqlQuery = session.createSQLQuery(query.getSqlQuery());
         sqlQuery.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
         List<Map<String, Object>> results = sqlQuery.list();

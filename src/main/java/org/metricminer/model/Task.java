@@ -14,7 +14,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -41,8 +40,6 @@ public class Task implements Comparable {
     private List<Task> depends;
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private List<TaskConfigurationEntry> configurationEntries;
-    @OneToOne
-    private Query query;
 
     public Task() {
         this.depends = new ArrayList<Task>();
@@ -149,11 +146,12 @@ public class Task implements Comparable {
         return false;
     }
 
-    public Query getQuery() {
-        return query;
+    public String getConfiguration(TaskConfigurationEntryKey queryId) {
+        for (TaskConfigurationEntry entry : configurationEntries) {
+            if (entry.getKey().equals(queryId))
+                return entry.getValue();
+        }
+        return null;
     }
 
-    public void setQuery(Query query) {
-        this.query = query;
-    }
 }

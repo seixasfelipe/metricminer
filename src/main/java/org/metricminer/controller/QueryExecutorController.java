@@ -5,6 +5,7 @@ import org.metricminer.dao.QueryDao;
 import org.metricminer.dao.TaskDao;
 import org.metricminer.model.Query;
 import org.metricminer.model.Task;
+import org.metricminer.model.TaskConfigurationEntryKey;
 import org.metricminer.tasks.ExecuteQueryTaskFactory;
 
 import br.com.caelum.vraptor.Get;
@@ -33,8 +34,8 @@ public class QueryExecutorController {
     public void execute(Query query) {
         Task task = new TaskBuilder().withName("Execute query")
                 .withRunnableTaskFactory(new ExecuteQueryTaskFactory()).build();
-        task.setQuery(query);
         queryDao.save(query);
+        task.addTaskConfigurationEntry(TaskConfigurationEntryKey.QUERY_ID, query.getId().toString());
         taskDao.save(task);
         result.redirectTo(TaskController.class).listTasks();
     }

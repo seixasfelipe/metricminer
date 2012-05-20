@@ -15,5 +15,14 @@ public class QueryDao {
 
     public void save(Query query) {
         session.save(query);
+        session.flush();
+    }
+
+    public Query findBy(Long id) {
+        return (Query) session.load(Query.class, id);
+    }
+
+    public void update(Query query) {
+        session.update(query);
     }
 }
