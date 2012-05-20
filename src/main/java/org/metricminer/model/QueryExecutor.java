@@ -22,10 +22,12 @@ public class QueryExecutor {
     
     @SuppressWarnings("unchecked")
     public void execute(Query query, OutputStream csvOutputStream) {
+        session.setDefaultReadOnly(true);
         SQLQuery sqlQuery = session.createSQLQuery(query.getSqlQuery());
         sqlQuery.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
         List<Map<String, Object>> results = sqlQuery.list();
         writeCSVTo(csvOutputStream, results);
+        session.setDefaultReadOnly(false);
     }
 
     private void writeCSVTo(OutputStream csvOutputStream, List<Map<String,Object>> results) {

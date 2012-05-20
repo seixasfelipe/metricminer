@@ -33,7 +33,7 @@ public class Project {
     private String name;
     private String scmUrl;
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
-    private List<ConfigurationEntry> configurationEntries;
+    private List<ProjectConfigurationEntry> configurationEntries;
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Artifact> artifacts;
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
@@ -49,7 +49,7 @@ public class Project {
     private MetricMinerConfigs metricMinerConfigs;
 
     public Project() {
-        this.configurationEntries = new ArrayList<ConfigurationEntry>();
+        this.configurationEntries = new ArrayList<ProjectConfigurationEntry>();
         this.tasks = new ArrayList<Task>();
         this.tags = new ArrayList<Tag>();
     }
@@ -88,25 +88,25 @@ public class Project {
         return id;
     }
 
-    public List<ConfigurationEntry> getConfigurationEntries() {
+    public List<ProjectConfigurationEntry> getConfigurationEntries() {
         return configurationEntries;
     }
 
     public void setupInitialConfigurationsEntries() {
         String metricMinerHome = this.metricMinerConfigs.getMetricMinerHome();
 
-        configurationEntries.add(new ConfigurationEntry("scm",
+        configurationEntries.add(new ProjectConfigurationEntry("scm",
                 "org.metricminer.scm.git.GitFactory", this));
-        configurationEntries.add(new ConfigurationEntry("scm.repository", metricMinerHome
+        configurationEntries.add(new ProjectConfigurationEntry("scm.repository", metricMinerHome
                 + "/projects/" + this.id + "/" + this.scmRootDirectoryName, this));
-        configurationEntries.add(new ConfigurationEntry("changesets",
+        configurationEntries.add(new ProjectConfigurationEntry("changesets",
                 "org.metricminer.changesets.AllChangeSetsFactory", this));
 
     }
 
     public MapConfig getMapConfig() {
         HashMap<String, String> configurations = new HashMap<String, String>();
-        for (ConfigurationEntry entry : this.configurationEntries)
+        for (ProjectConfigurationEntry entry : this.configurationEntries)
             configurations.put(entry.getKey(), entry.getValue());
         return new MapConfig(configurations);
     }

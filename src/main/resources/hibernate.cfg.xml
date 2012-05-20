@@ -22,7 +22,7 @@
         <property name="show_sql">yes</property>
         <property name="format_sql">false</property>
         
-        <mapping class="org.metricminer.model.ConfigurationEntry" />
+        <mapping class="org.metricminer.model.ProjectConfigurationEntry" />
         <mapping class="org.metricminer.model.TaskConfigurationEntry" />
         <mapping class="org.metricminer.model.Task" />
         <mapping class="org.metricminer.model.Project" />
