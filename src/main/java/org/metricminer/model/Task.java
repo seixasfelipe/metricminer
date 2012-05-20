@@ -91,9 +91,15 @@ public class Task implements Comparable {
 
     @Override
     public int compareTo(Object o) {
-        return ((Task) o).getPosition().compareTo(this.position);
+    	if (!(o instanceof Task)) {
+    		return 1;
+    	}
+        Task otherTask = (Task) o;
+        if (this.submitDate.compareTo(otherTask.getSubmitDate()) != 0)
+        	return this.submitDate.compareTo(otherTask.getSubmitDate());
+        return position.compareTo(otherTask.getPosition());
     }
-
+    
     public Integer getPosition() {
         return position;
     }

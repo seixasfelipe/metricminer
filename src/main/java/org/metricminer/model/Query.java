@@ -1,5 +1,7 @@
 package org.metricminer.model;
 
+import java.io.File;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -8,6 +10,7 @@ import javax.persistence.Id;
 public class Query {
     private String sqlQuery;
     private String csvFilename;
+    private String name;
     @Id
     @GeneratedValue
     private Long id;
@@ -34,5 +37,20 @@ public class Query {
     public void executed(String outputFileName) {
         csvFilename = outputFileName;
     }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
     
+    public File getCSV() {
+        return new File(csvFilename);
+    }
+    
+    public String getCsvFilename() {
+		return csvFilename;
+	}
 }

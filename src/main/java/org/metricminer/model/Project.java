@@ -2,7 +2,6 @@ package org.metricminer.model;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -111,12 +110,9 @@ public class Project {
         return new MapConfig(configurations);
     }
 
-    public List<Task> getTasks() {
-        Collections.sort(tasks, new Comparator<Task>() {
-            public int compare(Task o1, Task o2) {
-                return o1.compareTo(o2);
-            };
-        });
+    @SuppressWarnings("unchecked")
+	public List<Task> getTasks() {
+        Collections.sort(tasks);
         return tasks;
     }
 

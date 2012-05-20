@@ -1,5 +1,7 @@
 package org.metricminer.dao;
 
+import java.util.List;
+
 import org.hibernate.Session;
 import org.metricminer.model.Query;
 
@@ -23,6 +25,13 @@ public class QueryDao {
     }
 
     public void update(Query query) {
+    	session.getTransaction().begin();
         session.update(query);
+        session.getTransaction().commit();
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Query> list() {
+        return session.createCriteria(Query.class).list();
     }
 }

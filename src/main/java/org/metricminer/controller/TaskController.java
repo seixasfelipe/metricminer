@@ -1,6 +1,10 @@
 package org.metricminer.controller;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.metricminer.dao.TaskDao;
+import org.metricminer.model.Task;
 
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Resource;
@@ -17,8 +21,11 @@ public class TaskController {
 		this.taskDao = taskDao;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Get("/tasks")
 	public void listTasks() {
-	    result.include("tasks", taskDao.listTasks());
+		List<Task> tasks = taskDao.listTasks();
+		Collections.reverse(tasks);
+	    result.include("tasks", tasks);
 	}
 }
