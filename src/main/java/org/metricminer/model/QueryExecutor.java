@@ -21,7 +21,8 @@ public class QueryExecutor {
     }
     
     public void execute(Query query, OutputStream csvOutputStream) {
-        SQLQuery sqlQuery = session.createSQLQuery(query.getSql());
+        System.out.println(query.getSqlQuery());
+        SQLQuery sqlQuery = session.createSQLQuery(query.getSqlQuery());
         sqlQuery.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
         List<Map<String, Object>> results = sqlQuery.list();
         writeCSVTo(csvOutputStream, results);

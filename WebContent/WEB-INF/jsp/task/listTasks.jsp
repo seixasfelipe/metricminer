@@ -27,7 +27,7 @@
 							<tr>
 								<td>${task.name}</td>
 								<td>${task.status}</td>
-								<td><fmt:formatDate value="${task.submitDate.time}" pattern="yyyy/MM/dd"/></td>
+								<td><fmt:formatDate value="${task.submitDate.time}" pattern="yyyy/MM/dd - HH:MM:SS"/></td>
 							</tr>
 						</c:forEach>
 					</table>

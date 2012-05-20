@@ -33,6 +33,7 @@
         <mapping class="org.metricminer.model.Author"/>
         <mapping class="org.metricminer.model.Commit"/>
         <mapping class="org.metricminer.model.Modification"/>  
+        <mapping class="org.metricminer.model.Query"/>  
         
         <mapping class="org.metricminer.tasks.metric.lcom.LComResult" />
         <mapping class="org.metricminer.tasks.metric.cc.CCResult" />

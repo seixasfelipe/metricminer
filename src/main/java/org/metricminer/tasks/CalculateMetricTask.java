@@ -2,8 +2,6 @@ package org.metricminer.tasks;
 
 import java.io.ByteArrayInputStream;
 import java.util.Collection;
-import java.util.List;
-
 
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
@@ -16,7 +14,6 @@ import org.metricminer.model.Task;
 import org.metricminer.runner.RunnableTask;
 import org.metricminer.tasks.metric.common.Metric;
 import org.metricminer.tasks.metric.common.MetricResult;
-
 
 public class CalculateMetricTask implements RunnableTask {
 
@@ -73,16 +70,6 @@ public class CalculateMetricTask implements RunnableTask {
         query.setFirstResult(page * pageSize);
         query.setMaxResults(pageSize);
         ScrollableResults sources = query.scroll(ScrollMode.FORWARD_ONLY);
-        return sources;
-    }
-
-    private List<SourceCode> listSources(int page) {
-        Query query = session.createQuery("select source from SourceCode source "
-                + "join source.artifact as artifact where artifact.project.id = :project_id");
-        query.setParameter("project_id", projectId);
-        query.setFirstResult(page * pageSize);
-        query.setMaxResults(pageSize);
-        List<SourceCode> sources = query.list();
         return sources;
     }
 

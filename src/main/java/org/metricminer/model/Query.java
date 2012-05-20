@@ -1,20 +1,38 @@
 package org.metricminer.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
 public class Query {
-    private String sql;
+    private String sqlQuery;
+    private String csvFilename;
+    @Id
+    @GeneratedValue
+    private Long id;
 
     public Query() {
     }
     
     public Query(String query) {
-        this.sql = query;
+        this.sqlQuery = query;
     }
 
-    public String getSql() {
-        return sql;
+    public String getSqlQuery() {
+        return sqlQuery;
     }
     
-    public void setSql(String sql) {
-        this.sql = sql;
+    public void setSqlQuery(String sql) {
+        this.sqlQuery = sql;
     }
+
+    public Long getId() {
+        return id;
+    }
+    
+    public void executed(String outputFileName) {
+        csvFilename = outputFileName;
+    }
+    
 }

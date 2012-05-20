@@ -23,7 +23,7 @@
 				<div class="block_content">
 					<form method="post" action='<c:url value="/query"></c:url>' '>
 						<p>
-							<textarea type="text" class="text small" name="query.sql"></textarea>
+							<textarea type="text" class="text small" name="query.sqlQuery"></textarea>
 						</p>
 						
 						<p>

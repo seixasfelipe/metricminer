@@ -14,16 +14,17 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.metricminer.runner.RunnableTaskFactory;
 
-
 @SuppressWarnings("rawtypes")
 @Entity
 public class Task implements Comparable {
 
+    @SuppressWarnings("unused")
     @Id
     @GeneratedValue
     private Long id;
@@ -40,6 +41,8 @@ public class Task implements Comparable {
     private List<Task> depends;
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private List<TaskConfigurationEntry> configurationEntries;
+    @OneToOne
+    private Query query;
 
     public Task() {
         this.depends = new ArrayList<Task>();
@@ -134,6 +137,7 @@ public class Task implements Comparable {
     private boolean isFinished() {
         return this.status == TaskStatus.FINISHED;
     }
+
     public void addTaskConfigurationEntry(TaskConfigurationEntryKey key, String value) {
         configurationEntries.add(new TaskConfigurationEntry(key, value, this));
     }
@@ -144,7 +148,7 @@ public class Task implements Comparable {
 
     @Override
     public String toString() {
-        return project.getName() + " - " + name;
+        return project == null ? name : project.getName() + " - " + name;
     }
 
     public boolean willCalculate(RegisteredMetric registeredMetric) {
@@ -153,5 +157,13 @@ public class Task implements Comparable {
                 return true;
         }
         return false;
+    }
+
+    public Query getQuery() {
+        return query;
+    }
+
+    public void setQuery(Query query) {
+        this.query = query;
     }
 }

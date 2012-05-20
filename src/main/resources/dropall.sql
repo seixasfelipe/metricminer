@@ -21,6 +21,7 @@ DROP TABLE  `Artifact` ,
 `MethodsCountResult`,
 `BlamedLine`,
 `Project_Tag`,
+`Query`,
 `Tag`;
 
 SET foreign_key_checks = 1;

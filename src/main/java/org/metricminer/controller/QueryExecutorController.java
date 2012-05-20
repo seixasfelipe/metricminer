@@ -1,45 +1,40 @@
 package org.metricminer.controller;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.util.Random;
-
-import javax.servlet.http.HttpServletResponse;
-
+import org.metricminer.dao.QueryDao;
+import org.metricminer.dao.TaskDao;
 import org.metricminer.model.Query;
-import org.metricminer.model.QueryExecutor;
+import org.metricminer.model.Task;
+import org.metricminer.tasks.ExecuteQueryTaskFactory;
 
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;
 import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
-import br.com.caelum.vraptor.interceptor.download.Download;
-import br.com.caelum.vraptor.interceptor.download.FileDownload;
 
 @Resource
 public class QueryExecutorController {
-    
-    private final QueryExecutor queryExecutor;
-    
-    public QueryExecutorController(QueryExecutor queryExecutor, 
-            HttpServletResponse response, Result result) {
-        this.queryExecutor = queryExecutor;
+
+    private final TaskDao taskDao;
+    private final Result result;
+    private final QueryDao queryDao;
+
+    public QueryExecutorController(TaskDao taskDao, QueryDao queryDao, Result result) {
+        this.taskDao = taskDao;
+        this.queryDao = queryDao;
+        this.result = result;
     }
-    
+
     @Get("/query")
     public void queryForm() {
     }
-    
-    @Post("/query")
-    public Download execute(Query query) throws IOException {
-        String tmpFileName = "/tmp/result" + new Random().nextLong() + ".csv";
-        FileOutputStream outputStream = new FileOutputStream(tmpFileName);
-        queryExecutor.execute(query, outputStream);
-        return new FileDownload(new File(tmpFileName), "text/csv", "result.csv");
-    }
-    
-    
 
-    
+    @Post("/query")
+    public void execute(Query query) {
+        Task task = new Task(null, "Execute query", new ExecuteQueryTaskFactory(), 1);
+        task.setQuery(query);
+        queryDao.save(query);
+        taskDao.save(task);
+        result.redirectTo(TaskController.class).listTasks();
+    }
+
 }
