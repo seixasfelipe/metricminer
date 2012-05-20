@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivysettings>
+  <settings defaultResolver="myChain" />
+  <resolvers>
+    <chain name="myChain" returnFirst="true">
+      <ibiblio name="ibiblio" m2compatible="true" />
+      <ibiblio name="jboss" m2compatible="true" root="http://repository.jboss.com/maven2/" />
+      <ibiblio name="jboss2" m2compatible="true" root="http://repository.jboss.com/nexus/content/groups/public/" />
+    </chain>
+  </resolvers>
+</ivysettings>
