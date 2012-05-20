@@ -6,13 +6,7 @@ import static org.junit.Assert.assertTrue;
 import java.util.Arrays;
 import java.util.List;
 
-
 import org.junit.Test;
-import org.metricminer.model.Project;
-import org.metricminer.model.RegisteredMetric;
-import org.metricminer.model.Tag;
-import org.metricminer.model.Task;
-import org.metricminer.model.TaskConfigurationEntryKey;
 import org.metricminer.tasks.CalculateMetricTaskFactory;
 
 
@@ -62,10 +56,10 @@ public class ProjectTest {
     }
 
     private void setupProject(Project project) {
-        Task task = new Task(project, "calculate", CalculateMetricTaskFactory.class, 1);
+        Task task = new Task(project, "calculate", new CalculateMetricTaskFactory(), 1);
         task.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRICFACTORYCLASS, "classname1");
         project.addTask(task);
-        task = new Task(project, "calculate", CalculateMetricTaskFactory.class, 2);
+        task = new Task(project, "calculate", new CalculateMetricTaskFactory(), 2);
         task.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRICFACTORYCLASS, "classname2");
         project.addTask(task);
     }

@@ -16,13 +16,13 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
+import org.metricminer.builder.TaskBuilder;
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.projectconfig.MapConfig;
 import org.metricminer.tasks.CalculateMetricTaskFactory;
-import org.metricminer.tasks.SCMCloneTaskFactory;
 import org.metricminer.tasks.ParseSCMLogTaskFactory;
 import org.metricminer.tasks.RemoveSourceDirectoryTaskFactory;
-
+import org.metricminer.tasks.SCMCloneTaskFactory;
 
 @Entity
 public class Project {
@@ -54,7 +54,7 @@ public class Project {
         this.tags = new ArrayList<Tag>();
     }
 
-    public Project(MetricMinerConfigs metricMinerConfigs) {
+    private Project(MetricMinerConfigs metricMinerConfigs) {
         this();
         this.metricMinerConfigs = metricMinerConfigs;
         projectPath = this.metricMinerConfigs.getMetricMinerHome() + "/projects/";
@@ -149,25 +149,33 @@ public class Project {
     }
 
     public void addMetricToCalculate(String metricFactoryClassName) {
-        Task metricTask = new Task(this, "Calculate metric: " + metricFactoryClassName,
-                new CalculateMetricTaskFactory(), taskCount());
+        Task metricTask = new TaskBuilder().withName("Calculate metric: " + metricFactoryClassName)
+                .forProject(this).withRunnableTaskFactory(new CalculateMetricTaskFactory())
+                .withPosition(taskCount()).build();
+
         metricTask.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRICFACTORYCLASS,
                 metricFactoryClassName);
+
         Task lastTask = tasks.get(tasks.size() - 1);
         metricTask.addDependency(lastTask);
         tasks.add(metricTask);
     }
 
     private void setupInitialTasks() {
-        Task cloneTask = new Task(this, "Clone SCM", new SCMCloneTaskFactory(), 0);
-        Task parseLogTask = new Task(this, "Parse SCM logs", new ParseSCMLogTaskFactory(), 1);
-        Task removeDirecotryTask = new Task(this, "Remove source code directory",
-                new RemoveSourceDirectoryTaskFactory(), 2);
+        Task cloneTask = new TaskBuilder().forProject(this).withName("Clone SCM")
+                .withRunnableTaskFactory(new SCMCloneTaskFactory()).withPosition(0).build();
+        
+        Task parseLogTask = new TaskBuilder().forProject(this).withName("Parse SCM logs")
+                .withRunnableTaskFactory(new ParseSCMLogTaskFactory()).withPosition(1).build();
+        
+        Task removeDirectoryTask  = new TaskBuilder().forProject(this).withName("Remove source code directory")
+                .withRunnableTaskFactory(new RemoveSourceDirectoryTaskFactory()).withPosition(1).build();
+        
         parseLogTask.addDependency(cloneTask);
-        removeDirecotryTask.addDependency(parseLogTask);
+        removeDirectoryTask.addDependency(parseLogTask);
         tasks.add(cloneTask);
         tasks.add(parseLogTask);
-        tasks.add(removeDirecotryTask);
+        tasks.add(removeDirectoryTask);
     }
 
     public List<Tag> getTags() {

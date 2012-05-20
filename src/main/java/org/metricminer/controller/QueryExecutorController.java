@@ -1,5 +1,6 @@
 package org.metricminer.controller;
 
+import org.metricminer.builder.TaskBuilder;
 import org.metricminer.dao.QueryDao;
 import org.metricminer.dao.TaskDao;
 import org.metricminer.model.Query;
@@ -30,7 +31,8 @@ public class QueryExecutorController {
 
     @Post("/query")
     public void execute(Query query) {
-        Task task = new Task(null, "Execute query", new ExecuteQueryTaskFactory(), 1);
+        Task task = new TaskBuilder().withName("Execute query")
+                .withRunnableTaskFactory(new ExecuteQueryTaskFactory()).build();
         task.setQuery(query);
         queryDao.save(query);
         taskDao.save(task);
