@@ -15,5 +15,6 @@
 			</ul>
 		</li>
 		<li class="active"><a href="<c:url value="/query" />">Execute query</a></li>
+		<li><a href="${linkTo[TaskController].listTasks}">Tasks</a></li>
 	</ul>
 </div>		<!-- #header ends -->

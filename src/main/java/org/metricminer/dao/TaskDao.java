@@ -2,7 +2,6 @@ package org.metricminer.dao;
 
 import java.util.List;
 
-
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -37,5 +36,10 @@ public class TaskDao {
 
     public void update(Task task) {
         session.saveOrUpdate(task);
+    }
+
+    @SuppressWarnings("unchecked")
+    public List<Task> listTasks() {
+        return session.createCriteria(Task.class).list();
     }
 }
