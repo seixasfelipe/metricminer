@@ -1,5 +1,5 @@
 <ivy-module version="2.0">
-	<info organisation="caelum" module="revolution" />
+	<info organisation="caelum" module="MetricMiner" />
 
 	<configurations>
 		<conf name="default" description="dependencies used for compile" />
@@ -23,14 +23,9 @@
 		<dependency org="br.com.caelum" name="vraptor" rev="3.4.0" conf="default" />
 		<dependency org="org.hsqldb" name="hsqldb" rev="2.2.4" conf="default" />
 		<dependency org="opensymphony" name="sitemesh" rev="2.4.2" conf="default" />
-<!-- 		<dependency org="javax.servlet" name="jstl" rev="1.2" conf="default" /> -->
 		<dependency org="joda-time" name="joda-time" rev="2.0" conf="default" />
 		<dependency org="com.thoughtworks.xstream" name="xstream" rev="1.4.1" conf="default" />
 
-		<!-- Provided dependencies -->
-<!-- 		<dependency org="javax.servlet" name="servlet-api" rev="2.5" conf="default" /> -->
-<!-- 		<dependency org="javax.servlet.jsp" name="jsp-api" rev="2.1" conf="default" /> -->
-		
 		<dependency org="org.mortbay.jetty" name="servlet-api-2.5" rev="6.1H.14.1"/>
 		<dependency org="org.glassfish.web" name="jstl-impl" rev="1.2"/>
 		
@@ -39,14 +34,6 @@
 		<dependency org="br.com.prixma" name="vraptor-tasks" rev="1.0.2" conf="default" />
 		<dependency org="org.apache.commons" name="commons-lang3" rev="3.1" conf="default" />
 		
-		
-<!-- 		<dependency org="javax.servlet" name="servlet-api" rev="2.5"/> -->
-<!-- 		<dependency org="javax.servlet.jsp" name="jsp-api" rev="2.1"/> -->
-<!-- 		<dependency org="org.apache.tomcat" name="jasper-el" rev="6.0.26"/> -->
-		
-
-		
-
 		<!-- Test dependencies -->
 		<dependency org="junit" name="junit" rev="4.8.2" conf="test->default" />
 		<dependency org="org.mockito" name="mockito-all" rev="1.8.5" conf="test->default" />
