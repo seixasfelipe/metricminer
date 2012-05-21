@@ -32,7 +32,7 @@
 
 		<delete dir="${libs.dir}" includes="**/*.*" />
 		<ivy:settings file="${ivy.file}" />
-		<ivy:retrieve pattern="lib/[artifact](-[classifier]).[ext]" sync="true" />
+		<ivy:retrieve pattern="${webapp.dir}/WEB-INF/lib/[artifact](-[classifier]).[ext]" sync="true" />
 	</target>
 
 	<target name="compile" depends="prepare">

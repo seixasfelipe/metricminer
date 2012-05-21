@@ -8,7 +8,7 @@
 
 	<dependencies>
 		<dependency org="com.thoughtworks.xstream" name="xstream" rev="1.3.1"/>
-		<dependency org="org.hibernate" name="hibernate-core" rev="3.6.3.Final" conf="default" />
+		<dependency org="org.hibernate" name="hibernate-core" rev="3.6.1.Final" conf="default" />
 		<dependency org="org.hibernate.javax.persistence" name="hibernate-jpa-2.0-api" rev="1.0.0.Final" conf="default" />
 		<dependency org="javassist" name="javassist" rev="3.12.1.GA"/>
         <dependency org="org.slf4j" name="slf4j-api" rev="1.6.1"/>
@@ -18,12 +18,35 @@
 		<dependency org="commons-io" name="commons-io" rev="2.0.1"/>
 		<dependency org="com.google.guava" name="guava" rev="r09"/>
 		<dependency org="c3p0" name="c3p0" rev="0.9.1" conf="default" />
-		<dependency org="org.hibernate" name="hibernate-c3p0" rev="3.6.3.Final" conf="default" />
+		<dependency org="org.hibernate" name="hibernate-c3p0" rev="3.6.1.Final" conf="default" />
 
-		<dependency org="jfree" name="jfreechart" rev="1.0.13"/>
-		<dependency org="org.apache.ant" name="ant" rev="1.8.2"/>
+		<dependency org="br.com.caelum" name="vraptor" rev="3.4.0" conf="default" />
+		<dependency org="org.hsqldb" name="hsqldb" rev="2.2.4" conf="default" />
+		<dependency org="opensymphony" name="sitemesh" rev="2.4.2" conf="default" />
+<!-- 		<dependency org="javax.servlet" name="jstl" rev="1.2" conf="default" /> -->
+		<dependency org="joda-time" name="joda-time" rev="2.0" conf="default" />
+		<dependency org="com.thoughtworks.xstream" name="xstream" rev="1.4.1" conf="default" />
 
-								
+		<!-- Provided dependencies -->
+<!-- 		<dependency org="javax.servlet" name="servlet-api" rev="2.5" conf="default" /> -->
+<!-- 		<dependency org="javax.servlet.jsp" name="jsp-api" rev="2.1" conf="default" /> -->
+		
+		<dependency org="org.mortbay.jetty" name="servlet-api-2.5" rev="6.1H.14.1"/>
+		<dependency org="org.glassfish.web" name="jstl-impl" rev="1.2"/>
+		
+		<dependency org="javax.transaction" name="jta" rev="1.1"/>
+		<dependency org="com.google.code.javaparser" name="javaparser" rev="1.0.8" conf="default" />
+		<dependency org="br.com.prixma" name="vraptor-tasks" rev="1.0.2" conf="default" />
+		<dependency org="org.apache.commons" name="commons-lang3" rev="3.1" conf="default" />
+		
+		
+<!-- 		<dependency org="javax.servlet" name="servlet-api" rev="2.5"/> -->
+<!-- 		<dependency org="javax.servlet.jsp" name="jsp-api" rev="2.1"/> -->
+<!-- 		<dependency org="org.apache.tomcat" name="jasper-el" rev="6.0.26"/> -->
+		
+
+		
+
 		<!-- Test dependencies -->
 		<dependency org="junit" name="junit" rev="4.8.2" conf="test->default" />
 		<dependency org="org.mockito" name="mockito-all" rev="1.8.5" conf="test->default" />
