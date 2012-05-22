@@ -16,9 +16,4 @@ public class GitBlameParserTest {
 		assertEquals("3cd4ab40cba80761165ca0ecf01ec427b6d6e150", hash);
 	}
 	
-	@Test
-	public void shouldParseBlameDataFromFile() throws Exception {
-		
-	}
-	
 }
