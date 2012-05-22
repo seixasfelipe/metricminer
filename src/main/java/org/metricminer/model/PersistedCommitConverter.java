@@ -4,8 +4,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
-
 
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -15,7 +15,10 @@ import org.metricminer.scm.DiffData;
 
 public class PersistedCommitConverter {
 
-    public PersistedCommitConverter() {
+    private HashMap<String, Author> savedAuthors;
+
+	public PersistedCommitConverter() {
+    	savedAuthors = new HashMap<String, Author>();
     }
 
     public Commit toDomain(CommitData data, Session session, Project project) throws ParseException {
@@ -30,7 +33,7 @@ public class PersistedCommitConverter {
             if (artifact.isSourceCode()) {
                 SourceCode sourceCode = new SourceCode(artifact, commit, diff.getFullSourceCode());
                 session.save(sourceCode);
-                //convertBlameInformation(session, diff, sourceCode);
+                convertBlameInformation(session, diff, sourceCode);
                 
                 artifact.addSource(sourceCode);
                 commit.addSource(sourceCode);
@@ -45,7 +48,6 @@ public class PersistedCommitConverter {
 	private void convertBlameInformation(Session session, DiffData diff, SourceCode sourceCode) {
 		for(Map.Entry<Integer, String> entry :  diff.getBlameLines().entrySet()) {
 			Author blamedAuthor = searchForPreviouslySavedAuthor(entry.getValue(), session);
-			System.out.println(entry.getValue());
 			BlamedLine blamedLine = sourceCode.blame(entry.getKey(), blamedAuthor);
 			
 			session.save(blamedLine);
@@ -84,14 +86,18 @@ public class PersistedCommitConverter {
 		Author author = searchForPreviouslySavedAuthor(data.getAuthor(), session);
         if (author == null) {
             author = new Author(data.getAuthor(), data.getEmail());
+            savedAuthors.put(data.getAuthor(), author);
             session.save(author);
         }
 		return author;
 	}
 
     private Author searchForPreviouslySavedAuthor(String name, Session session) {
+    	if (savedAuthors.containsKey(name))
+    		return savedAuthors.get(name);
         Author author = (Author) session.createCriteria(Author.class).add(
                 Restrictions.eq("name", name)).uniqueResult();
+        savedAuthors.put(name, author);
         return author;
     }
 

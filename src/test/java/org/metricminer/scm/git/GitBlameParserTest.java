@@ -3,7 +3,6 @@ package org.metricminer.scm.git;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.metricminer.scm.git.GitBlameParser;
 
 
 public class GitBlameParserTest {
@@ -16,4 +15,10 @@ public class GitBlameParserTest {
 		
 		assertEquals("3cd4ab40cba80761165ca0ecf01ec427b6d6e150", hash);
 	}
+	
+	@Test
+	public void shouldParseBlameDataFromFile() throws Exception {
+		
+	}
+	
 }
