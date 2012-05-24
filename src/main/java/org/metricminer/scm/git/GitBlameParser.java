@@ -1,5 +1,9 @@
 package org.metricminer.scm.git;
 
+import java.util.Map;
+import java.util.Scanner;
+import java.util.TreeMap;
+
 public class GitBlameParser {
 
 	public String getHash(String line) {
@@ -12,6 +16,32 @@ public class GitBlameParser {
 				line.indexOf("\n"));
 		String author = authorLine.substring(6, authorLine.length()).trim();
 		return author;
+	}
+
+	public Map<Integer, String> getAuthors(String response) {
+		String currentAuthor = null;
+		int currentLine = 1;
+		Map<Integer, String> blamedLines = new TreeMap<Integer, String>();
+		Scanner scanner = new Scanner(response);
+		scanner.useDelimiter("\n");
+		while (scanner.hasNext()) {
+			scanner.next();
+			if (!scanner.hasNext())
+				return blamedLines;
+			String codeLine = scanner.next();
+			if (codeLine.startsWith("author")) {
+				currentAuthor = codeLine.substring(7, codeLine.length());
+				currentAuthor = currentAuthor.trim();
+				for (int i = 0; i < 11; i++) {
+					if (!scanner.hasNext())
+						return blamedLines;
+					scanner.next();
+				}
+			}
+			blamedLines.put(currentLine, currentAuthor);
+			currentLine++;
+		}
+		return blamedLines;
 	}
 
 }

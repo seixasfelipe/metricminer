@@ -1,6 +1,9 @@
 package org.metricminer.scm.git;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.metricminer.changesets.ChangeSet;
 import org.metricminer.executor.CommandExecutor;
@@ -91,13 +94,13 @@ public class Git implements SCM {
 
 			for (DiffData diffData : diffParser.parse(parsedCommit.getDiff())) {
 				diffData.setFullSourceCode(sourceOf(id, diffData.getName()));
-
 				if (diffData.getArtifactKind() != ArtifactKind.BINARY) {
-					for (int line = 1; line <= linesIn(diffData.getFullSourceCode()); line++) {
-						diffData.blame(line, blame(id, diffData.getName(), line));
+					Map<Integer, String> blamedLines = blame(id, diffData.getName());
+					Set<Entry<Integer, String>> blameLinesEntries = blamedLines.entrySet();
+					for (Entry<Integer, String> blamedLineEntry : blameLinesEntries) {
+						diffData.blame(blamedLineEntry.getKey(), blamedLineEntry.getValue());
 					}
 				}
-
 				parsedCommit.addDiff(diffData);
 			}
 
@@ -132,13 +135,6 @@ public class Git implements SCM {
 		return response;
 	}
 
-	public String blame(String commitId, String file, int line) {
-		goTo(commitId);
-		String response = exec.execute("git blame " + file + " -L " + line
-				+ "," + line + " -p -l", getRepoPath());
-
-		return blameParser.getAuthor(response);
-	}
 
 	public String getSourceCodePath() {
 		return repository;
@@ -148,7 +144,21 @@ public class Git implements SCM {
 		String command = "git clone " + scmUrl;
 		exec.execute("mkdir -p " + localPath, "/");
 		return exec.execute(command, localPath);
+	}
+	
+	public String blame(String commitId, String file, int line) {
+		goTo(commitId);
+		String response = exec.execute("git blame " + file + " -L " + line
+				+ "," + line + " -p -l", getRepoPath());
+		
+		return blameParser.getAuthor(response);
+	}
 
+	@Override
+	public Map<Integer, String> blame(String commitId, String filePath) {
+		goTo(commitId);
+		String response = exec.execute("git blame " + filePath + " -p ", getRepoPath());
+		return blameParser.getAuthors(response);
 	}
 
 }

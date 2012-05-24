@@ -1,6 +1,7 @@
 package org.metricminer.scm;
 
 import java.util.List;
+import java.util.Map;
 
 import org.metricminer.changesets.ChangeSet;
 
@@ -15,4 +16,5 @@ public interface SCM {
 	String getSourceCodePath();
 	String blame(String commitId, String file, int line);
 	String clone(String scmUrl, String localPath);
+	Map<Integer, String> blame(String commmitId, String string);
 }
