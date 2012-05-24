@@ -24,4 +24,18 @@ public class FanOutResult implements MetricResult {
         this.fanOut = fanOut;
     }
 
+	public Long getId() {
+		return id;
+	}
+
+	public SourceCode getSourceCode() {
+		return sourceCode;
+	}
+
+	public int getFanOut() {
+		return fanOut;
+	}
+    
+    
+
 }

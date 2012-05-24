@@ -57,7 +57,6 @@ public class LinesOfCodeMetric implements Metric {
 
     @Override
     public Collection<MetricResult> resultsToPersistOf(SourceCode source) {
-        StringBuilder msg;
         ArrayList<MetricResult> results = new ArrayList<MetricResult>();
         for (Entry<String, Integer> entry : visitor.methodLines().entrySet()) {
             results.add(new LinesOfCodeResult(source, entry.getKey(), entry.getValue()));

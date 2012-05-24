@@ -70,4 +70,8 @@ public class SourceCode {
 	public Long getId() {
 		return id;
 	}
+	
+	public Long getSourceSize() {
+		return sourceSize;
+	}
 }

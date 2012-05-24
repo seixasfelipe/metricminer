@@ -37,4 +37,11 @@ public class ProjectConfigurationEntry {
 		return value;
 	}
 
+	public Project getProject() {
+		return project;
+	}
+	
+	public Long getId() {
+		return id;
+	}
 }

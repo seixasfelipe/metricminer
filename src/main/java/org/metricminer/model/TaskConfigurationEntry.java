@@ -44,4 +44,11 @@ public class TaskConfigurationEntry {
                 && registeredMetric.getMetricFactoryClass().equals(this.value);
     }
 
+    public Task getTask() {
+		return task;
+	}
+    
+    public Long getId() {
+		return id;
+	}
 }

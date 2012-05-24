@@ -44,5 +44,50 @@ public class MethodsCountResult implements MetricResult {
         this.defaultAttributes = defaultAttributes;
     }
 
+	public Long getId() {
+		return id;
+	}
+
+	public SourceCode getSourceCode() {
+		return sourceCode;
+	}
+
+	public int getPrivateMethods() {
+		return privateMethods;
+	}
+
+	public int getPublicMethods() {
+		return publicMethods;
+	}
+
+	public int getCrotectedMethods() {
+		return crotectedMethods;
+	}
+
+	public int getDefaultMethods() {
+		return defaultMethods;
+	}
+
+	public int getConstructorMethods() {
+		return constructorMethods;
+	}
+
+	public int getPrivateAttributes() {
+		return privateAttributes;
+	}
+
+	public int getPublicAttributes() {
+		return publicAttributes;
+	}
+
+	public int getProtectedAttributes() {
+		return protectedAttributes;
+	}
+
+	public int getDefaultAttributes() {
+		return defaultAttributes;
+	}
+
+    
 
 }

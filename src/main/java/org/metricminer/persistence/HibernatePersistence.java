@@ -3,7 +3,6 @@ package org.metricminer.persistence;
 import java.util.ArrayList;
 import java.util.List;
 
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -20,7 +19,6 @@ public class HibernatePersistence {
 	private Session session;
 	private final Config config;
 	private static SessionFactory sessionFactory;
-	private static Integer lock = new Integer(3000);
 
 	public HibernatePersistence(Config config) {
 		this.config = config;

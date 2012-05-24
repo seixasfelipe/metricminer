@@ -26,4 +26,18 @@ public class LComResult implements MetricResult {
         this.lcom = lcom;
     }
 
+	public Long getId() {
+		return Id;
+	}
+
+	public SourceCode getSource() {
+		return source;
+	}
+
+	public double getLcom() {
+		return lcom;
+	}
+    
+    
+
 }

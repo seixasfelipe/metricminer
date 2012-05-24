@@ -27,4 +27,21 @@ public class MethodsInvocationResult implements MetricResult {
         this.methodName = methodName;
     }
 
+	public Long getId() {
+		return id;
+	}
+
+	public SourceCode getSourceCode() {
+		return sourceCode;
+	}
+
+	public double getMethodsInvocation() {
+		return methodsInvocation;
+	}
+
+	public String getMethodName() {
+		return methodName;
+	}
+
+    
 }
