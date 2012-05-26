@@ -24,6 +24,7 @@ public class GitBlameParser {
 		Map<Integer, String> blamedLines = new TreeMap<Integer, String>();
 		Scanner scanner = new Scanner(response);
 		scanner.useDelimiter("\n");
+		System.out.println(response);
 		while (scanner.hasNext()) {
 			scanner.next();
 			if (!scanner.hasNext())
@@ -38,6 +39,7 @@ public class GitBlameParser {
 					scanner.next();
 				}
 			}
+			System.out.println("blaming" + currentAuthor);
 			blamedLines.put(currentLine, currentAuthor);
 			currentLine++;
 		}

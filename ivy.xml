@@ -36,5 +36,7 @@
 		<!-- Test dependencies -->
 		<dependency org="junit" name="junit" rev="4.8.2" conf="test->default" />
 		<dependency org="org.mockito" name="mockito-all" rev="1.8.5" conf="test->default" />
+		<dependency org="hsqldb" name="hsqldb" rev="1.8.0.10" conf="test->default"/>
+            
 	</dependencies>
 </ivy-module>

@@ -3,7 +3,6 @@ package org.metricminer.scm.git;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
 
 import org.metricminer.changesets.ChangeSet;
 import org.metricminer.executor.CommandExecutor;
@@ -74,33 +73,13 @@ public class Git implements SCM {
 
 	public CommitData detail(String id) {
 		try {
-			String response = exec
-					.execute(
-							"git show "
-									+ id
-									+ " --pretty=format:<Commit><commitId>%H</commitId><author><![CDATA[%an]]></author><email><![CDATA[%ae]]></email><date>%ai</date><message><![CDATA[%s]]></message></Commit>",
-							getRepoPath());
-			response = cleanCDATA(response);
-			XStream xs = new XStream(new DomDriver());
-			xs.alias("Commit", CommitData.class);
-			CommitData parsedCommit = (CommitData) xs.fromXML(response
-					.substring(0, response.indexOf("</Commit>") + 9));
-			parsedCommit.setDiff(response.substring(response
-					.indexOf("</Commit>") + 9));
-
-			String priorCommit = exec.execute("git log " + id
-					+ "^1 --pretty=format:%H -n 1", getRepoPath());
+			CommitData parsedCommit = parseCommit(id);
+			String priorCommit = findPriorCommitOf(id);
 			parsedCommit.setPriorCommit(priorCommit.trim());
 
 			for (DiffData diffData : diffParser.parse(parsedCommit.getDiff())) {
 				diffData.setFullSourceCode(sourceOf(id, diffData.getName()));
-				if (diffData.getArtifactKind() != ArtifactKind.BINARY) {
-					Map<Integer, String> blamedLines = blame(id, diffData.getName());
-					Set<Entry<Integer, String>> blameLinesEntries = blamedLines.entrySet();
-					for (Entry<Integer, String> blamedLineEntry : blameLinesEntries) {
-						diffData.blame(blamedLineEntry.getKey(), blamedLineEntry.getValue());
-					}
-				}
+				parseBlameInformation(id, diffData);
 				parsedCommit.addDiff(diffData);
 			}
 
@@ -108,6 +87,41 @@ public class Git implements SCM {
 		} catch (Exception e) {
 			throw new SCMException(e);
 		}
+	}
+
+	private void parseBlameInformation(String id, DiffData diffData) {
+		if (diffData.getArtifactKind() != ArtifactKind.BINARY) {
+			Map<Integer, String> blamedLines = blame(id,
+					diffData.getName());
+			for (Entry<Integer, String> blamedLineEntry : blamedLines
+					.entrySet()) {
+				diffData.blame(blamedLineEntry.getKey(),
+						blamedLineEntry.getValue());
+			}
+		}
+	}
+
+	private String findPriorCommitOf(String id) {
+		String priorCommit = exec.execute("git log " + id
+				+ "^1 --pretty=format:%H -n 1", getRepoPath());
+		return priorCommit;
+	}
+
+	private CommitData parseCommit(String id) {
+		String response = exec
+				.execute(
+						"git show "
+								+ id
+								+ " --pretty=format:<Commit><commitId>%H</commitId><author><![CDATA[%an]]></author><email><![CDATA[%ae]]></email><date>%ai</date><message><![CDATA[%s]]></message></Commit>",
+						getRepoPath());
+		response = cleanCDATA(response);
+		XStream xs = new XStream(new DomDriver());
+		xs.alias("Commit", CommitData.class);
+		CommitData parsedCommit = (CommitData) xs.fromXML(response
+				.substring(0, response.indexOf("</Commit>") + 9));
+		parsedCommit.setDiff(response.substring(response
+				.indexOf("</Commit>") + 9));
+		return parsedCommit;
 	}
 
 	private int linesIn(String modifiedSource) {
@@ -119,7 +133,7 @@ public class Git implements SCM {
 		int lastCharIndex = modifiedSource.length() - 1;
 		if (lastCharIndex > 0) {
 			lines += modifiedSource.charAt(lastCharIndex) == '\n' ? 0 : 1;
-		} 
+		}
 		return lines;
 	}
 
@@ -135,7 +149,6 @@ public class Git implements SCM {
 		return response;
 	}
 
-
 	public String getSourceCodePath() {
 		return repository;
 	}
@@ -145,19 +158,24 @@ public class Git implements SCM {
 		exec.execute("mkdir -p " + localPath, "/");
 		return exec.execute(command, localPath);
 	}
-	
+
 	public String blame(String commitId, String file, int line) {
 		goTo(commitId);
 		String response = exec.execute("git blame " + file + " -L " + line
 				+ "," + line + " -p -l", getRepoPath());
-		
+
 		return blameParser.getAuthor(response);
 	}
 
 	@Override
 	public Map<Integer, String> blame(String commitId, String filePath) {
 		goTo(commitId);
-		String response = exec.execute("git blame " + filePath + " -p ", getRepoPath());
+		System.out.println(commitId);
+		System.out.println("git blame " + filePath + " -p ");
+		String response = exec.execute("git blame " + filePath + " -p ",
+				getRepoPath());
+		System.out.println(response);
+		
 		return blameParser.getAuthors(response);
 	}
 
