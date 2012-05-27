@@ -37,13 +37,20 @@
 						</tr>
 					</table>
 					<h2>Registered metrics</h2>
-					<table cellpadding="0" cellspacing="0" class="sortable zebra">
-						<c:forEach items="${status.configs.registeredMetrics}" var="metric">
+					<table cellpadding="0" cellspacing="0" class="tablesorter zebra">
+						<thead>
 							<tr>
-								<td>${metric.name}</td>
-								<td>${metric.metricFactoryClass}</td>
+								<th>Name</th>
 							</tr>
-						</c:forEach>
+						</thead>
+						<thead>
+							<c:forEach items="${status.configs.registeredMetrics}" var="metric">
+								<tr>
+									<td>${metric.name}</td>
+									<td>${metric.metricFactoryClass}</td>
+								</tr>
+							</c:forEach>
+						</thead>
 					</table>
 					<c:if test="${! empty status.taskQueue}">
 						<h2>Tasks running</h2>
@@ -73,6 +80,9 @@
 		</div>						<!-- wrapper ends -->
 	</div>		<!-- #hld ends -->
 	<c:import url="../import/javascripts.jsp" />
+	<script>
+		$(".tablesorter").tablesorter();
+	</script>
 </body>
 </html>
 

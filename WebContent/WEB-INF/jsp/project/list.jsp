@@ -25,7 +25,7 @@
 				</div>		<!-- .block_head ends -->
 				
 				<div class="block_content">
-					<table cellpadding="0" cellspacing="0" width="100%" class="tablesorter">
+					<table cellpadding="0" cellspacing="0" width="100%" class="tablesorter zebra">
 						<thead>
 							<tr>
 								<th>Name</th>
@@ -67,5 +67,8 @@
 	</div>		<!-- #hld ends -->
 	
 	<c:import url="../import/javascripts.jsp" />
+	<script>
+		$(".tablesorter").tablesorter();
+	</script>
 </body>
 </html>
