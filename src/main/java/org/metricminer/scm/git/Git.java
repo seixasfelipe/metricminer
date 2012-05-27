@@ -37,7 +37,7 @@ public class Git implements SCM {
 	public String goTo(String id) {
 		if (!id.equals(currentPosition)) {
 			try {
-				exec.execute("git checkout master -f", getRepoPath());
+				// exec.execute("git checkout master -f", getRepoPath());
 				exec.execute("git branch --no-track -f metricminer " + id,
 						getRepoPath());
 				exec.execute("git checkout metricminer -f", getRepoPath());
@@ -57,7 +57,7 @@ public class Git implements SCM {
 
 	public List<ChangeSet> getChangeSets() {
 		try {
-			exec.execute("git checkout master -f", getRepoPath());
+			// exec.execute("git checkout master -f", getRepoPath());
 			String output = exec.execute(
 					"git log --format=medium --date=iso --reverse",
 					getRepoPath());
@@ -79,7 +79,7 @@ public class Git implements SCM {
 
 			for (DiffData diffData : diffParser.parse(parsedCommit.getDiff())) {
 				diffData.setFullSourceCode(sourceOf(id, diffData.getName()));
-				parseBlameInformation(id, diffData);
+				//parseBlameInformation(id, diffData);
 				parsedCommit.addDiff(diffData);
 			}
 
@@ -91,8 +91,7 @@ public class Git implements SCM {
 
 	private void parseBlameInformation(String id, DiffData diffData) {
 		if (diffData.getArtifactKind() != ArtifactKind.BINARY) {
-			Map<Integer, String> blamedLines = blame(id,
-					diffData.getName());
+			Map<Integer, String> blamedLines = blame(id, diffData.getName());
 			for (Entry<Integer, String> blamedLineEntry : blamedLines
 					.entrySet()) {
 				diffData.blame(blamedLineEntry.getKey(),
@@ -117,10 +116,10 @@ public class Git implements SCM {
 		response = cleanCDATA(response);
 		XStream xs = new XStream(new DomDriver());
 		xs.alias("Commit", CommitData.class);
-		CommitData parsedCommit = (CommitData) xs.fromXML(response
-				.substring(0, response.indexOf("</Commit>") + 9));
-		parsedCommit.setDiff(response.substring(response
-				.indexOf("</Commit>") + 9));
+		CommitData parsedCommit = (CommitData) xs.fromXML(response.substring(0,
+				response.indexOf("</Commit>") + 9));
+		parsedCommit
+				.setDiff(response.substring(response.indexOf("</Commit>") + 9));
 		return parsedCommit;
 	}
 
@@ -169,14 +168,9 @@ public class Git implements SCM {
 
 	@Override
 	public Map<Integer, String> blame(String commitId, String filePath) {
-		goTo(commitId);
-		System.out.println(commitId);
-		System.out.println("git blame " + filePath + " -p ");
-		String response = exec.execute("git blame " + filePath + " -p ",
-				getRepoPath());
-		System.out.println(response);
+		String response = exec.execute("git blame " + commitId + " " + filePath
+				+ " -p ", getRepoPath());
 		
 		return blameParser.getAuthors(response);
 	}
-
 }

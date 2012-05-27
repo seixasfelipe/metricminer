@@ -32,7 +32,8 @@ public class SimpleCommandExecutor implements CommandExecutor {
 		Scanner sc = new Scanner(proc.getInputStream());
 
 		while (sc.hasNextLine()) {
-			total.append(sc.nextLine() + "\r\n");
+			String nextLine = sc.nextLine();
+			total.append(nextLine + "\r\n");
 		}
 		return total.toString();
 
