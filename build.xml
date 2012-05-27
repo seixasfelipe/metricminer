@@ -20,7 +20,10 @@
 	</target>
 
 	<target name="clean">
-		<delete dir="target/" />
+		<delete dir="${tmp.dir}" />
+		<delete>
+	    	<fileset dir="${libs.dir}" includes="*.jar"/>
+		</delete>
 	</target>
 	
 	<!-- resolve dependencies -->

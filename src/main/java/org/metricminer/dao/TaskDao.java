@@ -26,7 +26,7 @@ public class TaskDao {
     @SuppressWarnings("rawtypes")
     public Task getFirstQueuedTask() {
         List tasks = session.createCriteria(Task.class).add(
-                Restrictions.eq("status", TaskStatus.QUEUED)).addOrder(Order.asc("position"))
+                Restrictions.eq("status", TaskStatus.QUEUED)).addOrder(Order.asc("submitDate")).addOrder(Order.asc("position"))
                 .setMaxResults(1).list();
         if (tasks.isEmpty())
             return null;
