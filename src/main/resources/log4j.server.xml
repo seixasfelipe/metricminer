@@ -30,7 +30,7 @@
 		<appender-ref ref="logfile" />
 	</category>
 	
-	<category name="tasks">
+	<category name="org.metricminer">
 		<priority value="INFO" />
 		<appender-ref ref="logfile" />
 	</category>

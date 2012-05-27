@@ -226,7 +226,7 @@ public class Project {
     }
 
 	public void addMetricToCalculate(String metricFactoryClass) {
-		addMetricToCalculate(metricFactoryClass, tasks.get(tasks.size() - 1));
+		addMetricToCalculate(metricFactoryClass, tasks.get(1));
 	}
 
 	public void addNewMetrics(List<RegisteredMetric> registeredMetrics) {
