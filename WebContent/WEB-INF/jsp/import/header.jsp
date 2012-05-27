@@ -21,5 +21,6 @@
 			</ul>
 		</li>
 		<li><a href="${linkTo[TaskController].listTasks}">Tasks</a></li>
+		<li><a href="${linkTo[StatusController].showStatus}">Status</a></li>
 	</ul>
 </div>		<!-- #header ends -->

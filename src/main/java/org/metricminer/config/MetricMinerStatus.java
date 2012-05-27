@@ -1,5 +1,7 @@
 package org.metricminer.config;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Queue;
 import java.util.concurrent.LinkedBlockingDeque;
 
@@ -35,6 +37,14 @@ public class MetricMinerStatus {
     public boolean mayStartTask() {
         return tasksRunning.size() < configs.getMaxConcurrentTasks();
     }
+    
+    public Collection<Task> getTaskQueue() {
+    	return Collections.unmodifiableCollection(tasksRunning);
+    }
+    
+    public MetricMinerConfigs getConfigs() {
+		return configs;
+	}
     
     @Override
     public String toString() {
