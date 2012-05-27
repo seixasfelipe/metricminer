@@ -424,8 +424,11 @@ a:hover {
 	}
 
 .block table tr.even td {
-	background: #fbfbfb;
-	}
+	background: #f8f8f8;
+}
+.block table.zebra tr:nth-child(2n) td {
+	background: #f8f8f8;
+} 
 	
 .block table tr td,
 .block table tr th {

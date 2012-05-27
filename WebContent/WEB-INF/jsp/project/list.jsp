@@ -25,7 +25,7 @@
 				</div>		<!-- .block_head ends -->
 				
 				<div class="block_content">
-					<table cellpadding="0" cellspacing="0" width="100%" class="sortable">
+					<table cellpadding="0" cellspacing="0" width="100%" class="tablesorter">
 						<thead>
 							<tr>
 								<th>Name</th>

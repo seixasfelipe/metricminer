@@ -22,14 +22,46 @@
 				</div>		<!-- .block_head ends -->
 				
 				<div class="block_content">
-					<table>
-						<c:forEach items="${tasks}" var="task">
+					<table cellpadding="0" cellspacing="0" class="tablesorter zebra">
+						<thead>
 							<tr>
-								<td>${task.name}</td>
-								<td>${task.status}</td>
-								<td><fmt:formatDate value="${task.submitDate.time}" pattern="yyyy/MM/dd - HH:mm:ss"/></td>
+								<th>Name</th>
+								<th>Status</th>
+								<th>Submission date</th>
+								<th>Start date</th>
+								<th>End date</th>
 							</tr>
-						</c:forEach>
+						</thead>
+						<tbody>
+							<c:forEach items="${tasks}" var="task">
+								<tr>
+									<td>${task.name}</td>
+									<td>${task.status}</td>
+									<td>
+										<fmt:formatDate value="${task.submitDate.time}" 
+											pattern="yyyy/MM/dd - HH:mm:ss"/>
+									</td>
+									<td>
+										<c:if test="${task.hasStarted() || task.hasFinished()}">
+											<fmt:formatDate value="${task.startDate.time}" 
+												pattern="yyyy/MM/dd - HH:mm:ss"/>
+										</c:if>
+										<c:if test="${!task.hasStarted() && !task.hasFinished()}">
+											-
+										</c:if>
+									</td>
+									<td>
+										<c:if test="${task.hasFinished()}">
+											<fmt:formatDate value="${task.endDate.time}" 
+												pattern="yyyy/MM/dd - HH:mm:ss"/>
+										</c:if>
+										<c:if test="${!task.hasFinished()}">
+											-
+										</c:if>
+									</td>
+								</tr>
+							</c:forEach>
+						</tbody>
 					</table>
 				</div>		<!-- .block_content ends -->
 				<div class="bendl"></div>
@@ -41,6 +73,9 @@
 		</div>						<!-- wrapper ends -->
 	</div>		<!-- #hld ends -->
 	<c:import url="../import/javascripts.jsp" />
+	<script>
+		$(".tablesorter").tablesorter();
+	</script>
 </body>
 </html>
 

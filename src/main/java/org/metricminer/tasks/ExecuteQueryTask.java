@@ -18,7 +18,7 @@ public class ExecuteQueryTask implements RunnableTask {
 
     public ExecuteQueryTask(Task task, QueryExecutor queryExecutor, QueryDao queryDao) {
         this.queryDao = queryDao;
-        this.queryId = Long.parseLong(task.getConfiguration(TaskConfigurationEntryKey.QUERY_ID)); 
+        this.queryId = Long.parseLong(task.getTaskConfigurationValueFor(TaskConfigurationEntryKey.QUERY_ID)); 
         this.queryExecutor = queryExecutor;
     }
 

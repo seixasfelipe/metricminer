@@ -23,7 +23,7 @@
 				
 				<div class="block_content">
 					<c:if test="${empty status.taskQueue}">
-						<div class="message info"><p>There is no tasks running currently</p></div>
+						<div class="message info"><p>There are no tasks running currently</p></div>
 					</c:if>
 					<h2>Configurations</h2>
 					<table>
@@ -37,7 +37,7 @@
 						</tr>
 					</table>
 					<h2>Registered metrics</h2>
-					<table>
+					<table cellpadding="0" cellspacing="0" class="sortable zebra">
 						<c:forEach items="${status.configs.registeredMetrics}" var="metric">
 							<tr>
 								<td>${metric.name}</td>
@@ -45,8 +45,8 @@
 							</tr>
 						</c:forEach>
 					</table>
-					<c:if test="!${empty status.taskQueue}">
-						<h2>Tasks Running</h2>
+					<c:if test="${! empty status.taskQueue}">
+						<h2>Tasks running</h2>
 						<table>
 							<c:forEach items="${status.taskQueue}" var="task">
 								<tr>
