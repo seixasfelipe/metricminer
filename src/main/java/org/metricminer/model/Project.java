@@ -164,7 +164,7 @@ public class Project {
                 .withRunnableTaskFactory(new ParseSCMLogTaskFactory()).withPosition(1).build();
         
         Task removeDirectoryTask  = new TaskBuilder().forProject(this).withName("Remove source code directory")
-                .withRunnableTaskFactory(new RemoveSourceDirectoryTaskFactory()).withPosition(1).build();
+                .withRunnableTaskFactory(new RemoveSourceDirectoryTaskFactory()).withPosition(2).build();
         
         parseLogTask.addDependency(cloneTask);
         removeDirectoryTask.addDependency(parseLogTask);
@@ -227,5 +227,13 @@ public class Project {
 
 	public void addMetricToCalculate(String metricFactoryClass) {
 		addMetricToCalculate(metricFactoryClass, tasks.get(tasks.size() - 1));
+	}
+
+	public void addNewMetrics(List<RegisteredMetric> registeredMetrics) {
+		for (RegisteredMetric registeredMetric : registeredMetrics) {
+			if (!containsTaskWith(registeredMetric)) {
+				addMetricToCalculate(registeredMetric.getMetricFactoryClass());
+			}
+		}
 	}
 }

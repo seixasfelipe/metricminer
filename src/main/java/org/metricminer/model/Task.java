@@ -12,6 +12,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -36,7 +37,7 @@ public class Task implements Comparable {
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
     private Integer position;
-    @OneToMany
+    @ManyToMany
     private List<Task> depends;
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private List<TaskConfigurationEntry> configurationEntries;
