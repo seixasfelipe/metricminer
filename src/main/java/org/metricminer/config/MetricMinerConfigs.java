@@ -1,6 +1,7 @@
 package org.metricminer.config;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.metricminer.model.RegisteredMetric;
@@ -44,7 +45,7 @@ public class MetricMinerConfigs {
     }
 
     public List<RegisteredMetric> getRegisteredMetrics() {
-        return registeredMetrics;
+    	return Collections.unmodifiableList(registeredMetrics);
     }
 
     public int getMaxConcurrentTasks() {

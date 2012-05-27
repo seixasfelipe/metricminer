@@ -144,7 +144,7 @@ public class Project {
         return artifacts;
     }
 
-    public void addMetricToCalculate(String metricFactoryClassName) {
+    public void addMetricToCalculate(String metricFactoryClassName, Task parseLogTask) {
         Task metricTask = new TaskBuilder().withName("Calculate metric: " + metricFactoryClassName)
                 .forProject(this).withRunnableTaskFactory(new CalculateMetricTaskFactory())
                 .withPosition(taskCount()).build();
@@ -152,8 +152,7 @@ public class Project {
         metricTask.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRICFACTORYCLASS,
                 metricFactoryClassName);
 
-        Task lastTask = tasks.get(tasks.size() - 1);
-        metricTask.addDependency(lastTask);
+        metricTask.addDependency(parseLogTask);
         tasks.add(metricTask);
     }
 
@@ -172,6 +171,11 @@ public class Project {
         tasks.add(cloneTask);
         tasks.add(parseLogTask);
         tasks.add(removeDirectoryTask);
+        
+        for (RegisteredMetric registeredMetric : metricMinerConfigs.getRegisteredMetrics()) {
+        	addMetricToCalculate(registeredMetric.getMetricFactoryClass(), parseLogTask);
+		}
+        
     }
 
     public List<Tag> getTags() {
@@ -220,4 +224,8 @@ public class Project {
     public int getCommitCount() {
         return commits.size();
     }
+
+	public void addMetricToCalculate(String metricFactoryClass) {
+		addMetricToCalculate(metricFactoryClass, tasks.get(tasks.size() - 1));
+	}
 }
