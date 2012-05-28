@@ -2,8 +2,8 @@ package org.metricminer.config;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
 
 import org.metricminer.model.Task;
 
@@ -14,40 +14,40 @@ import br.com.caelum.vraptor.ioc.Component;
 @ApplicationScoped
 public class MetricMinerStatus {
 
-    private Queue<Task> tasksRunning;
-    private MetricMinerConfigs configs;
-    
-    public MetricMinerStatus(MetricMinerConfigs configs) {
-        this.configs = configs;
-        tasksRunning = new LinkedBlockingQueue<Task>();
-    }
-    
-    public void addRunningTask(Task t) {
-        tasksRunning.add(t);
-    }
-    
-    public boolean isRunningTask() {
-        return !tasksRunning.isEmpty();
-    }
-    
-    public Task finishCurrentTask() {
-        return tasksRunning.poll();
-    }
-    
-    public boolean mayStartTask() {
-        return tasksRunning.size() < configs.getMaxConcurrentTasks();
-    }
-    
-    public Collection<Task> getTaskQueue() {
-    	return Collections.unmodifiableCollection(tasksRunning);
-    }
-    
-    public MetricMinerConfigs getConfigs() {
+	private Queue<Task> tasksRunning;
+	private MetricMinerConfigs configs;
+
+	public MetricMinerStatus(MetricMinerConfigs configs) {
+		this.configs = configs;
+		tasksRunning = new LinkedList<Task>();
+	}
+
+	public synchronized void addRunningTask(Task t) {
+		tasksRunning.add(t);
+	}
+
+	public boolean isRunningTask() {
+		return !tasksRunning.isEmpty();
+	}
+
+	public synchronized  Task finishCurrentTask() {
+		return tasksRunning.poll();
+	}
+
+	public boolean mayStartTask() {
+		return tasksRunning.size() < configs.getMaxConcurrentTasks();
+	}
+
+	public Collection<Task> getTaskQueue() {
+		return Collections.unmodifiableCollection(tasksRunning);
+	}
+
+	public MetricMinerConfigs getConfigs() {
 		return configs;
 	}
-    
-    @Override
-    public String toString() {
-        return "MetricMiner status: " + tasksRunning.size() + " tasks running";
-    }
+
+	@Override
+	public String toString() {
+		return "MetricMiner status: " + tasksRunning.size() + " tasks running";
+	}
 }
