@@ -3,7 +3,7 @@ package org.metricminer.config;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Queue;
-import java.util.concurrent.LinkedBlockingDeque;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.metricminer.model.Task;
 
@@ -19,7 +19,7 @@ public class MetricMinerStatus {
     
     public MetricMinerStatus(MetricMinerConfigs configs) {
         this.configs = configs;
-        tasksRunning = new LinkedBlockingDeque<Task>();
+        tasksRunning = new LinkedBlockingQueue<Task>();
     }
     
     public void addRunningTask(Task t) {
