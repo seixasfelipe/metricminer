@@ -42,10 +42,13 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
         }
         log.info("Starting task: " + taskToRun);
         taskToRun.start();
+        log.info("adding task to status");
         status.addRunningTask(taskToRun);
+        log.info("status updated");
         Transaction tx = daoSession.beginTransaction();
         taskDao.update(taskToRun);
         tx.commit();
+        log.info("task updated");
         try {
             runTask(taskSession);
         } catch (Exception e) {
