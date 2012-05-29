@@ -16,6 +16,8 @@ import org.metricminer.model.SourceCode;
 
 
 public class Sandbox {
+    //TODO: create dao tests properly
+    @Ignore
     @Test
     public void testStatelessSession() throws Exception {
         SessionFactory sf = new Configuration().configure().buildSessionFactory();
@@ -29,7 +31,8 @@ public class Sandbox {
             System.out.println(source.getName());
         }
     }
-
+    //TODO: create dao tests properly
+    @Ignore
     @Test
     public void testCommitersCount() throws Exception {
         SessionFactory sf = new Configuration().configure().buildSessionFactory();
@@ -47,7 +50,8 @@ public class Sandbox {
             System.out.println(count);
         }
     }
-
+    //TODO: create dao tests properly
+    @Ignore
     @Test
     public void testCommitCountForInterval() throws Exception {
         SessionFactory sf = new Configuration().configure().buildSessionFactory();
@@ -89,7 +93,8 @@ public class Sandbox {
             System.out.println(commit.getCommitId());
         }
     }
-
+    //TODO: create dao tests properly
+    @Ignore
     @Test
     public void testDateIntervals() throws Exception {
 
@@ -124,6 +129,7 @@ public class Sandbox {
 
     }
 
+    //TODO: create dao tests properly
     @Ignore
     @Test
     public void testFirstCommit() throws Exception {

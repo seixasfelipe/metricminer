@@ -3,7 +3,7 @@ package org.metricminer.config;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.Queue;
+import java.util.List;
 
 import org.metricminer.model.Task;
 
@@ -14,7 +14,7 @@ import br.com.caelum.vraptor.ioc.Component;
 @ApplicationScoped
 public class MetricMinerStatus {
 
-	private Queue<Task> tasksRunning;
+	private List<Task> tasksRunning;
 	private MetricMinerConfigs configs;
 
 	public MetricMinerStatus(MetricMinerConfigs configs) {
@@ -30,8 +30,8 @@ public class MetricMinerStatus {
 		return !tasksRunning.isEmpty();
 	}
 
-	public synchronized  Task finishCurrentTask() {
-		return tasksRunning.poll();
+	public synchronized void finishCurrentTask(Task t) {
+		tasksRunning.remove(t);
 	}
 
 	public boolean mayStartTask() {

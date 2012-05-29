@@ -70,7 +70,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
 
     private void finishTask() {
         taskToRun.finish();
-        status.finishCurrentTask();
+        status.finishCurrentTask(taskToRun);
         Transaction tx = daoSession.beginTransaction();
         taskDao.update(taskToRun);
         log.info("Finished running task: " + taskToRun);
@@ -79,7 +79,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
 
     private void handleError(Exception e) {
         taskToRun.fail();
-        status.finishCurrentTask();
+        status.finishCurrentTask(taskToRun);
         Transaction tx = daoSession.beginTransaction();
         taskDao.update(taskToRun);
         tx.commit();

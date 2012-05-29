@@ -24,152 +24,165 @@ import org.metricminer.runner.RunnableTaskFactory;
 @Entity
 public class Task implements Comparable {
 
-	@SuppressWarnings("unused")
-	@Id
-	@GeneratedValue
-	private Long id;
-	@ManyToOne(cascade = CascadeType.PERSIST)
-	private Project project;
-	private String name;
-	private Class runnableTaskFactoryClass;
-	@Temporal(TemporalType.TIMESTAMP)
-	private Calendar submitDate;
-	@Temporal(TemporalType.TIMESTAMP)
-	private Calendar startDate;
-	@Temporal(TemporalType.TIMESTAMP)
-	private Calendar endDate;
-	@Enumerated(EnumType.STRING)
-	private TaskStatus status;
-	private Integer position;
-	@ManyToMany
-	private List<Task> depends;
-	@OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
-	private List<TaskConfigurationEntry> configurationEntries;
+    @Id
+    @GeneratedValue
+    private Long id;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    private Project project;
+    private String name;
+    private Class runnableTaskFactoryClass;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar submitDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar startDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar endDate;
+    @Enumerated(EnumType.STRING)
+    private TaskStatus status;
+    private Integer position;
+    @ManyToMany
+    private List<Task> depends;
+    @OneToMany(
+            mappedBy = "task", cascade = CascadeType.ALL)
+    private List<TaskConfigurationEntry> configurationEntries;
 
-	public Task() {
-		this.depends = new ArrayList<Task>();
-		this.configurationEntries = new ArrayList<TaskConfigurationEntry>();
-	}
+    public Task() {
+        this.depends = new ArrayList<Task>();
+        this.configurationEntries = new ArrayList<TaskConfigurationEntry>();
+    }
 
-	public Task(Project project, String name,
-			RunnableTaskFactory runnableTaskFactory, Integer position) {
-		this();
-		this.project = project;
-		this.name = name;
-		this.runnableTaskFactoryClass = runnableTaskFactory.getClass();
-		this.submitDate = new GregorianCalendar();
-		this.status = TaskStatus.QUEUED;
-		this.position = position;
-	}
+    public Task(Project project, String name, RunnableTaskFactory runnableTaskFactory,
+            Integer position) {
+        this();
+        this.project = project;
+        this.name = name;
+        this.runnableTaskFactoryClass = runnableTaskFactory.getClass();
+        this.submitDate = new GregorianCalendar();
+        this.status = TaskStatus.QUEUED;
+        this.position = position;
+    }
 
-	public void start() {
-		this.status = TaskStatus.STARTED;
-		this.startDate = new GregorianCalendar();
-	}
+    public void start() {
+        this.status = TaskStatus.STARTED;
+        this.startDate = new GregorianCalendar();
+    }
 
-	public void finish() {
-		this.status = TaskStatus.FINISHED;
-		this.endDate = new GregorianCalendar();
-	}
+    public void finish() {
+        this.status = TaskStatus.FINISHED;
+        this.endDate = new GregorianCalendar();
+    }
 
-	public void fail() {
-		this.status = TaskStatus.FAILED;
-	}
+    public void fail() {
+        this.status = TaskStatus.FAILED;
+    }
 
-	public void addDependency(Task task) {
-		if (depends == null)
-			depends = new ArrayList<Task>();
-		depends.add(task);
-	}
+    public void addDependency(Task task) {
+        if (depends == null)
+            depends = new ArrayList<Task>();
+        depends.add(task);
+    }
 
-	public boolean isDependenciesFinished() {
-		for (Task depencyTask : depends) {
-			if (!depencyTask.hasFinished())
-				return false;
-		}
-		return true;
-	}
+    public boolean isDependenciesFinished() {
+        for (Task depencyTask : depends) {
+            if (!depencyTask.hasFinished())
+                return false;
+        }
+        return true;
+    }
 
-	public boolean hasFinished() {
-		return this.status == TaskStatus.FINISHED;
-	}
-	
-	public boolean hasStarted() {
-		return this.status == TaskStatus.STARTED;
-	}
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Task) {
+            Task otherTask = (Task) obj;
+            return id == otherTask.getId();
+        } else {
+            return false;
+        }
+    }
 
-	public void addTaskConfigurationEntry(TaskConfigurationEntryKey key,
-			String value) {
-		configurationEntries.add(new TaskConfigurationEntry(key, value, this));
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public boolean willCalculate(RegisteredMetric registeredMetric) {
-		for (TaskConfigurationEntry entry : this.configurationEntries) {
-			if (entry.isEqualToMetric(registeredMetric))
-				return true;
-		}
-		return false;
-	}
+    public boolean hasFinished() {
+        return this.status == TaskStatus.FINISHED;
+    }
 
-	public String getTaskConfigurationValueFor(TaskConfigurationEntryKey key) {
-		for (TaskConfigurationEntry entry : this.configurationEntries) {
-			if (entry.getKey().equals(key)) {
-				return entry.getValue();
-			}
-		}
-		return null;
-	}
+    public boolean hasStarted() {
+        return this.status == TaskStatus.STARTED;
+    }
 
-	@Override
-	public String toString() {
-		return project == null ? name : project.getName() + " - " + name;
-	}
+    public void addTaskConfigurationEntry(TaskConfigurationEntryKey key, String value) {
+        configurationEntries.add(new TaskConfigurationEntry(key, value, this));
+    }
 
-	public List<TaskConfigurationEntry> getConfigurationEntries() {
-		return Collections.unmodifiableList(configurationEntries);
-	}
+    public boolean willCalculate(RegisteredMetric registeredMetric) {
+        for (TaskConfigurationEntry entry : this.configurationEntries) {
+            if (entry.isEqualToMetric(registeredMetric))
+                return true;
+        }
+        return false;
+    }
 
-	public Calendar getEndDate() {
-		return endDate;
-	}
+    public String getTaskConfigurationValueFor(TaskConfigurationEntryKey key) {
+        for (TaskConfigurationEntry entry : this.configurationEntries) {
+            if (entry.getKey().equals(key)) {
+                return entry.getValue();
+            }
+        }
+        return null;
+    }
 
-	public Calendar getStartDate() {
-		return startDate;
-	}
+    @Override
+    public String toString() {
+        return project == null ? name : project.getName() + " - " + name;
+    }
 
-	public String getName() {
-		return name;
-	}
+    public List<TaskConfigurationEntry> getConfigurationEntries() {
+        return Collections.unmodifiableList(configurationEntries);
+    }
 
-	public Class getRunnableTaskFactoryClass() {
-		return runnableTaskFactoryClass;
-	}
+    public Calendar getEndDate() {
+        return endDate;
+    }
 
-	public Project getProject() {
-		return project;
-	}
+    public Calendar getStartDate() {
+        return startDate;
+    }
 
-	public TaskStatus getStatus() {
-		return status;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public Calendar getSubmitDate() {
-		return submitDate;
-	}
+    public Class getRunnableTaskFactoryClass() {
+        return runnableTaskFactoryClass;
+    }
 
-	@Override
-	public int compareTo(Object o) {
-		if (!(o instanceof Task)) {
-			return 1;
-		}
-		Task otherTask = (Task) o;
-		if (this.submitDate.compareTo(otherTask.getSubmitDate()) != 0)
-			return this.submitDate.compareTo(otherTask.getSubmitDate());
-		return position.compareTo(otherTask.getPosition());
-	}
+    public Project getProject() {
+        return project;
+    }
 
-	public Integer getPosition() {
-		return position;
-	}
+    public TaskStatus getStatus() {
+        return status;
+    }
+
+    public Calendar getSubmitDate() {
+        return submitDate;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if (!(o instanceof Task)) {
+            return 1;
+        }
+        Task otherTask = (Task) o;
+        if (this.submitDate.compareTo(otherTask.getSubmitDate()) != 0)
+            return this.submitDate.compareTo(otherTask.getSubmitDate());
+        return position.compareTo(otherTask.getPosition());
+    }
+
+    public Integer getPosition() {
+        return position;
+    }
 
 }
