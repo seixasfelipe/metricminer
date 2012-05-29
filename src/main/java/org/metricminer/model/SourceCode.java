@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
+import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Type;
 
 
@@ -27,6 +28,7 @@ public class SourceCode {
     private Commit commit;
     @Type(type = "text")
     private String source;
+    @Index(name = "sourceSize_index")
     private Long sourceSize;
     @OneToMany(fetch=FetchType.LAZY, mappedBy="sourceCode", cascade = CascadeType.ALL)
     private List<BlamedLine> blamedLines = new ArrayList<BlamedLine>();
