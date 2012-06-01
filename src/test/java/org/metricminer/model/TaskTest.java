@@ -7,7 +7,7 @@ import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
-import org.metricminer.tasks.CalculateMetricTaskFactory;
+import org.metricminer.tasks.metric.CalculateMetricTaskFactory;
 
 public class TaskTest {
 

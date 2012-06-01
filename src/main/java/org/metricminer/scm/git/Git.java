@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.metricminer.changesets.ChangeSet;
-import org.metricminer.executor.CommandExecutor;
+import org.metricminer.infra.executor.CommandExecutor;
 import org.metricminer.model.ArtifactKind;
 import org.metricminer.scm.CommitData;
 import org.metricminer.scm.DiffData;

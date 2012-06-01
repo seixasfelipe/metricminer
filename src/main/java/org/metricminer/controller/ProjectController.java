@@ -3,8 +3,8 @@ package org.metricminer.controller;
 import java.util.List;
 
 import org.metricminer.config.MetricMinerConfigs;
-import org.metricminer.dao.ProjectDao;
-import org.metricminer.dao.TagDao;
+import org.metricminer.infra.dao.ProjectDao;
+import org.metricminer.infra.dao.TagDao;
 import org.metricminer.model.Project;
 import org.metricminer.model.RegisteredMetric;
 import org.metricminer.model.Tag;

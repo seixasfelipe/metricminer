@@ -3,7 +3,7 @@ package org.metricminer.changesets;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-import org.metricminer.projectconfig.Config;
+import org.metricminer.config.project.Config;
 import org.metricminer.scm.SCM;
 
 

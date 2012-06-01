@@ -3,7 +3,7 @@ package org.metricminer.controller;
 import java.util.Collections;
 import java.util.List;
 
-import org.metricminer.dao.TaskDao;
+import org.metricminer.infra.dao.TaskDao;
 import org.metricminer.model.Task;
 
 import br.com.caelum.vraptor.Get;

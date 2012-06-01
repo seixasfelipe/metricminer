@@ -5,8 +5,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 import org.junit.Test;
-import org.metricminer.projectconfig.Config;
-import org.metricminer.projectconfig.Configs;
+import org.metricminer.config.project.Config;
+import org.metricminer.config.project.Configs;
 import org.metricminer.scm.git.Git;
 
 public class SCMFactoryTest {
