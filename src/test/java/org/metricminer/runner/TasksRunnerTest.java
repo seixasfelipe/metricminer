@@ -10,6 +10,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.junit.Before;
 import org.junit.Test;
+import org.metricminer.config.ClassScan;
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.config.MetricMinerStatus;
 import org.metricminer.dao.TaskDao;
@@ -27,7 +28,7 @@ public class TasksRunnerTest {
     @Before
     public void setUp() {
         SessionFactory sf = mock(SessionFactory.class);
-        taskRunner = new TaskRunner(sf, new MetricMinerStatus(new MetricMinerConfigs()));
+        taskRunner = new TaskRunner(sf, new MetricMinerStatus(new MetricMinerConfigs(new ClassScan())));
         mockedSession = mock(Session.class);
         mockedDao = mock(TaskDao.class);
         taskRunner.daoSession = mockedSession;

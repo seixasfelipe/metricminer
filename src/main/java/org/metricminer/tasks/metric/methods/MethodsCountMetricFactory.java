@@ -1,8 +1,10 @@
 package org.metricminer.tasks.metric.methods;
 
+import org.metricminer.tasks.metric.MetricComponent;
 import org.metricminer.tasks.metric.common.Metric;
 import org.metricminer.tasks.metric.common.MetricFactory;
 
+@MetricComponent(name="Quantity of Methods")
 public class MethodsCountMetricFactory implements MetricFactory {
 
     @Override

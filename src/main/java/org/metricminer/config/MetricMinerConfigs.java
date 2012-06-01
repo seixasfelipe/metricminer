@@ -3,8 +3,11 @@ package org.metricminer.config;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.metricminer.model.RegisteredMetric;
+import org.metricminer.tasks.metric.MetricComponent;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;
@@ -15,29 +18,35 @@ public class MetricMinerConfigs {
     private String metricMinerHome;
     private List<RegisteredMetric> registeredMetrics;
     private int maxConcurrentTasks;
+	private final ClassScan scan;
+	
+	private Logger logger = Logger.getLogger(MetricMinerConfigs.class);
 
-    public MetricMinerConfigs() {
-        this.maxConcurrentTasks = 1;
+    public MetricMinerConfigs(ClassScan scan) {
+        this.scan = scan;
+        
+		this.maxConcurrentTasks = 1;
         this.metricMinerHome = "/tmp/metricminer";
         this.registeredMetrics = new ArrayList<RegisteredMetric>();
         registerMetrics();
     }
 
     private void registerMetrics() {
-        this.registeredMetrics.add(new RegisteredMetric("Ciclomatic Complexity",
-                "org.metricminer.tasks.metric.cc.CCMetricFactory"));
-        this.registeredMetrics.add(new RegisteredMetric("Fan-out",
-                "org.metricminer.tasks.metric.fanout.FanOutMetricFactory"));
-        this.registeredMetrics.add(new RegisteredMetric("Invocation",
-                "org.metricminer.tasks.metric.invocation.MethodsInvocationMetricFactory"));
-        this.registeredMetrics.add(new RegisteredMetric("LCom",
-                "org.metricminer.tasks.metric.lcom.LComMetricFactory"));
-        this.registeredMetrics.add(new RegisteredMetric("Lines of Code",
-                "org.metricminer.tasks.metric.lines.LinesOfCodeMetricFactory"));
-        this.registeredMetrics.add(new RegisteredMetric("Methods Count",
-                "org.metricminer.tasks.metric.methods.MethodsCountMetricFactory"));
-        this.registeredMetrics.add(new RegisteredMetric("Tested Methods Finder",
-                "org.metricminer.tasks.metric.testedmethods.TestedMethodsFinderMetricFactory"));
+    	
+    	Set<String> metrics = scan.findAll(MetricComponent.class);
+    	logger.info("Metrics found: " + metrics.size());
+    	
+    	for(String clazz : metrics) {
+    		try {
+				Class<?> clazzDef = Class.forName(clazz);
+				MetricComponent annotation = clazzDef.getAnnotation(MetricComponent.class);
+				
+				logger.info("Registering metric: " + clazz);
+				this.registeredMetrics.add(new RegisteredMetric(annotation.name(), clazz));
+			} catch (ClassNotFoundException e) {
+				logger.error("Metric not found: " + clazz);
+			}
+    	}
     }
 
     public String getMetricMinerHome() {
