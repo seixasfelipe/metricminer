@@ -18,7 +18,7 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.metricminer.changesets.ChangeSet;
-import org.metricminer.executor.CommandExecutor;
+import org.metricminer.infra.executor.CommandExecutor;
 import org.metricminer.scm.SCMException;
 import org.metricminer.scm.git.Git;
 import org.metricminer.scm.git.GitBlameParser;

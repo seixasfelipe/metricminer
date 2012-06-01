@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.metricminer.model.RegisteredMetric;
-import org.metricminer.tasks.metric.MetricComponent;
+import org.metricminer.tasks.MetricComponent;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
 import br.com.caelum.vraptor.ioc.Component;

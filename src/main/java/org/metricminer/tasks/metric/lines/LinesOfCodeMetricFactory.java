@@ -1,6 +1,6 @@
 package org.metricminer.tasks.metric.lines;
 
-import org.metricminer.tasks.metric.MetricComponent;
+import org.metricminer.tasks.MetricComponent;
 import org.metricminer.tasks.metric.common.Metric;
 import org.metricminer.tasks.metric.common.MetricFactory;
 

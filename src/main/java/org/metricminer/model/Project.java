@@ -15,13 +15,12 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
-import org.metricminer.builder.TaskBuilder;
 import org.metricminer.config.MetricMinerConfigs;
-import org.metricminer.projectconfig.MapConfig;
-import org.metricminer.tasks.CalculateMetricTaskFactory;
-import org.metricminer.tasks.ParseSCMLogTaskFactory;
-import org.metricminer.tasks.RemoveSourceDirectoryTaskFactory;
-import org.metricminer.tasks.SCMCloneTaskFactory;
+import org.metricminer.config.project.MapConfig;
+import org.metricminer.tasks.metric.CalculateMetricTaskFactory;
+import org.metricminer.tasks.scm.ParseSCMLogTaskFactory;
+import org.metricminer.tasks.scm.RemoveSourceDirectoryTaskFactory;
+import org.metricminer.tasks.scm.SCMCloneTaskFactory;
 
 @Entity
 public class Project {

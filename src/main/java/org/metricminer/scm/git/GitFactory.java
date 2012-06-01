@@ -1,7 +1,7 @@
 package org.metricminer.scm.git;
 
-import org.metricminer.executor.SimpleCommandExecutor;
-import org.metricminer.projectconfig.Config;
+import org.metricminer.config.project.Config;
+import org.metricminer.infra.executor.SimpleCommandExecutor;
 import org.metricminer.scm.SCM;
 import org.metricminer.scm.SpecificSCMFactory;
 

@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.metricminer.tasks.CalculateMetricTaskFactory;
+import org.metricminer.tasks.metric.CalculateMetricTaskFactory;
 
 
 public class ProjectTest {

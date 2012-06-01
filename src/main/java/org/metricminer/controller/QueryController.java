@@ -3,13 +3,13 @@ package org.metricminer.controller;
 import java.util.Collections;
 import java.util.List;
 
-import org.metricminer.builder.TaskBuilder;
-import org.metricminer.dao.QueryDao;
-import org.metricminer.dao.TaskDao;
+import org.metricminer.infra.dao.QueryDao;
+import org.metricminer.infra.dao.TaskDao;
 import org.metricminer.model.Query;
 import org.metricminer.model.Task;
+import org.metricminer.model.TaskBuilder;
 import org.metricminer.model.TaskConfigurationEntryKey;
-import org.metricminer.tasks.ExecuteQueryTaskFactory;
+import org.metricminer.tasks.query.ExecuteQueryTaskFactory;
 
 import br.com.caelum.vraptor.Get;
 import br.com.caelum.vraptor.Post;

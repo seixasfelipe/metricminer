@@ -7,7 +7,7 @@ import org.junit.Test;
 import org.metricminer.changesets.ChangeSetNotFoundException;
 import org.metricminer.changesets.ChangeSetsInPeriod;
 import org.metricminer.changesets.ChangeSetsInPeriodFactory;
-import org.metricminer.projectconfig.Config;
+import org.metricminer.config.project.Config;
 import org.metricminer.scm.SCM;
 
 import static org.junit.Assert.assertEquals;

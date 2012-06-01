@@ -1,6 +1,6 @@
 package org.metricminer.changesets;
 
-import org.metricminer.projectconfig.Config;
+import org.metricminer.config.project.Config;
 import org.metricminer.scm.SCM;
 
 
