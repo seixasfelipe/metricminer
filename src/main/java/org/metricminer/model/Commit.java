@@ -135,5 +135,10 @@ public class Commit {
 	public Project getProject() {
 		return project;
 	}
+
+	@Override
+	public String toString() {
+		return "Commit [id=" + id + "]";
+	}
 	
 }
