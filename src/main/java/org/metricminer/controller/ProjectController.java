@@ -49,11 +49,6 @@ public class ProjectController {
         result.include("tags", tokenize.tags(project.getTags()));
         result.include("avaiableMetrics", project.avaiableMetricsToAddBasedOn(configs.getRegisteredMetrics()));
         result.include("project", project);
-        result.include("commitCount", dao.commitCountFor(project));
-        result.include("commiterCount", dao.commitersCountFor(project));
-        result.include("lastCommit", dao.lastCommitFor(project));
-        result.include("firstCommit", dao.firstCommitFor(project));
-        result.include("lastSixMonthsCommitCountMap", dao.commitCountForLastMonths(project));
     }
     
     @Get("/projects/{id}/commitChartData")

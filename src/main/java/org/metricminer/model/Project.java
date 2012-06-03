@@ -13,6 +13,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Transient;
 
 import org.metricminer.config.MetricMinerConfigs;
@@ -42,7 +43,13 @@ public class Project {
     private List<Tag> tags;
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Commit> commits;
-
+    @OneToOne
+    private Commit firstCommit;
+    @OneToOne
+    private Commit lastCommit;
+    private Long totalCommits;
+    private Long totalCommiters;
+    
     @Transient
     private MetricMinerConfigs metricMinerConfigs;
 
@@ -226,6 +233,30 @@ public class Project {
 
 	public void addMetricToCalculate(String metricFactoryClass) {
 		addMetricToCalculate(metricFactoryClass, tasks.get(1));
+	}
+	
+	public Commit getFirstCommit() {
+		return firstCommit;
+	}
+	
+	public Commit getLastCommit() {
+		return lastCommit;
+	}
+	
+	public Long getTotalCommiters() {
+		return totalCommiters;
+	}
+	
+	public Long getTotalCommits() {
+		return totalCommits;
+	}
+	
+	public void setStats(Long totalCommiters, Long totalCommits, Commit first, Commit last) {
+		this.totalCommiters = totalCommiters;
+		this.totalCommits = totalCommits;
+		this.firstCommit = first;
+		this.lastCommit = last;
+		
 	}
 
 	public void addNewMetrics(List<RegisteredMetric> registeredMetrics) {
