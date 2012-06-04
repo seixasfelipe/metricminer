@@ -73,22 +73,22 @@
 							
 							<tr>
 								<th>Total commits</th>
-								<td>${commitCount}</td>
+								<td>${project.totalCommits}</td>
 							</tr>
 							
 							<tr>
 								<th>Total commiters</th>
-								<td>${commiterCount}</td>
+								<td>${project.totalCommiters}</td>
 							</tr>
 							
 							<tr>
 								<th>First commit</th>
-								<td><fmt:formatDate value="${firstCommit.date.time}" pattern="yyyy/MM/dd"/></td>
+								<td><fmt:formatDate value="${project.firstCommit.date.time}" pattern="yyyy/MM/dd"/></td>
 							</tr>
 							
 							<tr>
 								<th>Last commit</th>
-								<td><fmt:formatDate value="${lastCommit.date.time}" pattern="yyyy/MM/dd"/></td>
+								<td><fmt:formatDate value="${project.lastCommit.date.time}" pattern="yyyy/MM/dd"/></td>
 							</tr>
 	
 							<tr>

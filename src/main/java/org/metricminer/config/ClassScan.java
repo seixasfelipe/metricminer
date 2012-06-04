@@ -7,6 +7,11 @@ import java.util.Set;
 import org.scannotation.AnnotationDB;
 import org.scannotation.ClasspathUrlFinder;
 
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.Component;
+
+@Component
+@ApplicationScoped
 public class ClassScan {
 
 	public Set<String> findAll(Class<?> clazz) {

@@ -49,11 +49,6 @@ public class ProjectController {
         result.include("tags", tokenize.tags(project.getTags()));
         result.include("avaiableMetrics", project.avaiableMetricsToAddBasedOn(configs.getRegisteredMetrics()));
         result.include("project", project);
-        result.include("commitCount", dao.commitCountFor(project));
-        result.include("commiterCount", dao.commitersCountFor(project));
-        result.include("lastCommit", dao.lastCommitFor(project));
-        result.include("firstCommit", dao.firstCommitFor(project));
-        result.include("lastSixMonthsCommitCountMap", dao.commitCountForLastMonths(project));
     }
     
     @Get("/projects/{id}/commitChartData")
@@ -68,12 +63,6 @@ public class ProjectController {
         result.include("fileCountPerCommit", dao.fileCountPerCommitForLastSixMonths(project));
     }
 
-    @Get("/projects/{id}/delete")
-    public void delete(Long id) {
-        dao.delete(id);
-        result.redirectTo(ProjectController.class).list();
-    }
-    
     @Post("/projects/{projectId}/metrics")
     public void addMetricToCalculate(Long projectId, RegisteredMetric metric) {
         Project project = dao.findProjectBy(projectId);
