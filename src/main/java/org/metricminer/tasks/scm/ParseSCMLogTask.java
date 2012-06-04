@@ -1,7 +1,7 @@
 package org.metricminer.tasks.scm;
 
 import org.metricminer.tasks.RunnableTask;
-import org.metricminer.tasks.repo.SCMLogParser;
+import org.metricminer.tasks.parser.SCMLogParser;
 
 
 public class ParseSCMLogTask implements RunnableTask {

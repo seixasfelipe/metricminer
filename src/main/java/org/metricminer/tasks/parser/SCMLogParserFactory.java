@@ -1,4 +1,4 @@
-package org.metricminer.tasks.repo;
+package org.metricminer.tasks.parser;
 
 import org.hibernate.Session;
 import org.metricminer.changesets.ChangeSetCollection;

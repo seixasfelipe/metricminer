@@ -6,8 +6,8 @@ import org.hibernate.StatelessSession;
 import org.metricminer.model.Task;
 import org.metricminer.tasks.RunnableTask;
 import org.metricminer.tasks.RunnableTaskFactory;
-import org.metricminer.tasks.repo.SCMLogParser;
-import org.metricminer.tasks.repo.SCMLogParserFactory;
+import org.metricminer.tasks.parser.SCMLogParser;
+import org.metricminer.tasks.parser.SCMLogParserFactory;
 
 
 public class ParseSCMLogTaskFactory implements RunnableTaskFactory {

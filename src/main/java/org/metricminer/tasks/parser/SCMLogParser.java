@@ -1,4 +1,4 @@
-package org.metricminer.tasks.repo;
+package org.metricminer.tasks.parser;
 
 import java.text.ParseException;
 
