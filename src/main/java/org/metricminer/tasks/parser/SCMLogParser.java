@@ -1,4 +1,4 @@
-package org.metricminer.tasks.repo;
+package org.metricminer.tasks.parser;
 
 import java.text.ParseException;
 
@@ -52,8 +52,8 @@ public class SCMLogParser {
                 session.getTransaction().rollback();
                 e.printStackTrace();
             } catch (OutOfMemoryError e) {
+            	log.error("Too big changeset " + changeSet.getId() + " in project " + project.getName() + ", out of memory", e);
                 session.getTransaction().rollback();
-                log.error("Too big changeset, out of memory", e);
                 commitData = null;
                 System.gc();
             } catch (GenericJDBCException e) {

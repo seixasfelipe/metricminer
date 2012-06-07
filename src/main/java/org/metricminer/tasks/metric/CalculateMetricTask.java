@@ -78,8 +78,15 @@ public class CalculateMetricTask implements RunnableTask {
             metric.calculate(new ByteArrayInputStream(sourceCode.getSourceBytesArray()));
             Collection<MetricResult> results = metric.resultsToPersistOf(sourceCode);
             session.getTransaction().begin();
+            
+            int flushSession = 0;
             for (MetricResult result : results) {
                 session.save(result);
+                
+                if(++flushSession % 20 == 0) {
+                	session.flush();
+                	session.clear();
+                }
             }
             session.getTransaction().commit();
         } catch (Throwable t) {

@@ -2,18 +2,20 @@ package org.metricminer.tasks.registrator;
 
 import java.util.List;
 
+import javax.annotation.PostConstruct;
+
 import org.hibernate.SessionFactory;
 import org.hibernate.classic.Session;
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.infra.dao.ProjectDao;
 import org.metricminer.model.Project;
 
-import br.com.caelum.vraptor.ioc.PrototypeScoped;
-import br.com.caelum.vraptor.tasks.scheduler.Scheduled;
+import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.Component;
 
-@PrototypeScoped
-@Scheduled(cron = "0 * * * * ?")
-public class AutomaticMetricRegistrator implements br.com.caelum.vraptor.tasks.Task {
+@ApplicationScoped
+@Component
+public class AutomaticMetricRegistrator {
 
 	private ProjectDao projectDao;
 	private final MetricMinerConfigs metricMinerConfigs;
@@ -25,7 +27,7 @@ public class AutomaticMetricRegistrator implements br.com.caelum.vraptor.tasks.T
 		this.metricMinerConfigs = metricMinerConfigs;
 	}
 
-	@Override
+	@PostConstruct
 	public void execute() {
 		List<Project> projects = projectDao.listAll();
 		projectDaoSession.beginTransaction();
