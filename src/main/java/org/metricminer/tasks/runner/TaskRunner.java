@@ -65,9 +65,12 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     private void runTask(Session taskSession) throws InstantiationException, IllegalAccessException {
         RunnableTaskFactory runnableTaskFactory = (RunnableTaskFactory) taskToRun
                 .getRunnableTaskFactoryClass().newInstance();
+        log.info("Beginning transaction");
         taskSession.beginTransaction();
+        log.info("Running task");
         runnableTaskFactory.build(taskToRun, taskSession, statelessSession).run();
         Transaction transaction = taskSession.getTransaction();
+        log.info("Closing transaction");
         if (!transaction.isActive()) {
             transaction.begin();
         }
