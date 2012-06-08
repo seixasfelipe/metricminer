@@ -42,11 +42,11 @@
 											pattern="yyyy/MM/dd - HH:mm:ss"/>
 									</td>
 									<td>
-										<c:if test="${task.hasStarted() || task.hasFinished()}">
+										<c:if test="${task.hasStarted() or task.hasFinished()}">
 											<fmt:formatDate value="${task.startDate.time}" 
 												pattern="yyyy/MM/dd - HH:mm:ss"/>
 										</c:if>
-										<c:if test="${!task.hasStarted() && !task.hasFinished()}">
+										<c:if test="${!task.hasStarted() and !task.hasFinished()}">
 											-
 										</c:if>
 									</td>

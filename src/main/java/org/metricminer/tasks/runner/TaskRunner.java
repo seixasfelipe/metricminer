@@ -55,12 +55,11 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
             log.debug("Commited update");
             runTask(taskSession);
             log.info("Finished running task");
-        } catch (Exception e) {
+        } catch (Throwable e) {
             handleError(e);
         } finally {
             closeSessions();
         }
-        closeSessions();
     }
 
     private void runTask(Session taskSession) throws InstantiationException, IllegalAccessException {
@@ -87,7 +86,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
         tx.commit();
     }
 
-    private void handleError(Exception e) {
+    private void handleError(Throwable e) {
         taskToRun.fail();
         status.finishCurrentTask(taskToRun);
         Transaction tx = daoSession.beginTransaction();
@@ -97,10 +96,11 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     }
 
     private void closeSessions() {
-        if (daoSession.isOpen()) {
-            daoSession.disconnect();
+        if (daoSession.isOpen())
             daoSession.close();
-        }
+        if (taskSession.isOpen())
+            taskSession.close();
+        statelessSession.close();
     }
 
 }
