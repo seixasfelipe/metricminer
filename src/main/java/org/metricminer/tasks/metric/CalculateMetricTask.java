@@ -35,7 +35,7 @@ public class CalculateMetricTask implements RunnableTask {
 
     @Override
     public void run() {
-        pageSize = 20;
+        pageSize = 5;
         int page = 0;
         projectId = task.getProject().getId();
         long maxSourceSize = 10000;
@@ -54,12 +54,12 @@ public class CalculateMetricTask implements RunnableTask {
                 SourceCode source = (SourceCode) sources.get(0);
                 calculateAndSaveResultsOf(source);
                 notFinishedPage = sources.next();
+                System.gc();
             }
             page++;
             log.info("Calculated " + metric.getClass() + " for " + page * pageSize + " sources.");
             sources = scrollableSources(page, metric.fileNameSQLRegex(), maxSourceSize);
             notFinishedAllSources = sources.first();
-            System.gc();
         }
     }
 
@@ -84,14 +84,10 @@ public class CalculateMetricTask implements RunnableTask {
             Collection<MetricResult> results = metric.resultsToPersistOf(sourceCode);
             session.getTransaction().begin();
             
-            int flushSession = 0;
             for (MetricResult result : results) {
                 session.save(result);
-                
-                if(++flushSession % 20 == 0) {
-                	session.flush();
-                	session.clear();
-                }
+            	session.flush();
+            	session.clear();
             }
             session.getTransaction().commit();
         } catch (Throwable t) {
