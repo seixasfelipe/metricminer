@@ -40,9 +40,12 @@ public class CalculateMetricTask implements RunnableTask {
         projectId = task.getProject().getId();
         long maxSourceSize = 10000;
         boolean notFinishedPage;
-
+        
+        log.debug("Starting calculating metric");
+        
         ScrollableResults sources = scrollableSources(page, metric.fileNameSQLRegex(),
                 maxSourceSize);
+        log.debug("Fecthed results");
         boolean notFinishedAllSources = sources.first();
 
         while (notFinishedAllSources) {
@@ -75,7 +78,9 @@ public class CalculateMetricTask implements RunnableTask {
 
     private void calculateAndSaveResultsOf(SourceCode sourceCode) {
         try {
-            metric.calculate(new ByteArrayInputStream(sourceCode.getSourceBytesArray()));
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(sourceCode.getSourceBytesArray());
+            metric.calculate(inputStream);
+            inputStream.close();
             Collection<MetricResult> results = metric.resultsToPersistOf(sourceCode);
             session.getTransaction().begin();
             

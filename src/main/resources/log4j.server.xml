@@ -32,7 +32,7 @@
 	</category>
 	
 	<category name="org.metricminer">
-		<priority value="INFO" />
+		<priority value="DEBUG" />
 		<appender-ref ref="logfile" />
 	</category>
 
