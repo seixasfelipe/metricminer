@@ -1,6 +1,5 @@
 package org.metricminer.tasks.runner;
 
-
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -13,8 +12,10 @@ import org.metricminer.tasks.TaskStatus;
 
 import br.com.caelum.vraptor.ioc.PrototypeScoped;
 import br.com.caelum.vraptor.tasks.scheduler.Scheduled;
+
 @PrototypeScoped
-@Scheduled(cron = "0/10 * * * * ?")
+@Scheduled(
+        cron = "0/10 * * * * ?")
 public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
 
     TaskDao taskDao;
@@ -36,22 +37,22 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
 
     @Override
     public void execute() {
-        taskToRun = taskDao.getFirstQueuedTask();
-        if (!status.mayStartTask() || taskToRun == null || !taskToRun.isDependenciesFinished()) {
-            closeSessions();
-            return;
-        }
-        log.info("Starting task: " + taskToRun);
-        taskToRun.start();
-        log.info("Started task");
-        status.addRunningTask(taskToRun);
-        log.info("Added task to status");
-        Transaction tx = daoSession.beginTransaction();
-        taskDao.update(taskToRun);
-        log.info("Updated task");
-        tx.commit();
-        log.info("Commited update");
         try {
+            taskToRun = taskDao.getFirstQueuedTask();
+            if (!status.mayStartTask() || taskToRun == null || !taskToRun.isDependenciesFinished()) {
+                closeSessions();
+                return;
+            }
+            log.info("Starting task: " + taskToRun);
+            taskToRun.start();
+            log.debug("Started task");
+            status.addRunningTask(taskToRun);
+            log.debug("Added task to status");
+            Transaction tx = daoSession.beginTransaction();
+            taskDao.update(taskToRun);
+            log.debug("Updated task");
+            tx.commit();
+            log.debug("Commited update");
             runTask(taskSession);
             log.info("Finished running task");
         } catch (Exception e) {
@@ -65,12 +66,12 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     private void runTask(Session taskSession) throws InstantiationException, IllegalAccessException {
         RunnableTaskFactory runnableTaskFactory = (RunnableTaskFactory) taskToRun
                 .getRunnableTaskFactoryClass().newInstance();
-        log.info("Beginning transaction");
+        log.debug("Beginning transaction");
         taskSession.beginTransaction();
-        log.info("Running task");
+        log.debug("Running task");
         runnableTaskFactory.build(taskToRun, taskSession, statelessSession).run();
         Transaction transaction = taskSession.getTransaction();
-        log.info("Closing transaction");
+        log.debug("Closing transaction");
         if (!transaction.isActive()) {
             transaction.begin();
         }
