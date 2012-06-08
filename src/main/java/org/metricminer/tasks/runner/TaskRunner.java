@@ -2,6 +2,7 @@ package org.metricminer.tasks.runner;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.SessionException;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
@@ -100,7 +101,11 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
             daoSession.close();
         if (taskSession.isOpen())
             taskSession.close();
-        statelessSession.close();
+        try {
+            statelessSession.close();
+        } catch(SessionException e) {
+            log.info("Already closed session");
+        }
     }
 
 }
