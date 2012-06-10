@@ -2,11 +2,10 @@ package org.metricminer.tasks.metric;
 
 import java.io.ByteArrayInputStream;
 import java.util.Collection;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
-import org.hibernate.ScrollMode;
-import org.hibernate.ScrollableResults;
 import org.hibernate.Session;
 import org.hibernate.StatelessSession;
 import org.metricminer.model.SourceCode;
@@ -22,8 +21,11 @@ public class CalculateMetricTask implements RunnableTask {
     private Session session;
     private static Logger log = Logger.getLogger(CalculateMetricTask.class);
     private final StatelessSession statelessSession;
-    private int pageSize;
-    private Long projectId;
+    
+    private int page;
+    
+    public static final int PAGE_SIZE = 5;
+    public static final long MAX_SOURCE_SIZE = 10000;
 
     public CalculateMetricTask(Task task, Metric metric, Session session,
             StatelessSession statelessSession) {
@@ -35,48 +37,45 @@ public class CalculateMetricTask implements RunnableTask {
 
     @Override
     public void run() {
-        pageSize = 5;
-        int page = 0;
-        projectId = task.getProject().getId();
-        long maxSourceSize = 10000;
-        boolean notFinishedPage;
         
-        log.debug("Starting calculating metric");
+        log.debug("Starting calculating metric " + metric.getClass().getName());
         
-        ScrollableResults sources = scrollableSources(page, metric.fileNameSQLRegex(),
-                maxSourceSize);
-        log.debug("Fecthed results");
-        boolean notFinishedAllSources = sources.first();
-
-        while (notFinishedAllSources) {
-            notFinishedPage = true;
-            while (notFinishedPage) {
-                SourceCode source = (SourceCode) sources.get(0);
-                calculateAndSaveResultsOf(source);
-                notFinishedPage = sources.next();
-                System.gc();
-            }
-            page++;
-            log.info("Calculated " + metric.getClass() + " for " + page * pageSize + " sources.");
-            sources = scrollableSources(page, metric.fileNameSQLRegex(), maxSourceSize);
-            notFinishedAllSources = sources.first();
-        }
+        List<SourceCode> sourceCodes;
+        do {
+        	log.debug("Getting source codes (page " + page + ")");
+        	sourceCodes = scrollableSources(page++);
+        	
+        	for(SourceCode sc : sourceCodes) {
+        		log.debug("-- Working on " + sc.getName());
+        		calculateAndSaveResultsOf(sc);
+        	}
+        	
+        	System.gc();
+        	
+        } while(sourceCodes.size() > 0);
+        
+        log.debug("Metric " + metric.getClass().getName() + " has finished.");
     }
 
-    private ScrollableResults scrollableSources(int page, String fileNameRegex, long maxSourceSize) {
+    @SuppressWarnings("unchecked")
+	private List<SourceCode> scrollableSources(int page) {
         session.clear();
         Query query = statelessSession.createQuery("select source from SourceCode source "
-                + "join source.artifact as artifact where artifact.project.id = :project_id "
-                + "and artifact.name like '" + fileNameRegex + "'" + " and source.sourceSize < "
-                + maxSourceSize);
-        query.setParameter("project_id", projectId);
-        query.setFirstResult(page * pageSize);
-        query.setMaxResults(pageSize);
-        ScrollableResults sources = query.scroll(ScrollMode.FORWARD_ONLY);
-        return sources;
+                + "join fetch source.artifact as artifact where artifact.project.id = :project_id "
+                + " and source.sourceSize < :sourceSize");
+        
+        query.setParameter("project_id", task.getProject().getId())
+	         .setParameter("sourceSize", MAX_SOURCE_SIZE)
+	         .setFirstResult(page * PAGE_SIZE)
+	         .setMaxResults(PAGE_SIZE);
+        
+        return (List<SourceCode>) query.list();
     }
 
     private void calculateAndSaveResultsOf(SourceCode sourceCode) {
+    	
+    	if(!metric.matches(sourceCode.getName())) return;
+    	
         try {
             ByteArrayInputStream inputStream = new ByteArrayInputStream(sourceCode.getSourceBytesArray());
             metric.calculate(inputStream);

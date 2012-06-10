@@ -114,8 +114,8 @@ public class MethodsCountMetric implements Metric {
     }
     
     @Override
-    public String fileNameSQLRegex() {
-        return "%.java";
+    public boolean matches(String name) {
+        return name.endsWith(".java");
     }
 
 }

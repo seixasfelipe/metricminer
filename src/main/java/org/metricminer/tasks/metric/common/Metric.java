@@ -15,5 +15,5 @@ public interface Metric {
 
     boolean shouldCalculateMetricOf(String fileName);
     
-    String fileNameSQLRegex();
+    boolean matches(String name);
 }

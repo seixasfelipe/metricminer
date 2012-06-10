@@ -58,9 +58,9 @@ public class CCPerMethodMetric implements Metric {
     }
 
     @Override
-    public String fileNameSQLRegex() {
-        // TODO Auto-generated method stub
-        return null;
+    public boolean matches(String name) {
+        return name.endsWith(".java");
     }
+
 
 }

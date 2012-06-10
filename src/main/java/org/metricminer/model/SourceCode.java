@@ -35,12 +35,15 @@ public class SourceCode {
 
     public SourceCode() {
     }
-
     public SourceCode(Artifact artifact, Commit commit, String source) {
         this.artifact = artifact;
         this.commit = commit;
         this.source = source;
         sourceSize = (long) source.length();
+    }
+    
+    public Artifact getArtifact() {
+    	return artifact;
     }
 
     public String getSource() {
