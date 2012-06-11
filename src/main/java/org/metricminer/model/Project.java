@@ -62,7 +62,7 @@ public class Project {
     private Project(MetricMinerConfigs metricMinerConfigs) {
         this();
         this.metricMinerConfigs = metricMinerConfigs;
-        projectPath = this.metricMinerConfigs.getMetricMinerHome() + "/projects/";
+        projectPath = this.metricMinerConfigs.getRepositoriesDir() + "/projects/";
     }
 
     public Project(String name, String scmUrl, MetricMinerConfigs metricMinerConfigs) {
@@ -98,7 +98,7 @@ public class Project {
     }
 
     public void setupInitialConfigurationsEntries() {
-        String metricMinerHome = this.metricMinerConfigs.getMetricMinerHome();
+        String metricMinerHome = this.metricMinerConfigs.getRepositoriesDir();
 
         configurationEntries.add(new ProjectConfigurationEntry("scm",
                 "org.metricminer.scm.git.GitFactory", this));

@@ -27,12 +27,13 @@
 		<dependency org="org.slf4j" name="slf4j-log4j12" rev="1.6.1"/>
 		<dependency org="org.mortbay.jetty" name="servlet-api-2.5" rev="6.1H.14.1"/>
 		<dependency org="org.glassfish.web" name="jstl-impl" rev="1.2"/>
-		<dependency org="br.com.prixma" name="vraptor-tasks" rev="1.0.2" conf="default" />
+		<dependency org="org.mortbay.jetty" name="servlet-api" rev="3.0.pre4"/>
 
 		<!-- MetricMiner specific dependencies -->
 		<dependency org="com.google.code.javaparser" name="javaparser" rev="1.0.8" conf="default" />
 		<dependency org="org.apache.commons" name="commons-lang3" rev="3.1" conf="default" />
 		<dependency org="net.sf.scannotation" name="scannotation" rev="1.0.2"/>
+		<dependency org="br.com.prixma" name="vraptor-tasks" rev="1.0.2" conf="default" />
 		
 		<!-- Test dependencies -->
 		<dependency org="junit" name="junit" rev="4.8.2" conf="test->default" />
