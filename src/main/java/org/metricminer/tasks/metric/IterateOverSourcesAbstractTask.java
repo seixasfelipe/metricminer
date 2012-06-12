@@ -12,19 +12,16 @@ import org.metricminer.model.Project;
 import org.metricminer.model.SourceCode;
 import org.metricminer.model.Task;
 import org.metricminer.tasks.RunnableTask;
-import org.metricminer.tasks.metric.common.Metric;
 
 public abstract class IterateOverSourcesAbstractTask implements RunnableTask {
 
 	protected Task task;
-	protected Metric metric;
 	protected Session session;
 	protected static Logger log = Logger.getLogger(CalculateMetricTask.class);
 	protected SourceCodeDAO sourceCodeDAO;
 
-	public IterateOverSourcesAbstractTask(Task task, Metric metric, Session session, StatelessSession statelessSession) {
+	public IterateOverSourcesAbstractTask(Task task, Session session, StatelessSession statelessSession) {
 		this.task = task;
-		this.metric = metric;
 		this.session = session;
 		this.sourceCodeDAO = new SourceCodeDAO(statelessSession);
 	}
@@ -33,7 +30,7 @@ public abstract class IterateOverSourcesAbstractTask implements RunnableTask {
 	public void run() {
 		Project project = task.getProject();
 
-		log.debug("Starting to calculate metric " + metric.getClass().getName());
+		log.debug("Starting to iterate over sources");
 
 		Map<Long, String> map = sourceCodeDAO.listSourceCodeIdsAndNamesFor(project);
 		List<Long> sourceIds = new ArrayList<Long>(map.keySet());
@@ -57,7 +54,7 @@ public abstract class IterateOverSourcesAbstractTask implements RunnableTask {
 			}
 			System.gc();
 		}
-		log.debug("Metric " + metric.getClass().getName() + " has finished.");
+		log.debug("Finished iterating over sources");
 
 	}
 
