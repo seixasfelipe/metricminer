@@ -1,10 +1,14 @@
 package org.metricminer.infra.dao;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
@@ -57,11 +61,16 @@ public class SourceCodeDAOTest {
 		
 		saveProjectData(project, otherProject);
 		
-		List<Long> idsProject = sourceCodeDAO.listSourceCodeIdsFor(project);
-		List<Long> idsOtherProject = sourceCodeDAO.listSourceCodeIdsFor(otherProject);
+		Map<Long, String> idsMap = sourceCodeDAO.listSourceCodeIdsAndNamesFor(project);
+		List<Entry<Long, String>> idsProject = new ArrayList<Entry<Long, String>>(idsMap.entrySet());
+		idsMap = sourceCodeDAO.listSourceCodeIdsAndNamesFor(otherProject);
+		List<Entry<Long, String>> idsOtherProject = new ArrayList<Entry<Long, String>>(idsMap.entrySet());
 		
 		assertEquals(35, idsProject.size());
 		assertEquals(12, idsOtherProject.size());
+		for (Entry<Long, String> entry : idsOtherProject) {
+			assertNotNull(entry.getValue());
+		}
 	}
 	
 	@Test
@@ -71,12 +80,12 @@ public class SourceCodeDAOTest {
 		Project project = new Project("project", "", config);
 		Project otherProject = new Project("other project", "", config);
 		saveProjectData(project, otherProject);
-		List<Long> idsProject = sourceCodeDAO.listSourceCodeIdsFor(project);
 		
-		List<SourceCode> sources = sourceCodeDAO.listSourcesOf(project, idsProject.get(0), idsProject.get(idsProject.size()-1));
+		Map<Long, String> idsAndNamesMap = sourceCodeDAO.listSourceCodeIdsAndNamesFor(project);
+		ArrayList<Entry<Long, String>> entries = new ArrayList<Entry<Long, String>>(idsAndNamesMap.entrySet());
+		List<SourceCode> sources = sourceCodeDAO.listSourcesOf(project, entries.get(0).getKey(), entries.get(entries.size()-1).getKey());
 		
-		assertEquals(idsProject.size(), sources.size());
-		
+		assertEquals(entries.size(), sources.size());
 	}
 
 	private void saveProjectData(Project project, Project otherProject) {

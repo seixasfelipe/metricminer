@@ -1,8 +1,10 @@
 package org.metricminer.tasks.metric;
 
 import java.io.ByteArrayInputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
@@ -36,7 +38,8 @@ public class CalculateMetricTask implements RunnableTask {
 
 		log.debug("Starting to calculate metric " + metric.getClass().getName());
 		
-		List<Long> sourceIds = sourceCodeDAO.listSourceCodeIdsFor(project);
+		Map<Long, String> map = sourceCodeDAO.listSourceCodeIdsAndNamesFor(project);
+		List<Long> sourceIds = new ArrayList<Long>(map.keySet());
 		
 		int totalIds = sourceIds.size();
 		
@@ -52,8 +55,8 @@ public class CalculateMetricTask implements RunnableTask {
 			log.debug("Getting source codes (page " + i/PAGE_SIZE + ")");
 			List<SourceCode> sources = sourceCodeDAO.listSourcesOf(project, firstId, lastId);
 			for (SourceCode sc : sources) {
-				log.debug("-- Working on " + sc.getName());
-				calculateAndSaveResultsOf(sc);
+				log.debug("-- Working on " + map.get(sc.getId()) + " id " + sc.getId());
+				calculateAndSaveResultsOf(sc, map.get(sc.getId()));
 			}
 			System.gc();
 		}
@@ -61,9 +64,9 @@ public class CalculateMetricTask implements RunnableTask {
 		
 	}
 
-	private void calculateAndSaveResultsOf(SourceCode sourceCode) {
+	private void calculateAndSaveResultsOf(SourceCode sourceCode, String name) {
 
-		if (!metric.matches(sourceCode.getName()))
+		if (!metric.matches(name))
 			return;
 
 		try {
