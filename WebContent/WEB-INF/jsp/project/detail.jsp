@@ -119,8 +119,7 @@
 						<c:forEach items="${avaiableMetrics}" var="metric">
 							<tr>
 								<td>${metric.name}</td>
-								<td><button project-id="${project.id}"
-										metric-class="${metric.metricFactoryClass}">Calculate</button></td>
+								<td><button project-id="${project.id}" >Calculate</button></td>
 							</tr>
 						</c:forEach>
 					</table>
