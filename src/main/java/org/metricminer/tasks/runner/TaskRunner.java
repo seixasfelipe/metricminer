@@ -6,6 +6,7 @@ import org.hibernate.SessionException;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
+import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.infra.dao.TaskDao;
 import org.metricminer.model.Task;
 import org.metricminer.tasks.RunnableTaskFactory;
@@ -15,8 +16,7 @@ import br.com.caelum.vraptor.ioc.PrototypeScoped;
 import br.com.caelum.vraptor.tasks.scheduler.Scheduled;
 
 @PrototypeScoped
-@Scheduled(
-        cron = "0/10 * * * * ?")
+@Scheduled(cron = "0/10 * * * * ?")
 public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
 
     TaskDao taskDao;
@@ -26,9 +26,11 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     StatelessSession statelessSession;
     Logger log;
     private final TaskStatus status;
+	private final MetricMinerConfigs config;
 
     public TaskRunner(SessionFactory sf, TaskStatus status) {
         this.status = status;
+		this.config = status.getConfigs();
         this.daoSession = sf.openSession();
         this.taskSession = sf.openSession();
         this.statelessSession = sf.openStatelessSession();
@@ -69,7 +71,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
         log.debug("Beginning transaction");
         taskSession.beginTransaction();
         log.debug("Running task");
-        runnableTaskFactory.build(taskToRun, taskSession, statelessSession).run();
+        runnableTaskFactory.build(taskToRun, taskSession, statelessSession, config).run();
         Transaction transaction = taskSession.getTransaction();
         log.debug("Closing transaction");
         if (!transaction.isActive()) {

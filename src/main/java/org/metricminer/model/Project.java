@@ -179,7 +179,7 @@ public class Project {
         tasks.add(removeDirectoryTask);
         
         for (RegisteredMetric registeredMetric : metricMinerConfigs.getRegisteredMetrics()) {
-        	addMetricToCalculate(registeredMetric.getMetricFactoryClass(), parseLogTask);
+        	addMetricToCalculate(registeredMetric.getMetricFactoryClassName(), parseLogTask);
 		}
         
     }
@@ -262,7 +262,7 @@ public class Project {
 	public void addNewMetrics(List<RegisteredMetric> registeredMetrics) {
 		for (RegisteredMetric registeredMetric : registeredMetrics) {
 			if (!containsTaskWith(registeredMetric)) {
-				addMetricToCalculate(registeredMetric.getMetricFactoryClass());
+				addMetricToCalculate(registeredMetric.getMetricFactoryClassName());
 			}
 		}
 	}

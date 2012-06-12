@@ -66,7 +66,7 @@ public class ProjectController {
     @Post("/projects/{projectId}/metrics")
     public void addMetricToCalculate(Long projectId, RegisteredMetric metric) {
         Project project = dao.findProjectBy(projectId);
-        project.addMetricToCalculate(metric.getMetricFactoryClass());
+        project.addMetricToCalculate(metric.getMetricFactoryClassName());
         result.nothing();
     }
 
@@ -98,7 +98,7 @@ public class ProjectController {
         Project completeProject = new Project(project, configs);
         if (metrics != null) {
             for (RegisteredMetric metric : metrics) {
-                completeProject.addMetricToCalculate(metric.getMetricFactoryClass());
+                completeProject.addMetricToCalculate(metric.getMetricFactoryClassName());
             }
         }
         dao.save(completeProject);

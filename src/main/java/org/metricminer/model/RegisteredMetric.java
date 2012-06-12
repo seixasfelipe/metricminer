@@ -16,7 +16,7 @@ public class RegisteredMetric {
         return name;
     }
 
-    public String getMetricFactoryClass() {
+    public String getMetricFactoryClassName() {
         return metricFactoryClass;
     }
 

@@ -40,7 +40,7 @@ public class ProjectTest {
                         "classname2"), new RegisteredMetric("CC metric", "classname3")));
 
         assertEquals(1, avaiable.size());
-        assertEquals("classname3", avaiable.get(0).getMetricFactoryClass());
+        assertEquals("classname3", avaiable.get(0).getMetricFactoryClassName());
     }
     
     @Test
