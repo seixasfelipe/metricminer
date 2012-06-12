@@ -7,7 +7,8 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.StatelessSession;
-import org.metricminer.dao.SourceCodeDAO;
+import org.metricminer.infra.dao.SourceCodeDAO;
+import org.metricminer.model.Project;
 import org.metricminer.model.SourceCode;
 import org.metricminer.model.Task;
 import org.metricminer.tasks.RunnableTask;
@@ -20,46 +21,44 @@ public class CalculateMetricTask implements RunnableTask {
 	private Metric metric;
 	private Session session;
 	private static Logger log = Logger.getLogger(CalculateMetricTask.class);
-	private final StatelessSession statelessSession;
-
-	private int page;
-
 	private SourceCodeDAO sourceCodeDAO;
 
 	public CalculateMetricTask(Task task, Metric metric, Session session, StatelessSession statelessSession) {
 		this.task = task;
 		this.metric = metric;
 		this.session = session;
-		this.statelessSession = statelessSession;
+		this.sourceCodeDAO = new SourceCodeDAO(statelessSession);
 	}
 
 	@Override
 	public void run() {
+		Project project = task.getProject();
 
-		log.debug("Starting calculating metric " + metric.getClass().getName());
-
-		List<SourceCode> sourceCodes;
-		do {
-			log.debug("Getting source codes (page " + page + ")");
-			sourceCodes = scrollableSources(page++);
-
-			for (SourceCode sc : sourceCodes) {
+		log.debug("Starting to calculate metric " + metric.getClass().getName());
+		
+		List<Long> sourceIds = sourceCodeDAO.listSourceCodeIdsFor(project);
+		
+		int totalIds = sourceIds.size();
+		
+		int PAGE_SIZE = 5;
+		for (int i = 0; i < totalIds; i += PAGE_SIZE) {
+			Long firstId = sourceIds.get(i);
+			Long lastId;
+			int lastIdIndex = i + (PAGE_SIZE - 1);
+			if (lastIdIndex < sourceIds.size()) 
+				lastId = sourceIds.get(lastIdIndex);
+			else
+				lastId = sourceIds.get(sourceIds.size() - 1);
+			log.debug("Getting source codes (page " + i/PAGE_SIZE + ")");
+			List<SourceCode> sources = sourceCodeDAO.listSourcesOf(project, firstId, lastId);
+			for (SourceCode sc : sources) {
 				log.debug("-- Working on " + sc.getName());
 				calculateAndSaveResultsOf(sc);
 			}
-
 			System.gc();
-
-		} while (sourceCodes.size() > 0);
-
+		}
 		log.debug("Metric " + metric.getClass().getName() + " has finished.");
-	}
-
-	@SuppressWarnings("unchecked")
-	private List<SourceCode> scrollableSources(int page) {
-		session.clear();
-		sourceCodeDAO = new SourceCodeDAO(session, statelessSession);
-		return sourceCodeDAO.listSourcesOf(task.getProject(), page);
+		
 	}
 
 	private void calculateAndSaveResultsOf(SourceCode sourceCode) {
