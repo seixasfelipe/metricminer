@@ -107,26 +107,6 @@
 				<div class="bendr"></div>
 			</div>
 
-			<div class="block small left">
-				<div class="block_head">
-					<div class="bheadl"></div>
-					<div class="bheadr"></div>
-					<h2>Available metrics to calculate</h2>
-				</div>
-				<!-- .block_head ends -->
-				<div class="block_content">
-					<table>
-						<c:forEach items="${avaiableMetrics}" var="metric">
-							<tr>
-								<td>${metric.name}</td>
-								<td><button project-id="${project.id}" >Calculate</button></td>
-							</tr>
-						</c:forEach>
-					</table>
-				</div>
-				<div class="bendl"></div>
-				<div class="bendr"></div>
-			</div>
 			<div class="block small right">
 				<div class="block_head">
 					<div class="bheadl"></div>

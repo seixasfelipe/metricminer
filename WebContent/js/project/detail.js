@@ -21,7 +21,7 @@ function sendMetric(metricClass) {
 		type : 'POST',
 		url : postUrl,
 		data : {
-			"metric.metricFactoryClass" : metricClass
+			"metricFactoryClassName" : metricClass
 		},
 		success : function() {
 		},

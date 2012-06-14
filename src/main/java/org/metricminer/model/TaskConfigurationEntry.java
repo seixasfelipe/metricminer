@@ -40,7 +40,6 @@ public class TaskConfigurationEntry {
     }
 
     public boolean isEqualToMetric(RegisteredMetric registeredMetric) {
-    	System.out.println(registeredMetric.getMetricFactoryClassName());
         return this.key.equals(TaskConfigurationEntryKey.METRICFACTORYCLASS)
                 && registeredMetric.getMetricFactoryClassName().equals(this.value);
     }
