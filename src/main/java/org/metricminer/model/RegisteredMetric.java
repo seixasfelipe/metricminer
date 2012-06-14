@@ -2,12 +2,12 @@ package org.metricminer.model;
 
 public class RegisteredMetric {
     private String name;
-    private String metricFactoryClass;
+    private Class<?> metricFactoryClass;
 
     public RegisteredMetric() {
     }
 
-    public RegisteredMetric(String name, String metricFactoryClass) {
+    public RegisteredMetric(String name, Class<?> metricFactoryClass) {
         this.name = name;
         this.metricFactoryClass = metricFactoryClass;
     }
@@ -16,21 +16,19 @@ public class RegisteredMetric {
         return name;
     }
 
-    public String getMetricFactoryClassName() {
+    public Class<?> getMetricFactoryClass() {
         return metricFactoryClass;
     }
-
-    public void setMetricFactoryClass(String metricFactoryClass) {
-        this.metricFactoryClass = metricFactoryClass;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    
+    public String getMetricFactoryClassName() {
+    	String className = metricFactoryClass.toString();
+		className = className.substring(6); // class org.metricminer.etcetc
+		return className;
     }
 
     @Override
     public String toString() {
-        return metricFactoryClass;
+        return name;
     }
 
 }

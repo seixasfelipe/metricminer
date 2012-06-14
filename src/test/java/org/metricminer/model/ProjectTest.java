@@ -8,61 +8,67 @@ import java.util.List;
 
 import org.junit.Test;
 import org.metricminer.tasks.metric.CalculateMetricTaskFactory;
-
+import org.metricminer.tasks.metric.cc.CCMetricFactory;
+import org.metricminer.tasks.metric.lcom.LComMetricFactory;
+import org.metricminer.tasks.metric.methods.MethodsCountMetricFactory;
 
 public class ProjectTest {
 
-    @Test
-    public void shouldAddTags() {
-        Project project = new Project();
-        assertEquals(0, project.getTags().size());
+	@Test
+	public void shouldAddTags() {
+		Project project = new Project();
+		assertEquals(0, project.getTags().size());
 
-        project.addTag(new Tag("mvc"));
-        assertEquals(new Tag("mvc"), project.getTags().get(0));
-    }
+		project.addTag(new Tag("mvc"));
+		assertEquals(new Tag("mvc"), project.getTags().get(0));
+	}
 
-    @Test
-    public void shouldRemoveTags() {
-        Project project = new Project();
-        project.addTag(new Tag("mvc"));
-        project.removeTag("mvc");
+	@Test
+	public void shouldRemoveTags() {
+		Project project = new Project();
+		project.addTag(new Tag("mvc"));
+		project.removeTag("mvc");
 
-        assertEquals(0, project.getTags().size());
-    }
+		assertEquals(0, project.getTags().size());
+	}
 
-    @Test
-    public void shouldReturnAvaiableMetrics() throws Exception {
-        Project project = new Project();
-        setupProject(project);
+	@Test
+	public void shouldReturnAvaiableMetrics() throws Exception {
+		Project project = new Project();
+		setupProject(project);
 
-        List<RegisteredMetric> avaiable = project.avaiableMetricsToAddBasedOn(Arrays.asList(
-                new RegisteredMetric("CC metric", "classname1"), new RegisteredMetric("CC metric",
-                        "classname2"), new RegisteredMetric("CC metric", "classname3")));
+		List<RegisteredMetric> avaiable = project.avaiableMetricsToAddBasedOn(Arrays.asList(
+				new RegisteredMetric("CC metric", LComMetricFactory.class), new RegisteredMetric(
+						"CC metric", CCMetricFactory.class), new RegisteredMetric("CC metric",
+						MethodsCountMetricFactory.class)));
 
-        assertEquals(1, avaiable.size());
-        assertEquals("classname3", avaiable.get(0).getMetricFactoryClassName());
-    }
-    
-    @Test
-    public void shouldReturnNoneAvaiableMetrics() throws Exception {
-        Project project = new Project();
-        setupProject(project);
+		assertEquals(1, avaiable.size());
+		assertEquals(new RegisteredMetric("cc", CCMetricFactory.class).getMetricFactoryClassName(),
+				avaiable.get(0).getMetricFactoryClassName());
+	}
 
-        List<RegisteredMetric> avaiable = project.avaiableMetricsToAddBasedOn(Arrays.asList(
-                new RegisteredMetric("CC metric", "classname1"), new RegisteredMetric("CC metric",
-                        "classname2")));
+	@Test
+	public void shouldReturnNoneAvaiableMetrics() throws Exception {
+		Project project = new Project();
+		setupProject(project);
 
-        assertTrue(avaiable.isEmpty());
-    }
+		List<RegisteredMetric> avaiable = project.avaiableMetricsToAddBasedOn(Arrays.asList(
+				new RegisteredMetric("CC metric", LComMetricFactory.class), new RegisteredMetric(
+						"CC metric", MethodsCountMetricFactory.class)));
 
-    private void setupProject(Project project) {
-        Task task = new Task(project, "calculate", new CalculateMetricTaskFactory(), 1);
-        task.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRICFACTORYCLASS, "classname1");
-        project.addTask(task);
-        task = new Task(project, "calculate", new CalculateMetricTaskFactory(), 2);
-        task.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRICFACTORYCLASS, "classname2");
-        project.addTask(task);
-    }
+		assertTrue(avaiable.isEmpty());
+	}
 
-    
+	private void setupProject(Project project) {
+		Task task = new Task(project, "calculate", new CalculateMetricTaskFactory(), 1);
+		task.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRICFACTORYCLASS,
+				new RegisteredMetric("cc", LComMetricFactory.class).getMetricFactoryClassName());
+		project.addTask(task);
+		task = new Task(project, "calculate", new CalculateMetricTaskFactory(), 2);
+		task.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRICFACTORYCLASS,
+				new RegisteredMetric("cc", MethodsCountMetricFactory.class)
+						.getMetricFactoryClassName());
+		project.addTask(task);
+	}
+
 }

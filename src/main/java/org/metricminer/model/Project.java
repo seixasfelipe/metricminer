@@ -241,8 +241,8 @@ public class Project {
 		return commits.size();
 	}
 
-	public void addMetricToCalculate(String metricFactoryClass) {
-		addMetricToCalculate(metricFactoryClass, tasks.get(1));
+	public void addMetricToCalculate(String className) {
+		addMetricToCalculate(className, tasks.get(1));
 	}
 
 	public Commit getFirstCommit() {

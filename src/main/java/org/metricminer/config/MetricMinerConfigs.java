@@ -74,7 +74,7 @@ public class MetricMinerConfigs {
 				MetricComponent annotation = clazzDef.getAnnotation(MetricComponent.class);
 				
 				logger.info("Registering metric: " + clazz);
-				this.registeredMetrics.add(new RegisteredMetric(annotation.name(), clazz));
+				this.registeredMetrics.add(new RegisteredMetric(annotation.name(), clazzDef));
 			} catch (ClassNotFoundException e) {
 				logger.error("Metric not found: " + clazz);
 			}
