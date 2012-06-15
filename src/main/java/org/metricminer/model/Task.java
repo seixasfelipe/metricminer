@@ -185,4 +185,16 @@ public class Task implements Comparable {
         return position;
     }
 
+	public boolean hasFailedDependencies() {
+		for (Task dependecy : depends) {
+			if (dependecy.hasFailed())
+				return true;
+		}
+		return false;
+	}
+
+	private boolean hasFailed() {
+		return this.status == TaskStatus.FAILED;
+	}
+
 }

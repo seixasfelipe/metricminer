@@ -43,21 +43,23 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
         try {
             taskToRun = taskDao.getFirstQueuedTask();
             if (!status.mayStartTask() || taskToRun == null || !taskToRun.isDependenciesFinished()) {
+            	if (taskToRun.hasFailedDependencies()) {
+            		log.error(taskToRun + " failed because a dependency for this task also failed.");
+            		daoSession.beginTransaction();
+            		taskToRun.fail();
+            		daoSession.update(taskToRun);
+            		daoSession.getTransaction().commit();
+            	}
                 closeSessions();
                 return;
             }
             log.info("Starting task: " + taskToRun);
             taskToRun.start();
-            log.debug("Started task");
             status.addRunningTask(taskToRun);
-            log.debug("Added task to status");
-            Transaction tx = daoSession.beginTransaction();
+            daoSession.beginTransaction();
             taskDao.update(taskToRun);
-            log.debug("Updated task");
-            tx.commit();
-            log.debug("Commited update");
+            daoSession.getTransaction().commit();
             runTask(taskSession);
-            log.info("Finished running task");
         } catch (Throwable e) {
             handleError(e);
         } finally {
@@ -68,12 +70,10 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     private void runTask(Session taskSession) throws InstantiationException, IllegalAccessException {
         RunnableTaskFactory runnableTaskFactory = (RunnableTaskFactory) taskToRun
                 .getRunnableTaskFactoryClass().newInstance();
-        log.debug("Beginning transaction");
         taskSession.beginTransaction();
         log.debug("Running task");
         runnableTaskFactory.build(taskToRun, taskSession, statelessSession, config).run();
         Transaction transaction = taskSession.getTransaction();
-        log.debug("Closing transaction");
         if (!transaction.isActive()) {
             transaction.begin();
         }
@@ -106,7 +106,6 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
         try {
             statelessSession.close();
         } catch(SessionException e) {
-            log.info("Already closed session");
         }
     }
 
