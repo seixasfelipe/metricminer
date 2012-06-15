@@ -87,6 +87,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
         taskDao.update(taskToRun);
         log.info("Finished running task: " + taskToRun);
         tx.commit();
+        System.gc();
     }
 
     private void handleError(Throwable e) {
