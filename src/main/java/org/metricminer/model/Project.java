@@ -50,6 +50,7 @@ public class Project {
 	private Commit lastCommit;
 	private Long totalCommits;
 	private Long totalCommiters;
+	private List<CalculatedMetric> calculatedMetrics;
 
 	@Transient
 	private MetricMinerConfigs metricMinerConfigs;
@@ -58,6 +59,7 @@ public class Project {
 		this.configurationEntries = new ArrayList<ProjectConfigurationEntry>();
 		this.tasks = new ArrayList<Task>();
 		this.tags = new ArrayList<Tag>();
+		this.calculatedMetrics = new ArrayList<CalculatedMetric>();
 	}
 
 	private Project(MetricMinerConfigs metricMinerConfigs) {
@@ -217,20 +219,11 @@ public class Project {
 			List<RegisteredMetric> registeredMetrics) {
 		ArrayList<RegisteredMetric> avaiableMetrics = new ArrayList<RegisteredMetric>();
 		for (RegisteredMetric registeredMetric : registeredMetrics) {
-			if (!this.containsTaskWith(registeredMetric)) {
+			if (!this.alreadyCalculated(registeredMetric)) {
 				avaiableMetrics.add(registeredMetric);
 			}
 		}
 		return avaiableMetrics;
-	}
-
-	private boolean containsTaskWith(RegisteredMetric registeredMetric) {
-		for (Task task : this.tasks) {
-			if (task.willCalculate(registeredMetric)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	public void addTask(Task task) {
@@ -271,9 +264,21 @@ public class Project {
 
 	public void addNewMetrics(List<RegisteredMetric> registeredMetrics) {
 		for (RegisteredMetric registeredMetric : registeredMetrics) {
-			if (!containsTaskWith(registeredMetric)) {
+			if (!alreadyCalculated(registeredMetric)) {
 				addMetricToCalculate(registeredMetric.getMetricFactoryClassName());
 			}
 		}
+	}
+
+	public void addCalculatedMetric(CalculatedMetric calculatedMetric) {
+		calculatedMetrics.add(calculatedMetric);
+	}
+
+	public boolean alreadyCalculated(RegisteredMetric registeredMetric) {
+		for (CalculatedMetric calculatedMetric : calculatedMetrics) {
+			if (calculatedMetric.getMetricFactoryClass().equals(registeredMetric.getMetricFactoryClass()))
+				return true;
+		}
+		return false;
 	}
 }

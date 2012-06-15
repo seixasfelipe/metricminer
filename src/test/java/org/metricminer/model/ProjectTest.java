@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
-import org.metricminer.tasks.metric.CalculateMetricTaskFactory;
 import org.metricminer.tasks.metric.cc.CCMetricFactory;
 import org.metricminer.tasks.metric.lcom.LComMetricFactory;
 import org.metricminer.tasks.metric.methods.MethodsCountMetricFactory;
@@ -30,6 +29,13 @@ public class ProjectTest {
 		project.removeTag("mvc");
 
 		assertEquals(0, project.getTags().size());
+	}
+	
+	@Test
+	public void shouldAddACalculatedMetricProperly() throws Exception {
+		Project project = new Project();
+		project.addCalculatedMetric(new CalculatedMetric(project, CCMetricFactory.class));
+		assertTrue(project.alreadyCalculated(new RegisteredMetric("cc", CCMetricFactory.class)));
 	}
 
 	@Test
@@ -60,15 +66,8 @@ public class ProjectTest {
 	}
 
 	private void setupProject(Project project) {
-		Task task = new Task(project, "calculate", new CalculateMetricTaskFactory(), 1);
-		task.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRICFACTORYCLASS,
-				new RegisteredMetric("cc", LComMetricFactory.class).getMetricFactoryClassName());
-		project.addTask(task);
-		task = new Task(project, "calculate", new CalculateMetricTaskFactory(), 2);
-		task.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRICFACTORYCLASS,
-				new RegisteredMetric("cc", MethodsCountMetricFactory.class)
-						.getMetricFactoryClassName());
-		project.addTask(task);
+		project.addCalculatedMetric(new CalculatedMetric(project, LComMetricFactory.class));
+		project.addCalculatedMetric(new CalculatedMetric(project, MethodsCountMetricFactory.class));
 	}
 
 }
