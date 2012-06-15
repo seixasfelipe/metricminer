@@ -22,6 +22,7 @@ DROP TABLE  `Artifact` ,
 `BlamedLine`,
 `Project_Tag`,
 `Query`,
-`Tag`;
+`Tag`,
+`CalculatedMetric`;
 
 SET foreign_key_checks = 1;

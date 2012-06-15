@@ -70,4 +70,9 @@ public class MethodsInvocationMetric implements Metric{
         return name.endsWith(".java");
     }
 
+	@Override
+	public Class<?> getFactoryClass() {
+		return MethodsInvocationMetricFactory.class;
+	}
+
 }

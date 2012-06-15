@@ -75,4 +75,9 @@ public class TestedMethodFinderMetric implements Metric{
         return name.endsWith(".java");
     }
 
+	@Override
+	public Class<?> getFactoryClass() {
+		return TestedMethodsFinderMetricFactory.class;
+	}
+
 }

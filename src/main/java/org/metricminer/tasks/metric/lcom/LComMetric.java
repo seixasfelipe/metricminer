@@ -110,5 +110,10 @@ public class LComMetric implements Metric {
     public boolean matches(String name) {
         return name.endsWith(".java");
     }
+
+	@Override
+	public Class<?> getFactoryClass() {
+		return LComMetricFactory.class;
+	}
 	
 }

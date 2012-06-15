@@ -62,5 +62,11 @@ public class CCPerMethodMetric implements Metric {
         return name.endsWith(".java");
     }
 
+	@Override
+	public Class<?> getFactoryClass() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 }

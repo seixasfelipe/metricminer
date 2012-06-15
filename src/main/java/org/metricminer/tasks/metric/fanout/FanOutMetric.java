@@ -61,5 +61,10 @@ public class FanOutMetric implements Metric {
         return name.endsWith(".java");
     }
 
+	@Override
+	public Class<?> getFactoryClass() {
+		return FanOutMetricFactory.class;
+	}
+
     
 }

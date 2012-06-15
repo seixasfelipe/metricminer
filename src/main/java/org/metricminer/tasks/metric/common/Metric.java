@@ -16,4 +16,6 @@ public interface Metric {
     boolean shouldCalculateMetricOf(String fileName);
     
     boolean matches(String name);
+    
+    Class<?> getFactoryClass();
 }

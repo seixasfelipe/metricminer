@@ -13,14 +13,14 @@ import org.metricminer.model.SourceCode;
 import org.metricminer.model.Task;
 import org.metricminer.tasks.RunnableTask;
 
-public abstract class IterateOverSourcesAbstractTask implements RunnableTask {
+public abstract class SourcesIteratorAbstractTask implements RunnableTask {
 
 	protected Task task;
 	protected Session session;
-	protected static Logger log = Logger.getLogger(CalculateMetricTask.class);
+	protected static Logger log = Logger.getLogger(SourcesIteratorAbstractTask.class);
 	protected SourceCodeDAO sourceCodeDAO;
 
-	public IterateOverSourcesAbstractTask(Task task, Session session, StatelessSession statelessSession) {
+	public SourcesIteratorAbstractTask(Task task, Session session, StatelessSession statelessSession) {
 		this.task = task;
 		this.session = session;
 		this.sourceCodeDAO = new SourceCodeDAO(statelessSession);
@@ -54,10 +54,14 @@ public abstract class IterateOverSourcesAbstractTask implements RunnableTask {
 			}
 			System.gc();
 		}
+		log.debug("Calling onComplete");
+		onComplete();
 		log.debug("Finished iterating over sources");
 
 	}
 
 	protected abstract void manipulate(SourceCode sourceCode, String name);
+	
+	protected abstract void onComplete();
 
 }

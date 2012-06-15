@@ -12,7 +12,6 @@ import org.metricminer.tasks.metric.common.ClassInfoVisitor;
 import org.metricminer.tasks.metric.common.Metric;
 import org.metricminer.tasks.metric.common.MetricResult;
 
-
 public class CCMetric implements Metric {
 
     private CCVisitor visitor;
@@ -65,4 +64,9 @@ public class CCMetric implements Metric {
     public boolean matches(String name) {
         return name.endsWith(".java");
     }
+
+	@Override
+	public Class<?> getFactoryClass() {
+		return CCMetricFactory.class;
+	}
 }

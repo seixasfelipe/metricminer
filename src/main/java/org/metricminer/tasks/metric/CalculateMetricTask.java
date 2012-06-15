@@ -5,12 +5,13 @@ import java.util.Collection;
 
 import org.hibernate.Session;
 import org.hibernate.StatelessSession;
+import org.metricminer.model.CalculatedMetric;
 import org.metricminer.model.SourceCode;
 import org.metricminer.model.Task;
 import org.metricminer.tasks.metric.common.Metric;
 import org.metricminer.tasks.metric.common.MetricResult;
 
-public class CalculateMetricTask extends IterateOverSourcesAbstractTask {
+public class CalculateMetricTask extends SourcesIteratorAbstractTask {
 
 	private final Metric metric;
 
@@ -43,6 +44,15 @@ public class CalculateMetricTask extends IterateOverSourcesAbstractTask {
 		} catch (Throwable t) {
 			log.error("Unable to calculate metric: ", t);
 		}
+	}
+
+	@Override
+	protected void onComplete() {
+		session.beginTransaction();
+		CalculatedMetric calculatedMetric = new CalculatedMetric(task.getProject(),
+				metric.getFactoryClass());
+		session.save(calculatedMetric);
+		session.getTransaction().commit();
 	}
 
 }

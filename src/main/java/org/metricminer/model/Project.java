@@ -50,6 +50,7 @@ public class Project {
 	private Commit lastCommit;
 	private Long totalCommits;
 	private Long totalCommiters;
+	@OneToMany(mappedBy="project")
 	private List<CalculatedMetric> calculatedMetrics;
 
 	@Transient

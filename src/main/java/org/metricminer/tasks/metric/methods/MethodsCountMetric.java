@@ -118,4 +118,9 @@ public class MethodsCountMetric implements Metric {
         return name.endsWith(".java");
     }
 
+	@Override
+	public Class<?> getFactoryClass() {
+		return MethodsCountMetricFactory.class;
+	}
+
 }

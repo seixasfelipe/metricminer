@@ -74,4 +74,9 @@ public class LinesOfCodeMetric implements Metric {
         return name.endsWith(".java");
     }
 
+	@Override
+	public Class<?> getFactoryClass() {
+		return LinesOfCodeMetricFactory.class;
+	}
+
 }

@@ -6,16 +6,18 @@ import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.StatelessSession;
+import org.metricminer.model.CalculatedMetric;
 import org.metricminer.model.SourceCode;
 import org.metricminer.model.Task;
 import org.metricminer.tasks.metric.common.Metric;
 import org.metricminer.tasks.metric.common.MetricResult;
 
-public class CalculateAllMetricsTask extends IterateOverSourcesAbstractTask {
+public class CalculateAllMetricsTask extends SourcesIteratorAbstractTask {
 
 	private final List<Metric> metrics;
 
-	public CalculateAllMetricsTask(Task task, Session session, StatelessSession statelessSession, List<Metric> metrics) {
+	public CalculateAllMetricsTask(Task task, Session session, StatelessSession statelessSession,
+			List<Metric> metrics) {
 		super(task, session, statelessSession);
 		this.metrics = metrics;
 	}
@@ -31,7 +33,8 @@ public class CalculateAllMetricsTask extends IterateOverSourcesAbstractTask {
 		if (!metric.matches(name))
 			return;
 		try {
-			ByteArrayInputStream inputStream = new ByteArrayInputStream(sourceCode.getSourceBytesArray());
+			ByteArrayInputStream inputStream = new ByteArrayInputStream(
+					sourceCode.getSourceBytesArray());
 			metric.calculate(inputStream);
 			inputStream.close();
 			Collection<MetricResult> results = metric.resultsToPersistOf(sourceCode);
@@ -46,6 +49,17 @@ public class CalculateAllMetricsTask extends IterateOverSourcesAbstractTask {
 		} catch (Throwable t) {
 			log.error("Unable to calculate metric: ", t);
 		}
+	}
+
+	@Override
+	protected void onComplete() {
+		session.beginTransaction();
+		for (Metric metric : metrics) {
+			CalculatedMetric calculatedMetric = new CalculatedMetric(task.getProject(),
+					metric.getFactoryClass());
+			session.save(calculatedMetric);
+		}
+		session.getTransaction().commit();
 	}
 
 }
