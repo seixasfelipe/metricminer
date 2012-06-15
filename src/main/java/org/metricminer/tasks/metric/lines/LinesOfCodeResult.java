@@ -1,5 +1,6 @@
 package org.metricminer.tasks.metric.lines;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -17,6 +18,7 @@ public class LinesOfCodeResult implements MetricResult {
 	@OneToOne
 	private SourceCode sourceCode;
 
+	@Column(length=1024)
 	private String methodName;
 	private int linesOfCode;
 
