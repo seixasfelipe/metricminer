@@ -43,7 +43,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
         try {
             taskToRun = taskDao.getFirstQueuedTask();
             if (!status.mayStartTask() || taskToRun == null || !taskToRun.isDependenciesFinished()) {
-            	if (taskToRun.hasFailedDependencies()) {
+            	if (taskToRun != null && taskToRun.hasFailedDependencies()) {
             		log.error(taskToRun + " failed because a dependency for this task also failed.");
             		daoSession.beginTransaction();
             		taskToRun.fail();
