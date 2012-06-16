@@ -17,7 +17,7 @@ import org.metricminer.config.ClassScan;
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.infra.dao.TaskDao;
 import org.metricminer.model.Task;
-import org.metricminer.tasks.TaskStatus;
+import org.metricminer.tasks.TaskQueueStatus;
 
 public class TasksRunnerTest {
 
@@ -41,7 +41,7 @@ public class TasksRunnerTest {
 		when(mockedSession.close()).thenReturn(null);
 		when(mockedTaskSession.close()).thenReturn(null);
 		
-		taskRunner = new TaskRunner(sf, new TaskStatus(new MetricMinerConfigs(
+		taskRunner = new TaskRunner(sf, new TaskQueueStatus(new MetricMinerConfigs(
 				new ClassScan(), context)));
 		taskRunner.daoSession = mockedSession;
 		taskRunner.taskSession = mockedTaskSession;

@@ -13,12 +13,12 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Component
 @ApplicationScoped
-public class TaskStatus {
+public class TaskQueueStatus {
 
 	private List<Task> tasksRunning;
 	private MetricMinerConfigs configs;
 
-	public TaskStatus(MetricMinerConfigs configs) {
+	public TaskQueueStatus(MetricMinerConfigs configs) {
 		this.configs = configs;
 		tasksRunning = new LinkedList<Task>();
 	}

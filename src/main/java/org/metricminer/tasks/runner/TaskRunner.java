@@ -10,7 +10,7 @@ import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.infra.dao.TaskDao;
 import org.metricminer.model.Task;
 import org.metricminer.tasks.RunnableTaskFactory;
-import org.metricminer.tasks.TaskStatus;
+import org.metricminer.tasks.TaskQueueStatus;
 
 import br.com.caelum.vraptor.ioc.PrototypeScoped;
 import br.com.caelum.vraptor.tasks.scheduler.Scheduled;
@@ -25,10 +25,10 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     Session taskSession;
     StatelessSession statelessSession;
     Logger log;
-    private final TaskStatus status;
+    private final TaskQueueStatus status;
 	private final MetricMinerConfigs config;
 
-    public TaskRunner(SessionFactory sf, TaskStatus status) {
+    public TaskRunner(SessionFactory sf, TaskQueueStatus status) {
         this.status = status;
 		this.config = status.getConfigs();
         this.daoSession = sf.openSession();
