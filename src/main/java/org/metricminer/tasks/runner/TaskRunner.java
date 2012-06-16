@@ -40,6 +40,8 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
 
     @Override
     public void execute() {
+    	Runtime rt = Runtime.getRuntime();
+		log.debug("rt.totalMemory() - rt.freeMemory(): " + (rt.totalMemory() - rt.freeMemory()));
         try {
             taskToRun = taskDao.getFirstQueuedTask();
             if (!status.mayStartTask() || taskToRun == null || !taskToRun.isDependenciesFinished()) {
