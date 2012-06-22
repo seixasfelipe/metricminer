@@ -1,6 +1,5 @@
 package org.metricminer.tasks.scm;
 
-import org.hibernate.Session;
 import org.hibernate.StatelessSession;
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.infra.dao.ProjectDao;
@@ -13,11 +12,11 @@ import org.metricminer.tasks.parser.SCMLogParserFactory;
 public class ParseSCMLogTaskFactory implements RunnableTaskFactory {
 
 	@Override
-	public RunnableTask build(Task task, Session session, StatelessSession statelessSession,
+	public RunnableTask build(Task task, StatelessSession statelessSession,
 			MetricMinerConfigs config) {
 		SCMLogParser logParser = new SCMLogParserFactory().basedOn(
-				task.getProject().getMapConfig(), session, task.getProject());
-		return new ParseSCMLogTask(logParser, task.getProject(), new ProjectDao(session));
+				task.getProject().getMapConfig(), statelessSession, task.getProject());
+		return new ParseSCMLogTask(logParser, task.getProject(), new ProjectDao(statelessSession));
 	}
 
 }

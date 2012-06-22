@@ -2,9 +2,8 @@ package org.metricminer.tasks.parser;
 
 import java.text.ParseException;
 
-
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
+import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
 import org.hibernate.exception.GenericJDBCException;
 import org.metricminer.changesets.ChangeSet;
@@ -17,7 +16,7 @@ import org.metricminer.scm.SCM;
 
 public class SCMLogParser {
 
-    private Session session;
+    private StatelessSession session;
     private PersistedCommitConverter converter;
     private SCM scm;
     private final ChangeSetCollection collection;
@@ -25,7 +24,7 @@ public class SCMLogParser {
     private final Project project;
 
     public SCMLogParser(PersistedCommitConverter converter, SCM scm,
-            ChangeSetCollection collection, Session session, Project project) {
+            ChangeSetCollection collection, StatelessSession session, Project project) {
         this.converter = converter;
         this.scm = scm;
         this.collection = collection;
@@ -37,7 +36,6 @@ public class SCMLogParser {
         for (ChangeSet changeSet : collection.get()) {
             log.info("--------------------------");
             CommitData commitData;
-            session.clear();
             Transaction transaction = session.getTransaction();
             if (!transaction.isActive()) {
                 session.beginTransaction();

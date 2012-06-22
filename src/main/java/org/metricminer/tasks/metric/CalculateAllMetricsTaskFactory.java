@@ -3,7 +3,6 @@ package org.metricminer.tasks.metric;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.hibernate.Session;
 import org.hibernate.StatelessSession;
 import org.metricminer.MetricMinerExeption;
 import org.metricminer.config.MetricMinerConfigs;
@@ -17,7 +16,7 @@ import org.metricminer.tasks.metric.common.MetricFactory;
 public class CalculateAllMetricsTaskFactory implements RunnableTaskFactory {
 
 	@Override
-    public RunnableTask build(Task task, Session session, StatelessSession statelessSession, MetricMinerConfigs config) {
+    public RunnableTask build(Task task, StatelessSession statelessSession, MetricMinerConfigs config) {
     	List<RegisteredMetric> registeredMetrics = config.getRegisteredMetrics();
     	List<Metric> metrics = new ArrayList<Metric>();
     	for (RegisteredMetric registeredMetric : registeredMetrics) {
@@ -31,6 +30,6 @@ public class CalculateAllMetricsTaskFactory implements RunnableTaskFactory {
     		metrics.add(metricFactory.build());
 		}
     	System.out.println("calculate all tasks");
-		return new CalculateAllMetricsTask(task, session, statelessSession, metrics);
+		return new CalculateAllMetricsTask(task, statelessSession, metrics);
     }
 }

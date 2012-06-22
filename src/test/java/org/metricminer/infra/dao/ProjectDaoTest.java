@@ -7,8 +7,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.StatelessSession;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.classic.Session;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -19,14 +19,14 @@ import org.metricminer.model.Project;
 
 public class ProjectDaoTest {
 
-	private static Session session;
+	private static StatelessSession session;
 	private static ProjectDao projectDao;
 
 	@BeforeClass
 	public static void setUpClass() {
 		SessionFactory sessionFactory = new Configuration().configure(
 				"/hibernate.test.cfg.xml").buildSessionFactory();
-		session = sessionFactory.openSession();
+		session = sessionFactory.openStatelessSession();
 		projectDao = new ProjectDao(session);
 	}
 
@@ -48,7 +48,6 @@ public class ProjectDaoTest {
 				Calendar.getInstance());
 		Project projectWithTenCommits = aProjectWithCommits(10,
 				Calendar.getInstance());
-		session.flush();
 		assertEquals((Long) 3l,
 				projectDao.commitCountFor(projectWithThreeCommits));
 		assertEquals((Long) 5l,
@@ -62,9 +61,9 @@ public class ProjectDaoTest {
 		Project project = new Project();
 		Author author1 = new Author();
 		Author author2 = new Author();
-		session.save(project);
-		session.save(author1);
-		session.save(author2);
+		session.insert(project);
+		session.insert(author1);
+		session.insert(author2);
 		addCommitsOfAuthor(2, project, author1, Calendar.getInstance());
 		addCommitsOfAuthor(2, project, author2, Calendar.getInstance());
 
@@ -73,11 +72,11 @@ public class ProjectDaoTest {
 		Author author4 = new Author();
 		Author author5 = new Author();
 		Author author6 = new Author();
-		session.save(project2);
-		session.save(author3);
-		session.save(author4);
-		session.save(author5);
-		session.save(author6);
+		session.insert(project2);
+		session.insert(author3);
+		session.insert(author4);
+		session.insert(author5);
+		session.insert(author6);
 		addCommitsOfAuthor(10, project2, author3, Calendar.getInstance());
 		addCommitsOfAuthor(5, project2, author4, Calendar.getInstance());
 		addCommitsOfAuthor(21, project2, author5, Calendar.getInstance());
@@ -91,8 +90,8 @@ public class ProjectDaoTest {
 	public void shouldGetCommitCountForLastMonths() {
 		Project project = new Project();
 		Author author = new Author();
-		session.save(author);
-		session.save(project);
+		session.insert(author);
+		session.insert(project);
 		Calendar calendar;
 		Long totalCommits = 0l;
 		for (int i = 0; i < 12; i++) {
@@ -109,7 +108,6 @@ public class ProjectDaoTest {
 		calendar.set(2011, 9, 11);
 		addCommitsOfAuthor(5, project, author, calendar);
 		totalCommits += 10;
-		session.flush();
 
 		Map<Calendar, Long> lastCommits = projectDao
 				.commitCountForLastMonths(project);
@@ -126,9 +124,9 @@ public class ProjectDaoTest {
 
 	private Project aProjectWithCommits(int totalCommits, Calendar commitDate) {
 		Project project = new Project();
-		session.save(project);
+		session.insert(project);
 		Author author = new Author();
-		session.save(author);
+		session.insert(author);
 		addCommitsOfAuthor(totalCommits, project, author, commitDate);
 		return project;
 	}
@@ -136,7 +134,7 @@ public class ProjectDaoTest {
 	private void addCommitsOfAuthor(int totalCommits, Project project,
 			Author author, Calendar commitDate) {
 		for (int i = 0; i < totalCommits; i++) {
-			session.save(new Commit("" + i, author, commitDate, "", "", "",
+			session.insert(new Commit("" + i, author, commitDate, "", "", "",
 					project));
 		}
 	}

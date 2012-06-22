@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
 import org.hibernate.StatelessSession;
 import org.metricminer.infra.dao.SourceCodeDAO;
 import org.metricminer.model.Project;
@@ -17,13 +16,13 @@ public abstract class SourcesIteratorAbstractTask implements RunnableTask {
 
 	private static final int PAGE_SIZE = 5;
 	protected Task task;
-	protected Session session;
 	protected static Logger log = Logger.getLogger(SourcesIteratorAbstractTask.class);
 	protected SourceCodeDAO sourceCodeDAO;
+	protected StatelessSession statelessSession;
 
-	public SourcesIteratorAbstractTask(Task task, Session session, StatelessSession statelessSession) {
+	public SourcesIteratorAbstractTask(Task task, StatelessSession statelessSession) {
 		this.task = task;
-		this.session = session;
+		this.statelessSession = statelessSession;
 		this.sourceCodeDAO = new SourceCodeDAO(statelessSession);
 	}
 
