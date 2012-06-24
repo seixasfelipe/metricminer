@@ -43,6 +43,8 @@ public class TasksRunnerTest {
 		
 		taskRunner = new TaskRunner(sf, new TaskQueueStatus(new MetricMinerConfigs(
 				new ClassScan(), context)));
+		taskRunner.daoSession = mockedSession;
+		taskRunner.taskSession = mockedTaskSession;
 		taskRunner.taskDao = mockedDao;
 		taskRunner.statelessSession = mockedStatelessSession;
 	}

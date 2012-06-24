@@ -21,6 +21,8 @@ public class ParseSCMLogTask implements RunnableTask {
 	@Override
 	public void run() {
 		logParser.start();
+		Long commitCount = projectDao.commitCountFor(project);
+		Long commitersCount = projectDao.commitersCountFor(project);
 		project.setStats(projectDao.commitersCountFor(project),
 				projectDao.commitCountFor(project),
 				projectDao.firstCommitFor(project),

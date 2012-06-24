@@ -7,25 +7,27 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.hibernate.SQLQuery;
-import org.hibernate.StatelessSession;
+import org.hibernate.Session;
 import org.hibernate.transform.AliasToEntityMapResultTransformer;
 
 import br.com.caelum.vraptor.ioc.Component;
 
 @Component
 public class QueryExecutor {
-    private StatelessSession session;
+    private Session session;
     
-    public QueryExecutor(StatelessSession session) {
+    public QueryExecutor(Session session) {
         this.session = session;
     }
     
     @SuppressWarnings("unchecked")
     public void execute(Query query, OutputStream csvOutputStream) {
+        session.setDefaultReadOnly(true);
         SQLQuery sqlQuery = session.createSQLQuery(query.getSqlQuery());
         sqlQuery.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
         List<Map<String, Object>> results = sqlQuery.list();
         writeCSVTo(csvOutputStream, results);
+        session.setDefaultReadOnly(false);
     }
 
     private void writeCSVTo(OutputStream csvOutputStream, List<Map<String,Object>> results) {

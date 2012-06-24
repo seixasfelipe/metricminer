@@ -9,7 +9,7 @@ import java.util.TreeMap;
 
 import org.hibernate.Query;
 import org.hibernate.ScrollableResults;
-import org.hibernate.StatelessSession;
+import org.hibernate.Session;
 import org.metricminer.model.Commit;
 import org.metricminer.model.Project;
 
@@ -17,17 +17,16 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Component
 public class ProjectDao {
-	private StatelessSession session;
+    private final Session session;
 
-    public ProjectDao(StatelessSession statelessSession) {
-		this.session = statelessSession;
+    public ProjectDao(Session session) {
+        this.session = session;
     }
 
-    
     public void save(Project project) {
-        session.insert(project);
+        session.save(project);
         project.setupInitialConfigurationsEntries();
-        session.insert(project);
+        session.save(project);
     }
 
     @SuppressWarnings("unchecked")
@@ -36,7 +35,7 @@ public class ProjectDao {
     }
 
     public Project findProjectBy(Long id) {
-        return (Project) session.get(Project.class, id);
+        return (Project) session.load(Project.class, id);
     }
 
     public Long commitCountFor(Project project) {
@@ -163,6 +162,10 @@ public class ProjectDao {
         query.setParameter("end", end);
         Long count = (Long) query.uniqueResult();
         return count;
+    }
+
+    public Session getSession() {
+        return this.session;
     }
 
     public void update(Project project) {

@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.hibernate.StatelessSession;
+import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.metricminer.scm.CommitData;
 import org.metricminer.scm.DiffData;
@@ -21,7 +21,7 @@ public class PersistedCommitConverter {
     	savedAuthors = new HashMap<String, Author>();
     }
 
-    public Commit toDomain(CommitData data, StatelessSession session, Project project) throws ParseException {
+    public Commit toDomain(CommitData data, Session session, Project project) throws ParseException {
 
         Author author = convertAuthor(data, session);
         Commit commit = convertCommit(data, session, author, project);
@@ -32,12 +32,12 @@ public class PersistedCommitConverter {
 
             if (artifact.isSourceCode()) {
                 SourceCode sourceCode = new SourceCode(artifact, commit, diff.getFullSourceCode());
-                session.insert(sourceCode);
+                session.save(sourceCode);
                 convertBlameInformation(session, diff, sourceCode);
                 
                 artifact.addSource(sourceCode);
                 commit.addSource(sourceCode);
-                session.insert(sourceCode);
+                session.save(sourceCode);
             }
 
         }
@@ -45,54 +45,54 @@ public class PersistedCommitConverter {
         return commit;
     }
 
-	private void convertBlameInformation(StatelessSession session, DiffData diff, SourceCode sourceCode) {
+	private void convertBlameInformation(Session session, DiffData diff, SourceCode sourceCode) {
 		for(Map.Entry<Integer, String> entry :  diff.getBlameLines().entrySet()) {
 			Author blamedAuthor = searchForPreviouslySavedAuthor(entry.getValue(), session);
 			BlamedLine blamedLine = sourceCode.blame(entry.getKey(), blamedAuthor);
 			
-			session.insert(blamedLine);
+			session.save(blamedLine);
 		}
 	}
 
-	private void createModification(StatelessSession session, Commit commit, DiffData diff,
+	private void createModification(Session session, Commit commit, DiffData diff,
 			Artifact artifact) {
 		Modification modification = new Modification(diff.getDiff(), commit, artifact, diff
 		        .getModificationKind());
 		artifact.addModification(modification);
 		commit.addModification(modification);
 		commit.addArtifact(artifact);
-		session.insert(modification);
+		session.save(modification);
 	}
 
-	private Artifact convertArtifact(StatelessSession session, Project project, DiffData diff) {
+	private Artifact convertArtifact(Session session, Project project, DiffData diff) {
 		Artifact artifact = searchForPreviouslySavedArtifact(diff.getName(), project, session);
 
 		if (artifact == null) {
 		    artifact = new Artifact(diff.getName(), diff.getArtifactKind(), project);
-		    session.insert(artifact);
+		    session.save(artifact);
 		}
 		return artifact;
 	}
 
-	private Commit convertCommit(CommitData data, StatelessSession session, Author author, Project project)
+	private Commit convertCommit(CommitData data, Session session, Author author, Project project)
 			throws ParseException {
 		Commit commit = new Commit(data.getCommitId(), author, convertDate(data),
                 data.getMessage(), data.getDiff(), data.getPriorCommit(), project);
-        session.insert(commit);
+        session.save(commit);
 		return commit;
 	}
 
-	private Author convertAuthor(CommitData data, StatelessSession session) {
+	private Author convertAuthor(CommitData data, Session session) {
 		Author author = searchForPreviouslySavedAuthor(data.getAuthor(), session);
         if (author == null) {
             author = new Author(data.getAuthor(), data.getEmail());
             savedAuthors.put(data.getAuthor(), author);
-            session.insert(author);
+            session.save(author);
         }
 		return author;
 	}
 
-    private Author searchForPreviouslySavedAuthor(String name, StatelessSession session) {
+    private Author searchForPreviouslySavedAuthor(String name, Session session) {
     	if (savedAuthors.containsKey(name))
     		return savedAuthors.get(name);
         Author author = (Author) session.createCriteria(Author.class).add(
@@ -101,7 +101,7 @@ public class PersistedCommitConverter {
         return author;
     }
 
-    private Artifact searchForPreviouslySavedArtifact(String name, Project project, StatelessSession session) {
+    private Artifact searchForPreviouslySavedArtifact(String name, Project project, Session session) {
         Artifact artifact = (Artifact) session.createCriteria(Artifact.class).add(
                 Restrictions.eq("name", name)).add(Restrictions.eq("project", project))
                 .uniqueResult();
