@@ -33,7 +33,7 @@
 						</tr>
 						<tr>
 							<th>Temp directory</th>
-							<td>${status.configs.metricMinerHome}</td>
+							<td>${status.configs.repositoriesDir}</td>
 						</tr>
 					</table>
 					<h2>Registered metrics</h2>
