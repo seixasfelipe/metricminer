@@ -6,6 +6,7 @@ import org.hibernate.SessionException;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.infra.dao.TaskDao;
 import org.metricminer.model.Task;
@@ -25,17 +26,20 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     Session taskSession;
     StatelessSession statelessSession;
     Logger log;
-    private final TaskQueueStatus status;
-	private final MetricMinerConfigs config;
+    private TaskQueueStatus status;
+	private MetricMinerConfigs config;
+	private SessionFactory sessionFactory;
 
-    public TaskRunner(SessionFactory sf, TaskQueueStatus status) {
-        this.status = status;
-		this.config = status.getConfigs();
-        this.daoSession = sf.openSession();
-        this.taskSession = sf.openSession();
-        this.statelessSession = sf.openStatelessSession();
-        this.taskDao = new TaskDao(daoSession);
-        log = Logger.getLogger(TaskRunner.class);
+    public TaskRunner(TaskQueueStatus status) {
+    	this.sessionFactory = new Configuration().configure(
+				"/hibernate.cfg.xml").buildSessionFactory();
+    	this.status = status;
+    	this.config = status.getConfigs();
+    	this.daoSession = sessionFactory.openSession();
+    	this.taskSession = sessionFactory.openSession();
+    	this.statelessSession = sessionFactory.openStatelessSession();
+    	this.taskDao = new TaskDao(daoSession);
+    	log = Logger.getLogger(TaskRunner.class);
     }
 
     @Override
@@ -110,6 +114,8 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
             statelessSession.close();
         } catch(SessionException e) {
         }
+        if (!sessionFactory.isClosed())
+        	sessionFactory.close();
     }
 
 }
