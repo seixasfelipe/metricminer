@@ -43,7 +43,7 @@ public class TasksRunnerTest {
 //		taskRunner.statelessSession = mockedStatelessSession;
 //	}
 
-	@Test
+	@Ignore @Test
 	public void shouldRunATaskWithoutDependencies() throws Exception {
 		Task mockedTask = mock(Task.class);
 		when(mockedDao.getFirstQueuedTask()).thenReturn(mockedTask);

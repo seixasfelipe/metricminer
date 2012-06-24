@@ -15,6 +15,6 @@ public interface SCM {
 	
 	String getSourceCodePath();
 	String blame(String commitId, String file, int line);
-	String clone(String scmUrl, String localPath);
+	String clone(String scmUrl, String destinationPath);
 	Map<Integer, String> blame(String commmitId, String string);
 }

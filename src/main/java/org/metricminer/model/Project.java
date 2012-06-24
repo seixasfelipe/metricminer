@@ -38,7 +38,6 @@ public class Project {
 	private List<Artifact> artifacts;
 	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
 	private List<Task> tasks;
-	private String scmRootDirectoryName;
 	private String projectPath;
 	@ManyToMany(fetch = FetchType.LAZY)
 	private List<Tag> tags;
@@ -81,7 +80,6 @@ public class Project {
 		this.metricMinerConfigs = metricMinerConfigs;
 		this.name = baseProject.getName();
 		this.scmUrl = baseProject.getScmUrl();
-		this.scmRootDirectoryName = baseProject.getScmRootDirectoryName();
 		setupInitialTasks();
 	}
 
@@ -107,7 +105,7 @@ public class Project {
 		configurationEntries.add(new ProjectConfigurationEntry("scm",
 				"org.metricminer.scm.git.GitFactory", this));
 		configurationEntries.add(new ProjectConfigurationEntry("scm.repository", metricMinerHome
-				+ "/projects/" + this.id + "/" + this.scmRootDirectoryName, this));
+				+ "/projects/" + this.id, this));
 		configurationEntries.add(new ProjectConfigurationEntry("changesets",
 				"org.metricminer.changesets.AllChangeSetsFactory", this));
 
@@ -124,14 +122,6 @@ public class Project {
 	public List<Task> getTasks() {
 		Collections.sort(tasks);
 		return tasks;
-	}
-
-	public String getScmRootDirectoryName() {
-		return scmRootDirectoryName;
-	}
-
-	public void setScmRootDirectoryName(String scmRootDirectoryName) {
-		this.scmRootDirectoryName = scmRootDirectoryName;
 	}
 
 	public void setName(String name) {

@@ -152,10 +152,10 @@ public class Git implements SCM {
 		return repository;
 	}
 
-	public String clone(String scmUrl, String localPath) {
-		String command = "git clone " + scmUrl;
-		exec.execute("mkdir -p " + localPath, "/");
-		return exec.execute(command, localPath);
+	public String clone(String scmUrl, String destinationPath) {
+		String command = "git clone " + scmUrl + " " + destinationPath;
+		exec.execute("mkdir -p " + destinationPath, "/");
+		return exec.execute(command, destinationPath);
 	}
 
 	public String blame(String commitId, String file, int line) {

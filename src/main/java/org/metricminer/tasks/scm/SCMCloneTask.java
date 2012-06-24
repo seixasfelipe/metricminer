@@ -19,10 +19,10 @@ public class SCMCloneTask implements RunnableTask {
     }
 
     public void run() {
-        String localPath = project.getLocalPath();
-        log.info("Clonning git repo " + project.getScmUrl() + " to " + localPath);
+        String destinationPath = project.getLocalPath();
+        log.info("Clonning git repo " + project.getScmUrl() + " to " + destinationPath);
 
-        String output = scm.clone(project.getScmUrl(), localPath);
+        String output = scm.clone(project.getScmUrl(), destinationPath);
 
         log.info("Output: " + output);
     }

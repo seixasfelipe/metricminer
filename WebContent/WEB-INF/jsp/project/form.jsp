@@ -30,10 +30,6 @@
 							<label for="project.scmUrl">Git url: </label><br />
 							<input type="text" class="text small" name="project.scmUrl" />
 						</p>
-						<p>
-							<label for="project.scmRootDirectoryName">Git root directory name: </label><br />
-							<input type="text" class="text small" name="project.scmRootDirectoryName" />
-						</p>
 						
 						<p>
 							<input type="submit" class="submit small" value="Save" />
