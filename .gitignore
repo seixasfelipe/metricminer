@@ -5,3 +5,4 @@ WebContent/template/
 WebContent/WEB-INF/lib
 target/
 .sonar/
+scripts/send.csv

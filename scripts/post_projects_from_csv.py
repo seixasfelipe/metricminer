@@ -2,9 +2,15 @@
 # coding: utf-8
 
 import csv, time
-import httplib, urllib
+import httplib, urllib, sys
 
-reader = csv.reader(open("send.csv", "r"), delimiter=";", quotechar='"')
+if len(sys.argv) < 2:
+    print "Usage: " + sys.argv[0] + " <csvfile>"
+    sys.exit(1)
+
+csvfile = sys.argv[1]
+
+reader = csv.reader(open(csvfile, "r"), delimiter=";", quotechar='"')
 
 projects = []
 
