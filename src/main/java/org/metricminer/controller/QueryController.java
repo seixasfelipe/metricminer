@@ -1,11 +1,14 @@
 package org.metricminer.controller;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 
 import org.metricminer.infra.dao.QueryDao;
+import org.metricminer.infra.dao.QueryResultDAO;
 import org.metricminer.infra.dao.TaskDao;
 import org.metricminer.model.Query;
+import org.metricminer.model.QueryResult;
 import org.metricminer.model.Task;
 import org.metricminer.model.TaskBuilder;
 import org.metricminer.model.TaskConfigurationEntryKey;
@@ -24,10 +27,12 @@ public class QueryController {
     private final TaskDao taskDao;
     private final Result result;
     private final QueryDao queryDao;
+	private final QueryResultDAO queryResultDAO;
 
-    public QueryController(TaskDao taskDao, QueryDao queryDao, Result result) {
+    public QueryController(TaskDao taskDao, QueryDao queryDao, QueryResultDAO queryResultDAO, Result result) {
         this.taskDao = taskDao;
         this.queryDao = queryDao;
+		this.queryResultDAO = queryResultDAO;
         this.result = result;
     }
 
@@ -37,7 +42,7 @@ public class QueryController {
 
     @Post("/queries")
     public void save(Query query) {
-        Task task = new TaskBuilder().withName("Execute query")
+        Task task = new TaskBuilder().withName("Execute query " + query.getName())
                 .withRunnableTaskFactory(new ExecuteQueryTaskFactory()).build();
         queryDao.save(query);
         task.addTaskConfigurationEntry(TaskConfigurationEntryKey.QUERY_ID, query.getId().toString());
@@ -53,8 +58,14 @@ public class QueryController {
     }
     
     @Get("/query/{queryId}")
-    public Download downloadCSV(Long queryId) {
-        Query query = queryDao.findBy(queryId);
-        return new FileDownload(query.getCSV(), "text/csv", "result.csv");
+    public void detailQuery(Long queryId) {
+    	Query query = queryDao.findBy(queryId);
+    	result.include("query", query);
+    }
+    
+    @Get("/query/download/{resultId}")
+    public Download downloadCSV(Long resultId) {
+        QueryResult result = queryResultDAO.findBy(resultId);
+        return new FileDownload(new File(result.getCsvFilename()), "text/csv", "result.csv");
     }
 }

@@ -18,16 +18,15 @@
 				<div class="block_head">
 					<div class="bheadl"></div>
 					<div class="bheadr"></div>
-					<h2>Execute SQL query</h2>
+					<h2>Query</h2>
 				</div>		<!-- .block_head ends -->
 				
 				<div class="block_content">
+					<h3>${query.name}</h3>
 					<table>
-						<tr><th>Name</th></tr>
-						<c:forEach items="${queries}" var="query">
+						<c:forEach items="${query.results}" var="result" >
 							<tr>
-								<td><a href="<c:url value="/query/${query.id}"/>">${query.name}</a></td>
-								<td><fmt:formatDate value="${query.submitDate.time}" pattern="yyyy/MM/dd - HH:mm:ss"/></td>
+								<td><a href="<c:url value="/query/download/${result.id}" />">${result.csvFilename}</a></td>
 							</tr>
 						</c:forEach>
 					</table>

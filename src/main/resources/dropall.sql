@@ -23,6 +23,8 @@ DROP TABLE  `Artifact` ,
 `Project_Tag`,
 `Query`,
 `Tag`,
+`QueryResult`,
+`Query_QueryResult`,
 `CalculatedMetric`;
 
 SET foreign_key_checks = 1;

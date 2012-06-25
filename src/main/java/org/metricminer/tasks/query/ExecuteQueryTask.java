@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import org.metricminer.infra.dao.QueryDao;
 import org.metricminer.model.Query;
 import org.metricminer.model.QueryExecutor;
+import org.metricminer.model.QueryResult;
 import org.metricminer.model.Task;
 import org.metricminer.model.TaskConfigurationEntryKey;
 import org.metricminer.tasks.RunnableTask;
@@ -25,11 +26,10 @@ public class ExecuteQueryTask implements RunnableTask {
     @Override
     public void run() {
         Query query = queryDao.findBy(queryId);
-        String tmpFileName = "/tmp/result-" + query.getId() + ".csv";
-        FileOutputStream outputStream;
-        outputStream = createFile(tmpFileName);
+        String csvFileName = "/tmp/result-" + query.getId() + "-" + query.getResultCount() + ".csv";
+        FileOutputStream outputStream = createFile(csvFileName);
         queryExecutor.execute(query, outputStream);
-        query.executed(tmpFileName);
+        query.addResult(new QueryResult(csvFileName));
         queryDao.update(query);
     }
 

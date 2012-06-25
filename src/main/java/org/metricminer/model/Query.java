@@ -1,25 +1,28 @@
 package org.metricminer.model;
 
-import java.io.File;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
 public class Query implements Comparable<Query> {
 	private String sqlQuery;
-	private String csvFilename;
 	private String name;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar submitDate;
-	@Id
-	@GeneratedValue
+	@Id	@GeneratedValue
 	private Long id;
+	@OneToMany(cascade=CascadeType.ALL)
+	private List<QueryResult> results;
 
 	public Query() {
 		submitDate = new GregorianCalendar();
@@ -42,24 +45,12 @@ public class Query implements Comparable<Query> {
 		return id;
 	}
 
-	public void executed(String outputFileName) {
-		csvFilename = outputFileName;
-	}
-
 	public String getName() {
 		return name;
 	}
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public File getCSV() {
-		return new File(csvFilename);
-	}
-
-	public String getCsvFilename() {
-		return csvFilename;
 	}
 
 	public Calendar getSubmitDate() {
@@ -71,4 +62,15 @@ public class Query implements Comparable<Query> {
 		return -submitDate.compareTo(otherQuery.submitDate);
 	}
 	
+	public void addResult(QueryResult result) {
+		results.add(result);
+	}
+	
+	public int getResultCount() {
+		return results.size();
+	}
+	
+	public List<QueryResult> getResults() {
+		return Collections.unmodifiableList(results);
+	}
 }
