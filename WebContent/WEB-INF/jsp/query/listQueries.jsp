@@ -40,11 +40,9 @@
 				<div class="bendl"></div>
 				<div class="bendr"></div>
 			</div>		<!-- .block ends -->
-			<div id="footer">
-				<p class="left"><a href="#"></a></p>
-			</div>
 		</div>						<!-- wrapper ends -->
 	</div>		<!-- #hld ends -->
+	<c:import url="../import/footer.jsp" />
 	<c:import url="../import/javascripts.jsp" />
 </body>
 </html>

@@ -1005,6 +1005,10 @@ a:hover {
 	text-align: right;
 	}
 	
+#footer .center {
+	text-align: center;
+	}
+	
 task-status {
 	font-weight: bold;
 }
