@@ -8,6 +8,17 @@
 <head>
 	<c:import url="../import/head.jsp" />
 	<title>Metric Miner</title>
+	<style type="text/css">
+		h2 {
+			float: left;
+		}
+		form {
+			margin-left: 80px;
+		}
+		pre {
+			margin: 20px 0;
+		}
+	</style>
 </head>
 
 <body>
@@ -22,7 +33,13 @@
 				</div>		<!-- .block_head ends -->
 				
 				<div class="block_content">
-					<h3>${query.name}</h3>
+					<h2>${query.name}</h2>
+					<form method="post" action="<c:url value="/query/run" />">
+						<input type="submit" class="submit small" value="Run again" />
+						<input type="hidden" name="queryId" value="${query.id}" />
+					</form>
+					<pre>${query.sqlQuery}</pre>
+					<h3>Results:</h3>
 					<table>
 						<c:forEach items="${query.results}" var="result" >
 							<tr>

@@ -68,4 +68,14 @@ public class QueryController {
         QueryResult result = queryResultDAO.findBy(resultId);
         return new FileDownload(new File(result.getCsvFilename()), "text/csv", "result.csv");
     }
+    
+    @Post("/query/run")
+    public void runQuery(Long queryId) {
+    	Query query = queryDao.findBy(queryId);
+    	Task task = new TaskBuilder().withName("Execute query " + query.getName())
+                .withRunnableTaskFactory(new ExecuteQueryTaskFactory()).build();
+    	task.addTaskConfigurationEntry(TaskConfigurationEntryKey.QUERY_ID, query.getId().toString());
+    	taskDao.save(task);
+    	result.redirectTo(TaskController.class).listTasks();
+    }
 }
