@@ -6,7 +6,6 @@ import org.hibernate.SessionException;
 import org.hibernate.SessionFactory;
 import org.hibernate.StatelessSession;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.infra.dao.TaskDao;
 import org.metricminer.model.Task;
@@ -30,10 +29,9 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
 	private MetricMinerConfigs config;
 	private SessionFactory sessionFactory;
 
-    public TaskRunner(TaskQueueStatus status) {
-    	this.sessionFactory = new Configuration().configure(
-				"/hibernate.cfg.xml").buildSessionFactory();
+    public TaskRunner(TaskQueueStatus status, SessionFactory sessionFactory) {
     	this.status = status;
+		this.sessionFactory = sessionFactory;
     	this.config = status.getConfigs();
     	this.daoSession = sessionFactory.openSession();
     	this.taskSession = sessionFactory.openSession();
@@ -114,8 +112,6 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
             statelessSession.close();
         } catch(SessionException e) {
         }
-        if (!sessionFactory.isClosed())
-        	sessionFactory.close();
     }
 
 }
