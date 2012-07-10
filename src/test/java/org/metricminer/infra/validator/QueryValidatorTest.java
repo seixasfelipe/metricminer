@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.metricminer.model.Author;
 import org.metricminer.model.Query;
 
 import br.com.caelum.vraptor.util.test.MockValidator;
@@ -29,35 +30,40 @@ public class QueryValidatorTest {
 	@Test
 	public void shouldNotValidateQueryContainingSourceCode() {
 		query.setSqlQuery("select source as code from SourceCode;");
-		try {
-			queryValidator.validate(query);
-			fail("should throw exception");
-		} catch (ValidationException e) {
-			List<Message> errors = e.getErrors();
-			for (Message message : errors) {
-				assertEquals(QueryValidator.SOURCECODE_MESSAGE, message.getMessage());
-			}
-		}
+		shouldFailValidation(QueryValidator.SOURCECODE_MESSAGE);
 	}
 
 	@Test
 	public void shouldNotValidateQueryContainingWildCard() {
 		query.setSqlQuery("select * from Project;");
+		shouldFailValidation(QueryValidator.WILDCARD_MESSAGE);
+	}
+
+	@Test
+	public void shouldNotValidateQueryContainingAuthorName() {
+		query.setSqlQuery("select " + Author.NAME_COLUMN + " from Author;");
+		shouldFailValidation(QueryValidator.SECRETNAME_MESSAGE);
+	}
+
+	@Test
+	public void shouldNotValidateQueryContainingAuthorEmail() {
+		query.setSqlQuery("select " + Author.EMAIL_COLUMN + " from Author;");
+		shouldFailValidation(QueryValidator.SECRETEMAIL_MESSAGE);
+	}
+
+	@Test
+	public void shouldValidateCommonQuery() {
+		query.setSqlQuery("select name from Project;");
+	}
+
+	private void shouldFailValidation(String errorMessage) {
 		try {
 			queryValidator.validate(query);
 			fail("should throw exception");
 		} catch (ValidationException e) {
 			List<Message> errors = e.getErrors();
-			for (Message message : errors) {
-				assertEquals(QueryValidator.WILDCARD_MESSAGE, message.getMessage());
-			}
+			assertEquals(errorMessage, errors.get(0).getMessage());
 		}
 	}
-	
-	@Test
-	public void shouldValidateCommonQuery() {
-		query.setSqlQuery("select name from Project;");
-	}
-	
 
 }

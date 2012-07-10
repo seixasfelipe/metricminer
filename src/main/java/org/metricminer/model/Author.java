@@ -1,5 +1,6 @@
 package org.metricminer.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -8,11 +9,14 @@ import org.hibernate.annotations.Index;
 
 @Entity
 public class Author {
+	public static final String EMAIL_COLUMN = "secret_email";
+	public static final String NAME_COLUMN = "secret_name";
 	@Id
 	@GeneratedValue
 	private int id;
-	@Index(name = "author_name")
+	@Column(name=NAME_COLUMN) @Index(name = "author_name")
 	private String name;
+	@Column(name=EMAIL_COLUMN)
 	private String email;
 
 	public Author(String author, String email) {

@@ -1,6 +1,7 @@
 package org.metricminer.infra.validator;
 
 import org.metricminer.controller.QueryController;
+import org.metricminer.model.Author;
 import org.metricminer.model.Query;
 
 import br.com.caelum.vraptor.Validator;
@@ -10,23 +11,14 @@ import br.com.caelum.vraptor.validator.ValidationMessage;
 @Component
 public class QueryValidator {
 
-	static final String SOURCECODE_MESSAGE = "The query should not get source code from projects";
+	static final String SOURCECODE_MESSAGE = "It is forbidden to get source code from projects";
 	static final String WILDCARD_MESSAGE = "The query should not contain '*' wildcard";
+	static String SECRETNAME_MESSAGE = "It is forbidden to get author's names, try using 'AuthorName()' istead "+Author.NAME_COLUMN;
+	static String SECRETEMAIL_MESSAGE = "It is forbidden to get author's emails, try using 'AuthorEmail()' istead "+Author.EMAIL_COLUMN;
 	private final Validator validator;
 
 	public QueryValidator(Validator validator) {
 		this.validator = validator;
-	}
-
-	public boolean isValid(Query query) {
-		boolean valid = true;
-		if (containsWildCard(query)) {
-			valid = false;
-		}
-		if (containsSourceCode(query)) {
-			valid = false;
-		}
-		return valid;
 	}
 
 	private boolean containsSourceCode(Query query) {
@@ -46,6 +38,24 @@ public class QueryValidator {
 		}
 		return invalid;
 	}
+	
+	private boolean containsAuthorName(Query query) {
+		boolean invalid = false;
+		String sql = query.getSqlQuery();
+		if (sql.contains("Author") && sql.contains(Author.NAME_COLUMN)) {
+			invalid = true;
+		}
+		return invalid;
+	}
+	
+	private boolean containsAuthorEmail(Query query) {
+		boolean invalid = false;
+		String sql = query.getSqlQuery();
+		if (sql.contains("Author") && sql.contains(Author.EMAIL_COLUMN)) {
+			invalid = true;
+		}
+		return invalid;
+	}
 
 	public void validate(Query query) {
 		if (containsWildCard(query)) {
@@ -53,6 +63,12 @@ public class QueryValidator {
 		}
 		if (containsSourceCode(query)) {
 			validator.add(new ValidationMessage(SOURCECODE_MESSAGE, "InvalidQuery"));
+		}
+		if (containsAuthorName(query)) {
+			validator.add(new ValidationMessage(SECRETNAME_MESSAGE, "InvalidQuery"));
+		}
+		if (containsAuthorEmail(query)) {
+			validator.add(new ValidationMessage(SECRETEMAIL_MESSAGE, "InvalidQuery"));
 		}
 		validator.onErrorRedirectTo(QueryController.class).queryForm();
 	}
