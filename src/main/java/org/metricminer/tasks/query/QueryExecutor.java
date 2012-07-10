@@ -1,4 +1,4 @@
-package org.metricminer.model;
+package org.metricminer.tasks.query;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -9,21 +9,25 @@ import java.util.Map.Entry;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.transform.AliasToEntityMapResultTransformer;
+import org.metricminer.model.Query;
 
 import br.com.caelum.vraptor.ioc.Component;
 
 @Component
 public class QueryExecutor {
     private Session session;
+	private final QueryProcessor queryProcessor;
     
-    public QueryExecutor(Session session) {
+    public QueryExecutor(Session session, QueryProcessor queryProcessor) {
         this.session = session;
+		this.queryProcessor = queryProcessor;
     }
     
     @SuppressWarnings("unchecked")
     public void execute(Query query, OutputStream csvOutputStream) {
         session.setDefaultReadOnly(true);
-        SQLQuery sqlQuery = session.createSQLQuery(query.getSqlQuery());
+        Query processedQuery = queryProcessor.process(query);
+		SQLQuery sqlQuery = session.createSQLQuery(processedQuery.getSqlQuery());
         sqlQuery.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
         List<Map<String, Object>> results = sqlQuery.list();
         writeCSVTo(csvOutputStream, results);

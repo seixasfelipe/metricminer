@@ -5,7 +5,6 @@ import java.io.FileOutputStream;
 
 import org.metricminer.infra.dao.QueryDao;
 import org.metricminer.model.Query;
-import org.metricminer.model.QueryExecutor;
 import org.metricminer.model.QueryResult;
 import org.metricminer.model.Task;
 import org.metricminer.model.TaskConfigurationEntryKey;
