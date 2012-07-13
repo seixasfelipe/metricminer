@@ -94,12 +94,10 @@ public class ProjectDaoTest {
 		session.save(author);
 		session.save(project);
 		Calendar calendar;
-		Long totalCommits = 0l;
 		for (int i = 0; i < 12; i++) {
 			calendar = Calendar.getInstance();
-			calendar.set(2012, i, i);
+			calendar.set(2012, i, 10);
 			addCommitsOfAuthor(i, project, author, calendar);
-			totalCommits += i;
 		}
 		// some old commits
 		calendar = Calendar.getInstance();
@@ -108,7 +106,6 @@ public class ProjectDaoTest {
 		calendar = Calendar.getInstance();
 		calendar.set(2011, 9, 11);
 		addCommitsOfAuthor(5, project, author, calendar);
-		totalCommits += 10;
 		session.flush();
 
 		Map<Calendar, Long> lastCommits = projectDao
@@ -116,11 +113,8 @@ public class ProjectDaoTest {
 		assertEquals(12, lastCommits.size());
 		for (Entry<Calendar, Long> entry : lastCommits.entrySet()) {
 			int month = entry.getKey().get(Calendar.MONTH);
-			assertEquals((long) month, (long) entry.getValue());
-
+			assertEquals(month, (long) entry.getValue());
 		}
-
-		assertEquals(totalCommits, projectDao.commitCountFor(project));
 
 	}
 
