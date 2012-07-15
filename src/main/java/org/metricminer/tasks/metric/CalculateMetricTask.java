@@ -14,10 +14,12 @@ import org.metricminer.tasks.metric.common.MetricResult;
 public class CalculateMetricTask extends SourcesIteratorAbstractTask {
 
 	private final Metric metric;
+	private final StatelessSession statelessSession;
 
 	public CalculateMetricTask(Task task, Metric metric, Session session, StatelessSession statelessSession) {
 		super(task, session, statelessSession);
 		this.metric = metric;
+		this.statelessSession = statelessSession;
 	}
 
 	@Override
@@ -33,14 +35,11 @@ public class CalculateMetricTask extends SourcesIteratorAbstractTask {
 			metric.calculate(inputStream);
 			inputStream.close();
 			Collection<MetricResult> results = metric.resultsToPersistOf(sourceCode);
-			session.getTransaction().begin();
-
+			statelessSession.beginTransaction();
 			for (MetricResult result : results) {
-				session.save(result);
-				session.flush();
-				session.clear();
+				statelessSession.insert(result);
 			}
-			session.getTransaction().commit();
+			statelessSession.getTransaction().commit();
 		} catch (Throwable t) {
 			log.error("Unable to calculate metric: ", t);
 		}
@@ -48,11 +47,11 @@ public class CalculateMetricTask extends SourcesIteratorAbstractTask {
 
 	@Override
 	protected void onComplete() {
-		session.beginTransaction();
+		statelessSession.beginTransaction();
 		CalculatedMetric calculatedMetric = new CalculatedMetric(task.getProject(),
 				metric.getFactoryClass());
-		session.save(calculatedMetric);
-		session.getTransaction().commit();
+		statelessSession.insert(calculatedMetric);
+		statelessSession.getTransaction().commit();
 	}
 
 }
