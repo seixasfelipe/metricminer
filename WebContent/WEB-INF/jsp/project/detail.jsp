@@ -130,12 +130,28 @@
 							<th></th>
 							<th>Name</th>
 							<th>Task Status</th>
+							<th>Submited at</th>
+							<th>Finished at</th>
 						</tr>
 						<c:forEach items="${project.tasks}" var="task">
 							<tr>
-								<td>#${task.position}</td>
-								<td>${task.name}</td>
-								<td class="${fn:toLowerCase(task.status)} task-status">${task.status}</td>
+								<td>
+									#${task.position}
+								</td>
+								<td>
+									${task.name}
+								</td>
+								<td class="${fn:toLowerCase(task.status)} task-status">
+									${task.status}
+								</td>
+								<td>
+									<fmt:formatDate value="${task.submitDate.time}" 
+										pattern="yyyy/MM/dd - HH:mm:ss"/>
+								</td>
+								<td>
+									<fmt:formatDate value="${task.endDate.time}" 
+										pattern="yyyy/MM/dd - HH:mm:ss"/>
+								</td>
 							</tr>
 						</c:forEach>
 					</table>
