@@ -11,14 +11,21 @@
 <c:import url="../import/head.jsp" />
 <style type="text/css">
 #details {
-	float: left;
-	width:400px;
+	width: 35%;
+	padding-top: 30px;
+	display: inline-block;
+	height: 470px;
+	margin-left: 20px;
 }
 .googlechart {
-	width: 750px;
+	width: 100%;
 	height: 250px;
-	position: relative;
-	float: right;
+}
+#charts {
+	width: 60%;
+	padding-top: 15px;
+	margin: auto;
+	display: inline-block;
 }
 </style>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
@@ -100,14 +107,16 @@
 						</table>
 					</div>
 					
-				    <div id="commit_chart" class="googlechart"></div>
-				    <div id="fileCount_chart" class="googlechart"></div>
+					<div id="charts">
+					    <div id="commit_chart" class="googlechart"></div>
+					    <div id="fileCount_chart" class="googlechart"></div>
+				    </div>
 				</div>
 				<div class="bendl"></div>
 				<div class="bendr"></div>
 			</div>
 
-			<div class="block small right">
+			<div class="block">
 				<div class="block_head">
 					<div class="bheadl"></div>
 					<div class="bheadr"></div>

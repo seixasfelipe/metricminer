@@ -63,34 +63,33 @@ function drawCommitChart() {
 
 function drawFileCountChart() {
 	var id = $('#projectId').val();
-	$
-			.ajax({
-				type : 'GET',
-				url : CONTEXT_ROOT + '/projects/' + id + '/fileCountChartData',
-				dataType : 'json',
-				success : function(fileCountData) {
-					var data = google.visualization
-							.arrayToDataTable(fileCountData);
-
-					var options = {
-						title : 'Number of modified files per commit for the last six months',
-						hAxis : {
-							textColor : '#ffffff'
-						},
-						legend : {
-							position : 'none'
-						}
-					};
-
-					var chart = new google.visualization.LineChart(document
-							.getElementById('fileCount_chart'));
-					chart.draw(data, options);
-
+	$.ajax({
+		type : 'GET',
+		url : CONTEXT_ROOT + '/projects/' + id + '/fileCountChartData',
+		dataType : 'json',
+		success : function(fileCountData) {
+			var data = google.visualization
+					.arrayToDataTable(fileCountData);
+	
+			var options = {
+				title : 'Number of modified files per commit for the last six months',
+				hAxis : {
+					textColor : '#ffffff'
 				},
-				error : function() {
-					alert("Could load chart data");
+				legend : {
+					position : 'none'
 				}
-			});
+			};
+	
+			var chart = new google.visualization.LineChart(document
+					.getElementById('fileCount_chart'));
+			chart.draw(data, options);
+	
+		},
+		error : function() {
+			alert("Could load chart data");
+		}
+	});
 }
 
 function drawCharts() {
