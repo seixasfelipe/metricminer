@@ -27,11 +27,9 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     Logger log;
     private TaskQueueStatus status;
 	private MetricMinerConfigs config;
-	private SessionFactory sessionFactory;
 
     public TaskRunner(TaskQueueStatus status, SessionFactory sessionFactory) {
     	this.status = status;
-		this.sessionFactory = sessionFactory;
     	this.config = status.getConfigs();
     	this.daoSession = sessionFactory.openSession();
     	this.taskSession = sessionFactory.openSession();
