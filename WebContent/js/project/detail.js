@@ -41,13 +41,7 @@ function drawCommitChart() {
 			var data = google.visualization.arrayToDataTable(commitData);
 
 			var options = {
-				title : 'Commits of the last twelve months',
-				hAxis : {
-					textColor : '#ffffff'
-				},
-				legend : {
-					position : 'none'
-				}
+				title : 'Commits of the last twelve months'
 			};
 
 			var chart = new google.visualization.LineChart(document
@@ -72,13 +66,7 @@ function drawFileCountChart() {
 					.arrayToDataTable(fileCountData);
 	
 			var options = {
-				title : 'Number of modified files per commit for the last six months',
-				hAxis : {
-					textColor : '#ffffff'
-				},
-				legend : {
-					position : 'none'
-				}
+				title : 'Number of modified files per commit for the last six months'
 			};
 	
 			var chart = new google.visualization.LineChart(document

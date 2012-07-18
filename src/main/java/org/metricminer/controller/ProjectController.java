@@ -66,7 +66,6 @@ public class ProjectController {
     @Post("/projects/{projectId}/metrics")
     public void addMetricToCalculate(Long projectId, String metricFactoryClassName) {
         Project project = dao.findProjectBy(projectId);
-        System.out.println(metricFactoryClassName);
         project.addMetricToCalculate(metricFactoryClassName);
         result.nothing();
     }
