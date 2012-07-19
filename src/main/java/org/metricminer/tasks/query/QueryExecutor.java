@@ -30,11 +30,21 @@ public class QueryExecutor {
 		SQLQuery sqlQuery = session.createSQLQuery(processedQuery.getSqlQuery());
         sqlQuery.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
         List<Map<String, Object>> results = sqlQuery.list();
-        writeCSVTo(csvOutputStream, results);
+        if (results.isEmpty()) {
+        	writeEmptyResult(csvOutputStream);
+        }
+        else {
+        	writeCSVTo(csvOutputStream, results);
+        }
         session.setDefaultReadOnly(false);
     }
 
-    private void writeCSVTo(OutputStream csvOutputStream, List<Map<String,Object>> results) {
+    private void writeEmptyResult(OutputStream csvOutputStream) {
+    	PrintStream csvPrint = new PrintStream(csvOutputStream);
+    	csvPrint.println("Your query returned 0 rows.");
+	}
+
+	private void writeCSVTo(OutputStream csvOutputStream, List<Map<String,Object>> results) {
         PrintStream csvPrint = new PrintStream(csvOutputStream);
         Map<String, Object> first = results.get(0);
         printHeader(csvPrint, first);

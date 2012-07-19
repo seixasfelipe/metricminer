@@ -13,7 +13,7 @@ public class ExecuteQueryTaskFactory implements RunnableTaskFactory {
     @Override
 	public RunnableTask build(Task task, Session session, StatelessSession statelessSession,
 			MetricMinerConfigs config) {
-        return new ExecuteQueryTask(task, new QueryExecutor(session, new QueryProcessor()), new QueryDao(session));
+        return new ExecuteQueryTask(task, new QueryExecutor(session, new QueryProcessor()), new QueryDao(session), config);
     }
 
 }

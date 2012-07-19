@@ -31,6 +31,7 @@ public class MetricMinerConfigs {
 	private Logger logger = Logger.getLogger(MetricMinerConfigs.class);
 	private final ServletContext context;
 	private final String configPath = "/WEB-INF/metricminer.properties";
+	private String queriesResultDir;
 
     public MetricMinerConfigs(ClassScan scan, ServletContext context) {
         this.scan = scan;
@@ -45,7 +46,10 @@ public class MetricMinerConfigs {
 	private void readConfigurationFile() {
 		Properties properties = new Properties();
         try {
+        	logger.info("Loading configurations from metricminer.properties");
 			loadConfsFrom(properties);
+			logger.info("queries.results.dir = " + this.queriesResultDir);
+			logger.info("repositories.dir = " + this.repositoriesDir);
 		} catch (FileNotFoundException e) {
 			throw new MetricMinerExeption("Configuration file not found.", e);
 		} catch (IOException e) {
@@ -58,9 +62,13 @@ public class MetricMinerConfigs {
 		String configFilePath = context.getRealPath(configPath);
 		properties.load(new FileInputStream(configFilePath));
 		this.repositoriesDir = properties.getProperty("repositories.dir", "/tmp/metricminer");
+		this.queriesResultDir = properties.getProperty("queries.results.dir", "/tmp/");
 		File file = new File(repositoriesDir);
 		if (!file.canWrite())
 			throw new MetricMinerExeption(repositoriesDir + " is not writable.");
+		file = new File(queriesResultDir);
+		if (!file.canWrite())
+			throw new MetricMinerExeption(queriesResultDir + " is not writable.");
 	}
 
     private void registerMetrics() {
@@ -92,5 +100,9 @@ public class MetricMinerConfigs {
     public int getMaxConcurrentTasks() {
         return maxConcurrentTasks;
     }
+
+	public String getQueriesResultsDir() {
+		return queriesResultDir;
+	}
 
 }

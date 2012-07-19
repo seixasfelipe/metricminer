@@ -11,9 +11,10 @@
 	<style type="text/css">
 		h2 {
 			float: left;
+			width: 300px
 		}
 		form {
-			margin-left: 80px;
+			margin-left: 30%
 		}
 		pre {
 			margin: 20px 0;
@@ -44,6 +45,7 @@
 						<c:forEach items="${query.results}" var="result" >
 							<tr>
 								<td><a href="<c:url value="/query/download/${result.id}" />">${result.csvFilename}</a></td>
+								<td><fmt:formatDate value="${result.executedDate.time}" pattern="yyyy/MM/dd - HH:mm:ss"/></td>
 							</tr>
 						</c:forEach>
 					</table>
