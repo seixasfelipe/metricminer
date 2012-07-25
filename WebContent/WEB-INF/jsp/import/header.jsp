@@ -6,7 +6,7 @@
 	<div class="hdrl"></div>
 	<div class="hdrr"></div>
 	
-	<h1><a href="${linkTo[ProjectController].list}">MetricMiner</a></h1>
+	<h1><a href="${linkTo[IndexController].index}">MetricMiner</a></h1>
 	<ul id="nav">
 		<li><a href="${linkTo[ProjectController].list}">Projects</a>
 			<ul>

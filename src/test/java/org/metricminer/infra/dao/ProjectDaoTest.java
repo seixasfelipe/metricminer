@@ -1,8 +1,11 @@
 package org.metricminer.infra.dao;
 
 import static junit.framework.Assert.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -13,6 +16,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.model.Author;
 import org.metricminer.model.Commit;
 import org.metricminer.model.Project;
@@ -117,6 +121,30 @@ public class ProjectDaoTest {
 		}
 
 	}
+	
+	@Test
+	public void shouldFindTenProjectCount() throws Exception {
+		for (int i = 0; i < 10; i++)
+			session.save(new Project());
+		Long totalProjectCount = projectDao.totalProjectCount();
+		assertEquals(new Long(10L), totalProjectCount);
+	}
+	
+	@Test
+	public void shouldGetLastTenProjects() throws Exception {
+		MetricMinerConfigs configs = mock(MetricMinerConfigs.class);
+		when(configs.getRepositoriesDir()).thenReturn("");
+		for (int i = 0; i < 10; i++)
+			session.save(new Project("new project " + i, "", configs));
+		session.save(new Project("this should not appear", "", configs));
+		List<Project> projects = projectDao.getTenNewestProjects();
+		int i = 0;
+		for (Project project : projects) {
+			assertEquals("new project " + i, project.getName());
+			i++;
+		}
+	}
+	
 
 	private Project aProjectWithCommits(int totalCommits, Calendar commitDate) {
 		Project project = new Project();

@@ -38,7 +38,7 @@ public class ProjectController {
         result.include("metrics", configs.getRegisteredMetrics());
     }
 
-    @Get("/")
+    @Get("/projects")
     public void list() {
         result.include("projects", dao.listAll());
     }

@@ -1,6 +1,7 @@
 package org.metricminer.model;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -14,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.metricminer.config.MetricMinerConfigs;
@@ -51,11 +54,14 @@ public class Project {
 	private Long totalCommiters;
 	@OneToMany(mappedBy="project")
 	private List<CalculatedMetric> calculatedMetrics;
+	@Temporal(TemporalType.TIMESTAMP)
+	private Calendar creationDate;
 
 	@Transient
 	private MetricMinerConfigs metricMinerConfigs;
 
 	public Project() {
+		this.creationDate = Calendar.getInstance();
 		this.configurationEntries = new ArrayList<ProjectConfigurationEntry>();
 		this.tasks = new ArrayList<Task>();
 		this.tags = new ArrayList<Tag>();
@@ -244,7 +250,11 @@ public class Project {
 	public Long getTotalCommits() {
 		return totalCommits;
 	}
-
+	
+	public Calendar getCreationDate() {
+		return creationDate;
+	}
+	
 	public void setStats(Long totalCommiters, Long totalCommits, Commit first, Commit last) {
 		this.totalCommiters = totalCommiters;
 		this.totalCommits = totalCommits;
