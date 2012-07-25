@@ -27,6 +27,7 @@
         <mapping class="org.metricminer.model.Query"/>
         <mapping class="org.metricminer.model.QueryResult"/>  
         <mapping class="org.metricminer.model.CalculatedMetric"/>
+        <mapping class="org.metricminer.model.User"/>
         
         <mapping class="org.metricminer.tasks.metric.lcom.LComResult" />
         <mapping class="org.metricminer.tasks.metric.cc.CCResult" />
