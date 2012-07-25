@@ -6,17 +6,17 @@ import org.hibernate.Session;
 import br.com.caelum.vraptor.ioc.Component;
 
 @Component
-public class CommitDao {
-
+public class ArtifactDao {
+	
 	private final Session session;
 
-	public CommitDao(Session session) {
+	public ArtifactDao(Session session) {
 		this.session = session;
 	}
 	
-	public Long totalCommits() {
-		Query query = session.createQuery("select count(id) from Commit");
+	public Long totalArtifacts() {
+		Query query = session.createQuery("select count(id) from Artifact");
 		return (Long) query.uniqueResult();
 	}
-	
+
 }

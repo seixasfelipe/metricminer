@@ -171,7 +171,8 @@ public class ProjectDao {
 		return count;
 	}
 
-	public List<Project> getTenNewestProjects() {
+	@SuppressWarnings("unchecked")
+	public List<Project> tenNewestProjects() {
 		Query query = session
 				.createQuery("select project from Project as project order by creationDate asc")
 				.setMaxResults(10);
@@ -191,7 +192,7 @@ public class ProjectDao {
 		session.delete(project);
 	}
 
-	public Long totalProjectCount() {
+	public Long totalProjects() {
 		Query query = session.createQuery("select count(id) from Project");
 		return (Long) query.uniqueResult();
 	}

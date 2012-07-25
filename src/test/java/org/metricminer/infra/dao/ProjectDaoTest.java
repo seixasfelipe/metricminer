@@ -126,7 +126,7 @@ public class ProjectDaoTest {
 	public void shouldFindTenProjectCount() throws Exception {
 		for (int i = 0; i < 10; i++)
 			session.save(new Project());
-		Long totalProjectCount = projectDao.totalProjectCount();
+		Long totalProjectCount = projectDao.totalProjects();
 		assertEquals(new Long(10L), totalProjectCount);
 	}
 	
@@ -137,7 +137,7 @@ public class ProjectDaoTest {
 		for (int i = 0; i < 10; i++)
 			session.save(new Project("new project " + i, "", configs));
 		session.save(new Project("this should not appear", "", configs));
-		List<Project> projects = projectDao.getTenNewestProjects();
+		List<Project> projects = projectDao.tenNewestProjects();
 		int i = 0;
 		for (Project project : projects) {
 			assertEquals("new project " + i, project.getName());

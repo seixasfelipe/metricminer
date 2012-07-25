@@ -30,13 +30,22 @@
 					<table>
 						<tr>
 							<th>Total projects</th> 
-							<td>${totalProjectCount}</td>
+							<td>${totalProjects}</td>
+						</tr>
+						<tr>
+							<th>Total committers</th> 
+							<td>${totalAuthors}</td>
 						</tr>
 						<tr>
 							<th>Total commits processed</th> 
-							<td>${totalCommitCount}</td>
+							<td>${totalCommits}</td>
+						</tr>
+						<tr>
+							<th>Total artifacts processed</th> 
+							<td>${totalArtifacts}</td>
 						</tr>
 					</table>
+					<h2>Last projects added</h2>
 					<table>
 						<tr>
 							<th>Name</th>
@@ -44,6 +53,19 @@
 						<c:forEach items="${newProjects}" var="project">
 							<tr>
 								<td><a href="<c:url value="/project/${project.id}"/>">${project.name}</a></td>
+							</tr>
+						</c:forEach>
+					</table>
+					<h2>Last tasks executed</h2>
+					<table>
+						<tr>
+							<th>Name</th>
+							<th>Project</th>
+						</tr>
+						<c:forEach items="${lastTasks}" var="task">
+							<tr>
+								<td>${task.name}</td>
+								<td>${task.project.name}</td>
 							</tr>
 						</c:forEach>
 					</table>

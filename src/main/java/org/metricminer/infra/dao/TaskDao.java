@@ -2,6 +2,7 @@ package org.metricminer.infra.dao;
 
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -42,4 +43,13 @@ public class TaskDao {
     public List<Task> listTasks() {
         return session.createCriteria(Task.class).list();
     }
+    
+    @SuppressWarnings("unchecked")
+	public List<Task> lastTasks(int total) {
+    	Query query = session
+				.createQuery("select task from Task as task join fetch task.project order by endDate asc")
+				.setMaxResults(total);
+		return query.list();
+		
+	}
 }
