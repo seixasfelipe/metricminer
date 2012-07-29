@@ -28,15 +28,20 @@
 						<c:if test="${message != null && !message.isEmpty()}">
 							<div class="message info"><p>${message}</p></div>
 						</c:if>
+
+						<c:forEach var="error" items="${errors}">
+							<div class="message errormsg"><p>${error.message}</p></div>
+						</c:forEach>
 						
-						<form action="page.html" method="post">
+						
+						<form action='<c:url value="/login" />' method="post">
 							<p>
 								<label>Email:</label> <br />
-								<input type="text" class="text" />
+								<input type="text" class="text" name="email" />
 							</p>
 							<p>
 								<label>Password:</label> <br />
-								<input type="password" class="text" />
+								<input type="password" class="text" name="password" />
 							</p>
 							<p>
 								<input type="submit" class="submit" value="Login" />

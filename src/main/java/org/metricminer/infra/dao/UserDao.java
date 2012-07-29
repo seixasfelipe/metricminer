@@ -18,7 +18,7 @@ public class UserDao {
 		session.save(user);
 	}
 
-	public void findByEmail(String email) {
-		session.createCriteria(User.class).add(Restrictions.eq("email", email));
+	public User findByEmail(String email) {
+		return (User) session.createCriteria(User.class).add(Restrictions.like("email", email)).uniqueResult();
 	}
 }
