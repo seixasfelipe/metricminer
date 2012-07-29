@@ -2,7 +2,6 @@ package org.metricminer.tasks.parser;
 
 import java.text.ParseException;
 
-
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -61,6 +60,8 @@ public class SCMLogParser {
                 log.error("Too big changeset, unable to persist", e);
                 commitData = null;
                 System.gc();
+            } catch(Throwable e) {
+            	//morre geral
             }
 
         }
