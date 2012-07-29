@@ -42,16 +42,16 @@ public class UserController {
 
 	@Post("/signup")
 	public void registerUser(final User user) {
+		validator.validate(user);
 		if (!user.isValid()) {
-			System.out.println(user);
 			validator.add(new ValidationMessage("Password confirmation don't match.", "error"));
 		}
 		result.include("user", user);
-		validator.onErrorRedirectTo(UserController.class).loginForm("You can login into MetricMiner now.");
+		validator.onErrorRedirectTo(UserController.class).userForm();
 		
 		user.encryptPassword(encryptor);
 		dao.save(user);
 		
-		result.redirectTo(IndexController.class).index();
+		result.redirectTo(UserController.class).loginForm("You can login into MetricMiner now.");
 	}
 }

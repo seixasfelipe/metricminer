@@ -15,11 +15,15 @@ import org.metricminer.infra.encryptor.Encryptor;
 public class User {
 	@Id @GeneratedValue
 	private Long id;
-	@NotEmpty
+	@NotEmpty(message="Name should not be empty")
 	private String name;
-	@NotEmpty @Column(unique = true) @Email
+	
+	@Column(unique = true) 
+	@NotEmpty(message="Email should not be empty")
+	@Email(message="Email should be valid")
 	private String email;
-	@NotEmpty @Length(min=5)
+	@NotEmpty(message="Password should not be empty")
+	@Length(min=5, message="Password length should be at least 5")
 	private String password;
 	private String university;
 	private String cvUrl;

@@ -20,9 +20,17 @@
 						<h2>MetricMiner - Register</h2>
 					</div>		<!-- .block_head ends -->
 					<div class="block_content">
+					
+						<c:if test="${! empty errors}">
+							<div class="message errormsg"><p>
+						</c:if>
 						<c:forEach var="error" items="${errors}">
-							<div class="message errormsg"><p>${error.message}</p></div>
+							${error.message}<br />
 						</c:forEach>
+						<c:if test="${! empty errors}">
+							</p></div>
+						</c:if>
+						
 						<form action='<c:url value="/signup" />' method="post">
 							<p>
 								<label>Name:</label> <br />
