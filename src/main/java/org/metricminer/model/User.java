@@ -6,18 +6,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.metricminer.infra.encryptor.Encryptor;
 
 @Entity
 public class User {
-	@Id
-	@GeneratedValue
+	@Id @GeneratedValue
 	private Long id;
-	private String name;
 	@NotEmpty
-	@Column(unique = true)
+	private String name;
+	@NotEmpty @Column(unique = true) @Email
 	private String email;
+	@NotEmpty @Length(min=5)
 	private String password;
 	private String university;
 	private String cvUrl;
