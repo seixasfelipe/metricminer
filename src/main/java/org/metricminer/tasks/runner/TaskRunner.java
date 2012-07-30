@@ -40,8 +40,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
 
     @Override
     public void execute() {
-    	Runtime rt = Runtime.getRuntime();
-        try {
+    	try {
             taskToRun = taskDao.getFirstQueuedTask();
             if (!status.mayStartTask() || taskToRun == null || !taskToRun.isDependenciesFinished()) {
             	if (taskToRun != null && taskToRun.hasFailedDependencies()) {
