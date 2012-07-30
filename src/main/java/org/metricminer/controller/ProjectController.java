@@ -5,6 +5,7 @@ import java.util.List;
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.infra.dao.ProjectDao;
 import org.metricminer.infra.dao.TagDao;
+import org.metricminer.infra.interceptor.PublicAccess;
 import org.metricminer.model.Project;
 import org.metricminer.model.RegisteredMetric;
 import org.metricminer.model.Tag;
@@ -95,7 +96,17 @@ public class ProjectController {
 
     @Post("/projects")
     public void createProject(Project project, List<RegisteredMetric> metrics) {
-        Project completeProject = new Project(project, configs);
+        saveProject(project, metrics);
+    }
+    
+    @PublicAccess
+    @Post("/projects/06560fb292075c5eeca4ceb586185332")
+    public void createProjectRemote(Project project, List<RegisteredMetric> metrics) {
+    	saveProject(project, metrics);
+    }
+
+	private void saveProject(Project project, List<RegisteredMetric> metrics) {
+		Project completeProject = new Project(project, configs);
         if (metrics != null) {
             for (RegisteredMetric metric : metrics) {
                 completeProject.addMetricToCalculate(metric.getMetricFactoryClassName());
@@ -103,6 +114,6 @@ public class ProjectController {
         }
         dao.save(completeProject);
         result.redirectTo(ProjectController.class).list();
-    }
+	}
 
 }
