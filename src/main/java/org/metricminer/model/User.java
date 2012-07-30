@@ -1,5 +1,7 @@
 package org.metricminer.model;
 
+import java.io.Serializable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,7 +16,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.metricminer.infra.encryptor.Encryptor;
 
 @Entity
-public class User {
+public class User implements Serializable {
 	@Id @GeneratedValue
 	private Long id;
 	
@@ -37,6 +39,8 @@ public class User {
 	private String cvUrl;
 	private String twitter;
 	
+	@Transient
+	private static final long serialVersionUID = 1L;
 	@Transient
 	private String passwordConfirmation;
 

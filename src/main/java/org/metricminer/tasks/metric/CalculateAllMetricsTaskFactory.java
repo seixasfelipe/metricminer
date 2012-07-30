@@ -30,7 +30,6 @@ public class CalculateAllMetricsTaskFactory implements RunnableTaskFactory {
 			}
     		metrics.add(metricFactory.build());
 		}
-    	System.out.println("calculate all tasks");
 		return new CalculateAllMetricsTask(task, session, statelessSession, metrics);
     }
 }
