@@ -2,6 +2,7 @@ package org.metricminer.controller;
 
 import org.metricminer.infra.dao.UserDao;
 import org.metricminer.infra.encryptor.Encryptor;
+import org.metricminer.infra.interceptor.PublicAccess;
 import org.metricminer.infra.session.UserSession;
 import org.metricminer.model.User;
 
@@ -30,18 +31,16 @@ public class UserController {
 		this.session = session;
 	}
 
+	@PublicAccess
 	@Get("/login")
 	public void loginForm() {
 	}
 
+	@PublicAccess
 	@Post("/login")
 	public void login(String email, String password) {
-		System.out.println(email);
-		System.out.println(password);
 		User user = dao.findByEmail(email);
-		System.out.println(user);
 		password = encryptor.encrypt(password);
-		System.out.println(password);
 		if (user != null && user.getPassword().equals(password)) {
 			session.login(user);
 			result.redirectTo(IndexController.class).index();
@@ -55,10 +54,12 @@ public class UserController {
 		validator.onErrorRedirectTo(UserController.class).loginForm();
 	}
 
+	@PublicAccess
 	@Get("/signup")
 	public void userForm() {
 	}
 
+	@PublicAccess
 	@Post("/signup")
 	public void registerUser(final User user) {
 		validator.validate(user);

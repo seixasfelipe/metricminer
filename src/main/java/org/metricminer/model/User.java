@@ -2,6 +2,8 @@ package org.metricminer.model;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
@@ -15,6 +17,7 @@ import org.metricminer.infra.encryptor.Encryptor;
 public class User {
 	@Id @GeneratedValue
 	private Long id;
+	
 	@NotEmpty(message="Name should not be empty")
 	private String name;
 	
@@ -22,12 +25,18 @@ public class User {
 	@NotEmpty(message="Email should not be empty")
 	@Email(message="Email should be valid")
 	private String email;
+	
 	@NotEmpty(message="Password should not be empty")
 	@Length(min=5, message="Password length should be at least 5")
 	private String password;
+	
+	@Enumerated(EnumType.STRING)
+	private UserRole role = UserRole.RESEARCHER;
+	
 	private String university;
 	private String cvUrl;
 	private String twitter;
+	
 	@Transient
 	private String passwordConfirmation;
 
@@ -108,5 +117,9 @@ public class User {
 	
 	public void encryptPassword(Encryptor encryptor) {
 		this.password = encryptor.encrypt(password);
+	}
+	
+	public UserRole getRole() {
+		return role;
 	}
 }
