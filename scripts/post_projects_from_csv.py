@@ -31,7 +31,7 @@ for project in projects:
     headers = {"Content-type": "application/x-www-form-urlencoded","Accept": "text/plain"}
     
     conn = httplib.HTTPConnection(url)
-    conn.request("POST", "/projects", query, headers)
+    conn.request("POST", "/projects/06560fb292075c5eeca4ceb586185332", query, headers)
     response = conn.getresponse()
     print response.status, response.reason
     
