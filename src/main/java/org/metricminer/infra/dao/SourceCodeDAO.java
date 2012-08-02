@@ -40,6 +40,7 @@ public class SourceCodeDAO {
 		query.setParameter("project_id", project.getId())
 			.setParameter("sourceSize", MAX_SOURCE_SIZE);
 		List<Object[]> idsAndNames = query.list();
+		System.out.println("lala");
 		Map<Long, String> map = new TreeMap<Long, String>();
 		for (Object[] objects : idsAndNames) {
 			map.put((Long) objects[0], (String) objects[1]);

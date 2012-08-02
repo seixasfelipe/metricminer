@@ -47,7 +47,7 @@ public class TaskDao {
     @SuppressWarnings("unchecked")
 	public List<Task> lastTasks(int total) {
     	Query query = session
-				.createQuery("select task from Task as task join fetch task.project order by endDate asc")
+				.createQuery("select task from Task as task join fetch task.project order by endDate desc")
 				.setMaxResults(total);
 		return query.list();
 		

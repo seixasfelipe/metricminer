@@ -39,12 +39,12 @@ public class Task implements Comparable {
     private Calendar endDate;
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
-    private Integer position;
     @ManyToMany
     private List<Task> depends;
     @OneToMany(
             mappedBy = "task", cascade = CascadeType.ALL)
     private List<TaskConfigurationEntry> configurationEntries;
+    private int position;
 
     public Task() {
         this.depends = new ArrayList<Task>();
@@ -178,7 +178,8 @@ public class Task implements Comparable {
         Task otherTask = (Task) o;
         if (this.submitDate.compareTo(otherTask.getSubmitDate()) != 0)
             return this.submitDate.compareTo(otherTask.getSubmitDate());
-        return position.compareTo(otherTask.getPosition());
+        Integer positionInteger = position;
+        return positionInteger.compareTo(otherTask.getPosition());
     }
 
     public Integer getPosition() {

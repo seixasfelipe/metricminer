@@ -1,6 +1,7 @@
 package org.metricminer.model;
 
 import org.metricminer.tasks.RunnableTaskFactory;
+import org.metricminer.tasks.scm.SCMCloneTaskFactory;
 
 public class TaskBuilder {
 
@@ -11,6 +12,7 @@ public class TaskBuilder {
 
     public TaskBuilder() {
         position = 0;
+        this.runnableTaskFactory = new SCMCloneTaskFactory();
     }
 
     public TaskBuilder withName(String name) {
