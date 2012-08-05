@@ -64,6 +64,9 @@
 										${task.status}
 									</td>
 									<td>
+										<a href="<c:url value="/projects/${task.project.id}" />">${task.project.name}</a>
+									</td>
+									<td>
 										<fmt:formatDate value="${task.submitDate.time}" pattern="yyyy/MM/dd - HH:mm:ss"/>
 									</td>
 								</tr>
