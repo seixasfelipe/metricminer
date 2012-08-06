@@ -18,6 +18,7 @@ import br.com.caelum.vraptor.Resource;
 import br.com.caelum.vraptor.Result;
 import br.com.caelum.vraptor.interceptor.download.Download;
 import br.com.caelum.vraptor.interceptor.download.FileDownload;
+import br.com.caelum.vraptor.view.Results;
 
 @Resource
 public class QueryController {
@@ -76,13 +77,19 @@ public class QueryController {
     @Get("/query/edit/{queryId}")
     public void editQueryForm(Long queryId) {
         Query query = queryDao.findBy(queryId);
+        if (!query.isAllowedToEdit(userSession.user())) {
+            result.use(Results.http()).setStatusCode(403);
+        }
         result.include("query", query);
     }
 
     @Get("/query/{queryId}")
     public void detailQuery(Long queryId) {
         Query query = queryDao.findBy(queryId);
+        boolean allowedToEdit = query.isAllowedToEdit(userSession.user());
+        
         result.include("query", query);
+        result.include("allowedToEdit", allowedToEdit);
     }
 
     @Get("/query/download/{resultId}")

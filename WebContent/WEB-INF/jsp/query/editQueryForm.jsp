@@ -41,7 +41,7 @@
 							their projects here. So, never try to get their code. Be honest!
 						</p>
 						<p>
-							<input type="submit" class="submit small" value="Update and execute" />
+							<input type="submit" class="submit long" value="Update and execute" />
 						</p>
 					</form>
 				</div>		<!-- .block_content ends -->

@@ -43,9 +43,11 @@
 						<input type="hidden" name="queryId" value="${query.id}" />
 					</form>
 					
-					<form method="get" action="<c:url value="/query/edit/${query.id}" />">
-						<input type="submit" class="submit small" value="Edit" />
-					</form>
+					<c:if test="${allowedToEdit}">
+						<form method="get" action="<c:url value="/query/edit/${query.id}" />">
+							<input type="submit" class="submit small" value="Edit" />
+						</form>
+					</c:if>
 					
 					<h3 class="clear">Results:</h3>
 					<table class="clear">

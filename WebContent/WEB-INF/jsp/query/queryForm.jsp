@@ -45,7 +45,7 @@
 							their projects here. So, never try to get their code. Be honest!
 						</p>
 						<p>
-							<input type="submit" class="submit small" value="Save and execute" />
+							<input type="submit" class="submit long" value="Save and execute" />
 						</p>
 					</form>
 				</div>		<!-- .block_content ends -->
