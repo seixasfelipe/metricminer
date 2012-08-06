@@ -6,7 +6,7 @@
 
 [["Month", "count"]
 <c:forEach items="${lastSixMonthsCommitCountMap}" var="entry">
-	,["<fmt:formatDate value="${entry.key.time}" pattern="yyyy/MM/dd"/>",
+	,["<fmt:formatDate value="${entry.key.time}" pattern="MMM yy"/>",
     ${entry.value}]
 </c:forEach>
 ]

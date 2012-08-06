@@ -50,7 +50,6 @@ function drawCommitChart() {
 
 		},
 		error : function() {
-			alert("Could load chart data");
 		}
 	});
 }
