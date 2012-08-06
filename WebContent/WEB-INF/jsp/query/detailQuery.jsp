@@ -9,15 +9,15 @@
 	<c:import url="../import/head.jsp" />
 	<title>Metric Miner</title>
 	<style type="text/css">
-		h2 {
-			float: left;
-			width: 300px
-		}
 		form {
-			margin-left: 30%
+			margin: 20px 0;
+			float: left;
 		}
 		pre {
 			margin: 20px 0;
+		}
+		.clear {
+			clear: both;
 		}
 	</style>
 </head>
@@ -35,13 +35,20 @@
 				
 				<div class="block_content">
 					<h2>${query.name}</h2>
+					
+					<pre>${query.sqlQuery}</pre>
+					
 					<form method="post" action="<c:url value="/query/run" />">
 						<input type="submit" class="submit small" value="Run again" />
 						<input type="hidden" name="queryId" value="${query.id}" />
 					</form>
-					<pre>${query.sqlQuery}</pre>
-					<h3>Results:</h3>
-					<table>
+					
+					<form method="get" action="<c:url value="/query/edit/${query.id}" />">
+						<input type="submit" class="submit small" value="Edit" />
+					</form>
+					
+					<h3 class="clear">Results:</h3>
+					<table class="clear">
 						<c:forEach items="${query.results}" var="result" >
 							<tr>
 								<td><a href="<c:url value="/query/download/${result.id}" />">${result.csvFilename}</a></td>

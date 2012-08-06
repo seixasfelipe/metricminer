@@ -41,8 +41,7 @@ public class Task implements Comparable {
     private TaskStatus status;
     @ManyToMany
     private List<Task> depends;
-    @OneToMany(
-            mappedBy = "task", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
     private List<TaskConfigurationEntry> configurationEntries;
     private int position;
 
@@ -51,8 +50,8 @@ public class Task implements Comparable {
         this.configurationEntries = new ArrayList<TaskConfigurationEntry>();
     }
 
-    public Task(Project project, String name, RunnableTaskFactory runnableTaskFactory,
-            Integer position) {
+    public Task(Project project, String name,
+            RunnableTaskFactory runnableTaskFactory, Integer position) {
         this();
         this.project = project;
         this.name = name;
@@ -112,7 +111,8 @@ public class Task implements Comparable {
         return this.status == TaskStatus.STARTED;
     }
 
-    public void addTaskConfigurationEntry(TaskConfigurationEntryKey key, String value) {
+    public void addTaskConfigurationEntry(TaskConfigurationEntryKey key,
+            String value) {
         configurationEntries.add(new TaskConfigurationEntry(key, value, this));
     }
 
@@ -186,16 +186,16 @@ public class Task implements Comparable {
         return position;
     }
 
-	public boolean hasFailedDependencies() {
-		for (Task dependecy : depends) {
-			if (dependecy.hasFailed())
-				return true;
-		}
-		return false;
-	}
+    public boolean hasFailedDependencies() {
+        for (Task dependecy : depends) {
+            if (dependecy.hasFailed())
+                return true;
+        }
+        return false;
+    }
 
-	private boolean hasFailed() {
-		return this.status == TaskStatus.FAILED;
-	}
+    private boolean hasFailed() {
+        return this.status == TaskStatus.FAILED;
+    }
 
 }

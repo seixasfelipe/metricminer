@@ -38,14 +38,14 @@
 						</p>
 						<p>
 							<label for="query.sqlQuery">SQL Query: </label> <br />
-							<textarea type="text" value="${query.sqlQuery}" class="text small" name="query.sqlQuery"></textarea>
+							<textarea type="text" class="text small" name="query.sqlQuery">${query.sqlQuery}</textarea>
 						</p>
 						<p class="note">
 							Please, do not get the source code. We are trying to convince industry to put 
 							their projects here. So, never try to get their code. Be honest!
 						</p>
 						<p>
-							<input type="submit" class="submit small" value="Execute" />
+							<input type="submit" class="submit small" value="Save and execute" />
 						</p>
 					</form>
 				</div>		<!-- .block_content ends -->

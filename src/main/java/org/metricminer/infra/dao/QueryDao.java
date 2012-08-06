@@ -25,11 +25,9 @@ public class QueryDao {
     }
 
     public void update(Query query) {
-    	session.getTransaction().begin();
         session.update(query);
-        session.getTransaction().commit();
     }
-
+    
     @SuppressWarnings("unchecked")
     public List<Query> list() {
         return session.createCriteria(Query.class).list();

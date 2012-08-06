@@ -2,6 +2,8 @@ package org.metricminer.infra.validator;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 import java.util.List;
 
@@ -9,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.metricminer.model.Author;
 import org.metricminer.model.Query;
+import org.metricminer.model.User;
 
 import br.com.caelum.vraptor.util.test.MockValidator;
 import br.com.caelum.vraptor.validator.Message;
@@ -49,6 +52,27 @@ public class QueryValidatorTest {
 	public void shouldNotValidateQueryContainingAuthorEmail() {
 		query.setSqlQuery("select " + Author.EMAIL_COLUMN + " from Author;");
 		shouldFailValidation(QueryValidator.SECRETEMAIL_MESSAGE);
+	}
+	
+	@Test
+	public void shouldNotAllowOtherUserToUpdateQuery() {
+	    query.setSqlQuery("select id from Project;");
+	    User author = mock(User.class);
+	    User otherUser = mock(User.class);
+	    when(author.getId()).thenReturn(1L);
+	    when(otherUser.getId()).thenReturn(2L);
+	    query.setAuthor(author);
+	    
+	    queryValidator.validateEditByAuthor(query, author);
+
+	    try {
+            queryValidator.validateEditByAuthor(query, otherUser);
+            fail("should throw exception");
+        } catch (ValidationException e) {
+            List<Message> errors = e.getErrors();
+            assertEquals(QueryValidator.NOT_ALLOWED_MESSAGE, errors.get(0).getMessage());
+        }
+	    
 	}
 
 	@Test

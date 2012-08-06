@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 
@@ -18,23 +17,33 @@
 				<div class="block_head">
 					<div class="bheadl"></div>
 					<div class="bheadr"></div>
-					<h2>Queries</h2>
+					<h2>Execute SQL query</h2>
 				</div>		<!-- .block_head ends -->
 				
+				
 				<div class="block_content">
-					<table>
-						<tr>
-							<th>Name</th>
-							<th>Author</th>
-						</tr>
-						<c:forEach items="${queries}" var="query">
-							<tr>
-								<td><a href="<c:url value="/query/${query.id}"/>">${query.name}</a></td>
-								<td>${query.author.name}</td>
-								<td><fmt:formatDate value="${query.submitDate.time}" pattern="yyyy/MM/dd - HH:mm:ss"/></td>
-							</tr>
-						</c:forEach>
-					</table>
+					<c:if test="${!empty errors}">
+						<div class="message errormsg">
+							<p>
+								<c:forEach var="error" items="${errors}">
+							    	${error.category} - ${error.message}<br />
+								</c:forEach>
+							</p>
+						</div>
+					</c:if>
+					<form method="post" action="<c:url value="/query/${query.id}"/>">
+						<p>
+							<label for="updatedQuery.sqlQuery">SQL Query: </label> <br />
+							<textarea type="text" class="text small" name="updatedQuery.sqlQuery">${query.sqlQuery}</textarea>
+						</p>
+						<p class="note">
+							Please, do not get the source code. We are trying to convince industry to put 
+							their projects here. So, never try to get their code. Be honest!
+						</p>
+						<p>
+							<input type="submit" class="submit small" value="Update and execute" />
+						</p>
+					</form>
 				</div>		<!-- .block_content ends -->
 				<div class="bendl"></div>
 				<div class="bendr"></div>
