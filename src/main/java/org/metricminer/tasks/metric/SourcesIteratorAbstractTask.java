@@ -33,30 +33,38 @@ public abstract class SourcesIteratorAbstractTask implements RunnableTask {
 
 		log.debug("Starting to iterate over sources");
 
-		Map<Long, String> idsAndNames = sourceCodeDAO.listSourceCodeIdsAndNamesFor(project);
-		List<Long> sourceIds = new ArrayList<Long>(idsAndNames.keySet());
-
-		int totalIds = sourceIds.size();
-
-		for (int i = 0; i < totalIds; i += PAGE_SIZE) {
-			Long firstId = sourceIds.get(i);
-			Long lastId = calculateLastId(sourceIds, i);
-			
-			log.debug("Getting source codes (page " + i / PAGE_SIZE + ")");
-			
-			List<SourceCode> sources = sourceCodeDAO.listSourcesOf(project, firstId, lastId);
-			for (SourceCode sc : sources) {
-				log.debug("-- Working on " + idsAndNames.get(sc.getId()) + " id " + sc.getId());
-				manipulate(sc, idsAndNames.get(sc.getId()));
-			}
+		int page = 0;
+		Map<Long, String> idsAndNames = sourceCodeDAO.listSourceCodeIdsAndNamesFor(project, page++);
+		
+		while(idsAndNames.size()>0) {
 			System.gc();
+			log.debug("More " + idsAndNames.size() + " sources to work on!");
+
+			List<Long> sourceIds = new ArrayList<Long>(idsAndNames.keySet());
+			for (int i = 0; i < sourceIds.size(); i += PAGE_SIZE) {
+	
+				Long firstId = sourceIds.get(i);
+				Long lastId = calculateLastId(sourceIds, i);
+				
+				log.debug("Getting source codes (page " + i / PAGE_SIZE + ")");
+				
+				List<SourceCode> sources = sourceCodeDAO.listSourcesOf(project, firstId, lastId);
+				for (SourceCode sc : sources) {
+					log.debug("-- Working on " + idsAndNames.get(sc.getId()) + " id " + sc.getId());
+					manipulate(sc, idsAndNames.get(sc.getId()));
+				}
+				
+			}
+
+			idsAndNames = sourceCodeDAO.listSourceCodeIdsAndNamesFor(project, page++);
 		}
+		
 		log.debug("Calling onComplete");
 		onComplete();
 		log.debug("Finished iterating over sources");
 
 	}
-
+	
 	private Long calculateLastId(List<Long> sourceIds, int i) {
 		Long lastId;
 		int lastIdIndex = i + (PAGE_SIZE - 1);
