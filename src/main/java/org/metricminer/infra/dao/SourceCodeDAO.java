@@ -42,7 +42,6 @@ public class SourceCodeDAO {
 			.setFirstResult(500*page)
 			.setMaxResults(500);
 		List<Object[]> idsAndNames = query.list();
-		System.out.println("lala");
 		Map<Long, String> map = new TreeMap<Long, String>();
 		for (Object[] objects : idsAndNames) {
 			map.put((Long) objects[0], (String) objects[1]);
