@@ -33,12 +33,14 @@ public class SourceCodeDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public Map<Long, String> listSourceCodeIdsAndNamesFor(Project project) {
+	public Map<Long, String> listSourceCodeIdsAndNamesFor(Project project, int page) {
 		Query query = statelessSession.createQuery("select source.id, artifact.name from SourceCode source "
                 + "join source.artifact as artifact where artifact.project.id = :project_id "
                 + "and source.sourceSize < :sourceSize order by source.id asc");
 		query.setParameter("project_id", project.getId())
-			.setParameter("sourceSize", MAX_SOURCE_SIZE);
+			.setParameter("sourceSize", MAX_SOURCE_SIZE)
+			.setFirstResult(500*page)
+			.setMaxResults(500);
 		List<Object[]> idsAndNames = query.list();
 		System.out.println("lala");
 		Map<Long, String> map = new TreeMap<Long, String>();

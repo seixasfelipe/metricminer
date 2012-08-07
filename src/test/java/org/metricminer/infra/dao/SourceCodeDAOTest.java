@@ -65,10 +65,10 @@ public class SourceCodeDAOTest {
 		saveProjectData(project, otherProject);
 
 		Map<Long, String> idsMap = sourceCodeDAO
-				.listSourceCodeIdsAndNamesFor(project);
+				.listSourceCodeIdsAndNamesFor(project, 0);
 		List<Entry<Long, String>> idsProject = new ArrayList<Entry<Long, String>>(
 				idsMap.entrySet());
-		idsMap = sourceCodeDAO.listSourceCodeIdsAndNamesFor(otherProject);
+		idsMap = sourceCodeDAO.listSourceCodeIdsAndNamesFor(otherProject, 0);
 		List<Entry<Long, String>> idsOtherProject = new ArrayList<Entry<Long, String>>(
 				idsMap.entrySet());
 
@@ -90,7 +90,7 @@ public class SourceCodeDAOTest {
 		saveProjectData(project, otherProject);
 
 		Map<Long, String> idsAndNamesMap = sourceCodeDAO
-				.listSourceCodeIdsAndNamesFor(project);
+				.listSourceCodeIdsAndNamesFor(project, 0);
 		ArrayList<Entry<Long, String>> entries = new ArrayList<Entry<Long, String>>(
 				idsAndNamesMap.entrySet());
 		List<SourceCode> sources = sourceCodeDAO.listSourcesOf(project, entries
