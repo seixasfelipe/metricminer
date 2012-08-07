@@ -49,6 +49,7 @@ public abstract class SourcesIteratorAbstractTask implements RunnableTask {
 				log.debug("-- Working on " + idsAndNames.get(sc.getId()) + " id " + sc.getId());
 				manipulate(sc, idsAndNames.get(sc.getId()));
 			}
+			
 			System.gc();
 		}
 		log.debug("Calling onComplete");
