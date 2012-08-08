@@ -48,9 +48,7 @@ public class ProjectDao {
 
 	public Long commitersCountFor(Project project) {
 		Query query = session
-				.createQuery("select count(id) from Author where id "
-						+ "in (select author.id from Commit commit join commit.author author "
-						+ "where commit.project.id = :id group by author.id)");
+				.createQuery("select count(distinct c.author) from Commit c where c.project.id = :id");
 		query.setParameter("id", project.getId());
 		return (Long) query.uniqueResult();
 	}
