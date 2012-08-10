@@ -4,6 +4,7 @@ import java.lang.reflect.Method;
 import java.util.Calendar;
 
 import org.apache.log4j.Logger;
+import org.hibernate.stat.QueryStatistics;
 import org.hibernate.stat.Statistics;
 
 import br.com.caelum.vraptor.ioc.PrototypeScoped;
@@ -11,7 +12,7 @@ import br.com.caelum.vraptor.tasks.Task;
 import br.com.caelum.vraptor.tasks.scheduler.Scheduled;
 
 @PrototypeScoped
-@Scheduled(cron = "0 0/2 * * * ?")
+@Scheduled(cron = "0 0/30 0-23 * * ?")
 public class StatisticsLoggerJob implements Task {
 
 	private final Statistics stats;
@@ -32,7 +33,18 @@ public class StatisticsLoggerJob implements Task {
 				// do nothing!
 			}
 		}
-
+		
+		for(String q : stats.getQueries()) {
+			QueryStatistics qs = stats.getQueryStatistics(q);
+			for (Method m : QueryStatistics.class.getMethods()) {
+				try {
+					if (m.getName().startsWith("get"))
+						log.info("[Query " + q + "] " + m.getName() + " = " + m.invoke(qs));
+				} catch (Exception e) {
+					// do nothing!
+				}
+			}
+		}
 	}
 
 }
