@@ -172,7 +172,7 @@ public class ProjectDao {
 	@SuppressWarnings("unchecked")
 	public List<Project> tenNewestProjects() {
 		Query query = session
-				.createQuery("select project from Project as project order by creationDate asc")
+				.createQuery("select project from Project as project order by creationDate desc")
 				.setMaxResults(10);
 		return query.list();
 	}
