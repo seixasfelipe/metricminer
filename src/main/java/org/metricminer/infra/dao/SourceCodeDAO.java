@@ -60,6 +60,14 @@ public class SourceCodeDAO {
         
         return (List<SourceCode>) query.list();
 	}
+
+    public SourceCode findByIdAndSourceSize(Long id) {
+        Query query = statelessSession.createQuery("select source from SourceCode source " +
+        		"where id=:id and source.sourceSize < :sourceSize");
+        query.setParameter("id", id)
+             .setParameter("sourceSize", MAX_SOURCE_SIZE);
+        return (SourceCode) query.uniqueResult();
+    }
 	
 
 }

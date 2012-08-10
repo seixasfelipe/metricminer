@@ -112,6 +112,14 @@ public class SourceCodeDAOTest {
 		saveSourceCodesFor(B, 25);
 		saveSourceCodesFor(C, 12);
 	}
+	
+	@Test
+    public void shouldFindSourceCodeById() throws Exception {
+        SourceCode sourceCode = new SourceCode(null, null, "");
+        statelessSession.insert(sourceCode);
+        SourceCode sc = sourceCodeDAO.findByIdAndSourceSize(1L);
+        assertEquals(Long.valueOf(1L), sc.getId());
+    }
 
 	private void saveSourceCodesFor(Artifact A, int n) {
 		for (int i = 0; i < n; i++) {
