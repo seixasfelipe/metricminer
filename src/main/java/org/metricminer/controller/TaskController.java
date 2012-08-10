@@ -1,6 +1,5 @@
 package org.metricminer.controller;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.metricminer.infra.dao.TaskDao;
@@ -24,7 +23,6 @@ public class TaskController {
 	@Get("/tasks")
 	public void listTasks() {
 		List<Task> tasks = taskDao.listTasks();
-		Collections.reverse(tasks);
 	    result.include("tasks", tasks);
 	}
 }
