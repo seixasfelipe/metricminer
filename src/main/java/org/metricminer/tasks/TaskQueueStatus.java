@@ -1,9 +1,11 @@
 package org.metricminer.tasks;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.model.Task;
@@ -15,33 +17,51 @@ import br.com.caelum.vraptor.ioc.Component;
 @ApplicationScoped
 public class TaskQueueStatus {
 
-	private List<Task> tasksRunning;
 	private MetricMinerConfigs configs;
+    private Map<Task, Thread> threadByTask;
+    private final ThreadInspector inspector;
 
-	public TaskQueueStatus(MetricMinerConfigs configs) {
+	public TaskQueueStatus(MetricMinerConfigs configs, ThreadInspector inspector) {
 		this.configs = configs;
-		tasksRunning = new LinkedList<Task>();
+        this.inspector = inspector;
+		this.threadByTask = new HashMap<Task, Thread>();
 	}
 
-	public synchronized void addRunningTask(Task t) {
-		tasksRunning.add(t);
+	public synchronized void addRunningTask(Task t, Thread runningThread) {
+		threadByTask.put(t, runningThread);
 	}
 
 	public boolean isRunningTask() {
-		return !tasksRunning.isEmpty();
+		return !threadByTask.isEmpty();
 	}
 
 	public synchronized void finishCurrentTask(Task t) {
-		tasksRunning.remove(t);
+	    threadByTask.remove(t);
 	}
 
-	public boolean mayStartTask() {
-		return tasksRunning.size() < configs.getMaxConcurrentTasks();
+	public synchronized boolean mayStartTask() {
+		return threadByTask.size() < configs.getMaxConcurrentTasks();
 	}
 
-	public Collection<Task> getTaskQueue() {
-		return Collections.unmodifiableCollection(tasksRunning);
-	}
+    
+    public List<Task> cleanTasksNotRunning() {
+        ArrayList<Task> tasksToRemove = findTasksTasksNotRunning();
+        for (Task task : tasksToRemove) {
+            threadByTask.remove(task);
+        }
+        return tasksToRemove;
+    }
+
+    private ArrayList<Task> findTasksTasksNotRunning() {
+        Set<Entry<Task, Thread>> entrySet = threadByTask.entrySet();
+        ArrayList<Task> tasksToRemove = new ArrayList<Task>();
+        for (Entry<Task, Thread> entry : entrySet) {
+            if (!inspector.isRunning(entry.getValue())) {
+                tasksToRemove.add(entry.getKey());
+            }
+        }
+        return tasksToRemove;
+    }
 
 	public MetricMinerConfigs getConfigs() {
 		return configs;
@@ -49,6 +69,6 @@ public class TaskQueueStatus {
 
 	@Override
 	public String toString() {
-		return "MetricMiner status: " + tasksRunning.size() + " tasks running";
+		return "MetricMiner status: " + threadByTask.size() + " tasks running";
 	}
 }

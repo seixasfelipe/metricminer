@@ -9,6 +9,7 @@ public class TaskBuilder {
     private RunnableTaskFactory runnableTaskFactory;
     private Integer position;
     private Project project;
+    private Long id;
 
     public TaskBuilder() {
         position = 0;
@@ -26,7 +27,7 @@ public class TaskBuilder {
     }
 
     public Task build() {
-        return new Task(project, name, runnableTaskFactory, position);
+        return new Task(project, name, runnableTaskFactory, position, id);
     }
 
     public TaskBuilder forProject(Project project) {
@@ -36,6 +37,11 @@ public class TaskBuilder {
 
     public TaskBuilder withPosition(Integer position) {
         this.position = position;
+        return this;
+    }
+    
+    public TaskBuilder withId(Long id) {
+        this.id = id;
         return this;
     }
 

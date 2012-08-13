@@ -61,6 +61,12 @@ public class Task implements Comparable {
         this.position = position;
     }
 
+    public Task(Project project, String name,
+            RunnableTaskFactory runnableTaskFactory, Integer position, Long id) {
+        this(project, name, runnableTaskFactory, position);
+        this.id = id;
+    }
+
     public void start() {
         this.status = TaskStatus.STARTED;
         this.startDate = new GregorianCalendar();
@@ -197,5 +203,10 @@ public class Task implements Comparable {
     private boolean hasFailed() {
         return this.status == TaskStatus.FAILED;
     }
-
+    
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+    
 }

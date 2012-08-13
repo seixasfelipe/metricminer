@@ -1,5 +1,7 @@
 package org.metricminer.tasks.runner;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionException;
@@ -25,37 +27,40 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     Session taskSession;
     StatelessSession statelessSession;
     Logger log;
-    private TaskQueueStatus status;
-	private MetricMinerConfigs config;
+    private TaskQueueStatus queueStatus;
+    private MetricMinerConfigs config;
 
     public TaskRunner(TaskQueueStatus status, SessionFactory sessionFactory) {
-    	this.status = status;
-    	this.config = status.getConfigs();
-    	this.daoSession = sessionFactory.openSession();
-    	this.taskSession = sessionFactory.openSession();
-    	this.statelessSession = sessionFactory.openStatelessSession();
-    	this.taskDao = new TaskDao(daoSession);
-    	log = Logger.getLogger(TaskRunner.class);
+        this.queueStatus = status;
+        this.config = status.getConfigs();
+        this.daoSession = sessionFactory.openSession();
+        this.taskSession = sessionFactory.openSession();
+        this.statelessSession = sessionFactory.openStatelessSession();
+        this.taskDao = new TaskDao(daoSession);
+        log = Logger.getLogger(TaskRunner.class);
     }
 
     @Override
     public void execute() {
-    	try {
+        try {
+            List<Task> tasksToClean = queueStatus.cleanTasksNotRunning();
+            failZombieTasks(tasksToClean);
             taskToRun = taskDao.getFirstQueuedTask();
-            if (!status.mayStartTask() || taskToRun == null || !taskToRun.isDependenciesFinished()) {
-            	if (taskToRun != null && taskToRun.hasFailedDependencies()) {
-            		log.error(taskToRun + " failed because a dependency for this task also failed.");
-            		daoSession.beginTransaction();
-            		taskToRun.fail();
-            		daoSession.update(taskToRun);
-            		daoSession.getTransaction().commit();
-            	}
+            if (shouldNotStartTask()) {
+                if (taskHasFailedDependency()) {
+                    log.error(taskToRun
+                            + " failed because a dependency for this task also failed.");
+                    daoSession.beginTransaction();
+                    taskToRun.fail();
+                    daoSession.update(taskToRun);
+                    daoSession.getTransaction().commit();
+                }
                 closeSessions();
                 return;
             }
             log.info("Starting task: " + taskToRun);
             taskToRun.start();
-            status.addRunningTask(taskToRun);
+            queueStatus.addRunningTask(taskToRun, Thread.currentThread());
             daoSession.beginTransaction();
             taskDao.update(taskToRun);
             daoSession.getTransaction().commit();
@@ -67,12 +72,34 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
         }
     }
 
-    private void runTask(Session taskSession) throws InstantiationException, IllegalAccessException {
+    private void failZombieTasks(List<Task> tasksToClean) {
+        for (Task task : tasksToClean) {
+            log.error("The thread running: " + task + " died, setting status to FAILED");
+            daoSession.beginTransaction();
+            task.fail();
+            daoSession.update(task);
+            daoSession.getTransaction().commit();
+        }
+
+    }
+
+    private boolean taskHasFailedDependency() {
+        return taskToRun != null && taskToRun.hasFailedDependencies();
+    }
+
+    private boolean shouldNotStartTask() {
+        return !queueStatus.mayStartTask() || taskToRun == null
+                || !taskToRun.isDependenciesFinished();
+    }
+
+    private void runTask(Session taskSession) throws InstantiationException,
+            IllegalAccessException {
         RunnableTaskFactory runnableTaskFactory = (RunnableTaskFactory) taskToRun
                 .getRunnableTaskFactoryClass().newInstance();
         taskSession.beginTransaction();
         log.debug("Running task");
-        runnableTaskFactory.build(taskToRun, taskSession, statelessSession, config).run();
+        runnableTaskFactory.build(taskToRun, taskSession, statelessSession,
+                config).run();
         Transaction transaction = taskSession.getTransaction();
         if (!transaction.isActive()) {
             transaction.begin();
@@ -82,7 +109,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
 
     private void finishTask() {
         taskToRun.finish();
-        status.finishCurrentTask(taskToRun);
+        queueStatus.finishCurrentTask(taskToRun);
         Transaction tx = daoSession.beginTransaction();
         taskDao.update(taskToRun);
         log.info("Finished running task: " + taskToRun);
@@ -92,7 +119,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
 
     private void handleError(Throwable e) {
         taskToRun.fail();
-        status.finishCurrentTask(taskToRun);
+        queueStatus.finishCurrentTask(taskToRun);
         Transaction tx = daoSession.beginTransaction();
         taskDao.update(taskToRun);
         tx.commit();
@@ -106,7 +133,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
             taskSession.close();
         try {
             statelessSession.close();
-        } catch(SessionException e) {
+        } catch (SessionException e) {
         }
     }
 
