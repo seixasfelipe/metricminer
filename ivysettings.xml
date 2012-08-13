@@ -7,6 +7,7 @@
       <ibiblio name="jboss" m2compatible="true" root="http://repository.jboss.com/maven2/" />
       <ibiblio name="jboss2" m2compatible="true" root="http://repository.jboss.com/nexus/content/groups/public/" />
       <ibiblio name="sonatype-oss-public" m2compatible="true" root="https://oss.sonatype.org/content/groups/public/" />
+      <ibiblio name="terracotta" m2compatible="true" root="http://repo.terracotta.org/maven2/" />
     </chain>
   </resolvers>
 </ivysettings>
