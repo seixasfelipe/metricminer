@@ -10,6 +10,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
@@ -27,7 +28,7 @@ public class Task implements Comparable {
     @Id
     @GeneratedValue
     private Long id;
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(cascade=CascadeType.PERSIST, fetch=FetchType.LAZY)
     private Project project;
     private String name;
     private Class runnableTaskFactoryClass;
@@ -39,9 +40,9 @@ public class Task implements Comparable {
     private Calendar endDate;
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
-    @ManyToMany
+    @ManyToMany(fetch=FetchType.LAZY)
     private List<Task> depends;
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
     private List<TaskConfigurationEntry> configurationEntries;
     private int position;
 
