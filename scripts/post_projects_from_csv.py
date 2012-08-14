@@ -35,4 +35,4 @@ for project in projects:
     response = conn.getresponse()
     print response.status, response.reason
     
-    time.sleep(2)
+    time.sleep(1)
