@@ -71,4 +71,10 @@ public class TaskQueueStatus {
 	public String toString() {
 		return "MetricMiner status: " + threadByTask.size() + " tasks running";
 	}
+	
+	public List<Task> getTaskQueue() {
+	    Set<Task> tasks = threadByTask.keySet();
+        return new ArrayList<Task>(tasks);
+	}
+	
 }
