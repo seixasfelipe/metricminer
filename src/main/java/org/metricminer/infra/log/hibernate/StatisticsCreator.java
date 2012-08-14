@@ -1,4 +1,4 @@
-package org.metricminer.infra.hibernate;
+package org.metricminer.infra.log.hibernate;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.stat.Statistics;

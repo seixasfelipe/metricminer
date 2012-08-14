@@ -1,4 +1,4 @@
-package org.metricminer.infra.hibernate;
+package org.metricminer.infra.log.hibernate;
 
 import java.lang.reflect.Method;
 import java.util.Calendar;

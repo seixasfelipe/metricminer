@@ -18,6 +18,15 @@
         </layout>
         <param name="DatePattern" value=".yyyy-ww" />
 	</appender>
+
+		<appender name="memoryfile" class="org.apache.log4j.FileAppender">
+		<param name="File" value="/var/log/MemoryStats.log" />
+        <param name="Append" value="false" />
+        <layout class="org.apache.log4j.PatternLayout">
+          <param name="ConversionPattern" value="%d{HH:mm:ss,SSS} %5p [%-20c{1}] %m%n" />
+        </layout>
+        <param name="DatePattern" value=".yyyy-ww" />
+	</appender>
 	
 	<appender name="errorlog" class="org.apache.log4j.FileAppender">
 		<param name="File" value="/var/log/MetricMiner.error.log" />
@@ -43,11 +52,17 @@
 		<appender-ref ref="logfile" />
 	</logger>
 
-	<logger name="org.metricminer.infra.hibernate">
+	<logger name="org.metricminer.infra.log.hibernate">
 		<priority value="DEBUG" />
 		<appender-ref ref="statsfile" />
 	</logger>
+
+	<logger name="org.metricminer.infra.log.memory">
+		<priority value="DEBUG" />
+		<appender-ref ref="memoryfile" />
+	</logger>
 	
+			
 	<category name="br.com.caelum.vraptor">
 		<priority value="INFO" />
 		<appender-ref ref="logfile" />
