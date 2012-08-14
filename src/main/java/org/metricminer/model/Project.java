@@ -52,7 +52,7 @@ public class Project {
 	private Commit lastCommit;
 	private Long totalCommits;
 	private Long totalCommiters;
-	@OneToMany(mappedBy="project")
+	@OneToMany(mappedBy="project", fetch=FetchType.LAZY)
 	private List<CalculatedMetric> calculatedMetrics;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar creationDate;
@@ -282,4 +282,10 @@ public class Project {
 		}
 		return false;
 	}
+
+    @Override
+    public String toString() {
+        return "Project [id=" + id + ", name=" + name + "]";
+    }
+	
 }
