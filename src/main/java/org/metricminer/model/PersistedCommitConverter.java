@@ -95,14 +95,14 @@ public class PersistedCommitConverter {
     private Author searchForPreviouslySavedAuthor(String name, Session session) {
     	if (savedAuthors.containsKey(name))
     		return savedAuthors.get(name);
-        Author author = (Author) session.createCriteria(Author.class).add(
+        Author author = (Author) session.createCriteria(Author.class).setCacheable(true).add(
                 Restrictions.eq("name", name)).uniqueResult();
         savedAuthors.put(name, author);
         return author;
     }
 
     private Artifact searchForPreviouslySavedArtifact(String name, Project project, Session session) {
-        Artifact artifact = (Artifact) session.createCriteria(Artifact.class).add(
+        Artifact artifact = (Artifact) session.createCriteria(Artifact.class).setCacheable(true).add(
                 Restrictions.eq("name", name)).add(Restrictions.eq("project", project))
                 .uniqueResult();
         return artifact;
