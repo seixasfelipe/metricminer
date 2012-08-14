@@ -7,6 +7,7 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.StatelessSession;
 import org.metricminer.model.CalculatedMetric;
+import org.metricminer.model.Project;
 import org.metricminer.model.SourceCode;
 import org.metricminer.model.Task;
 import org.metricminer.tasks.metric.common.Metric;
@@ -53,7 +54,9 @@ public class CalculateAllMetricsTask extends SourcesIteratorAbstractTask {
 	protected void onComplete() {
 		statelessSession.beginTransaction();
 		for (Metric metric : metrics) {
-			CalculatedMetric calculatedMetric = new CalculatedMetric(task.getProject(),
+		    Project project = task.getProject();
+		    project = (Project) statelessSession.get(Project.class, project.getId());
+			CalculatedMetric calculatedMetric = new CalculatedMetric(project,
 					metric.getFactoryClass());
 			statelessSession.insert(calculatedMetric);
 		}
