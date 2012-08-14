@@ -12,17 +12,17 @@ public class CalculatedMetric {
 	private Long id;
 	@ManyToOne
 	private Project project;
-	private Class metricFactoryClass;
+	private Class<?> metricFactoryClass;
 	
 	public CalculatedMetric() {
 	}
 
-	public CalculatedMetric(Project project, Class metricFactoryClass) {
+	public CalculatedMetric(Project project, Class<?> metricFactoryClass) {
 		this.project = project;
 		this.metricFactoryClass = metricFactoryClass;
 	}
 	
-	public Class getMetricFactoryClass() {
+	public Class<?> getMetricFactoryClass() {
 		return metricFactoryClass;
 	}
 
