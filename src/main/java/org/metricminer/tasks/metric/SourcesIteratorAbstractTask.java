@@ -47,15 +47,12 @@ public abstract class SourcesIteratorAbstractTask implements RunnableTask {
 				Long lastId = calculateLastId(sourceIds, i);
 				
 				log.debug("Getting source codes (page " + i / PAGE_SIZE + ")");
-				
-				for (Long id = firstId; id <= lastId; id++) {
-				    if (!idsAndNames.containsKey(id)) {
-				        continue;
-				    }
-                    SourceCode sc = sourceCodeDAO.findByIdAndSourceSize(id);
-                    log.debug("-- Working on " + idsAndNames.get(id) + " id " + id);
+				List<SourceCode> sources = sourceCodeDAO.listSourcesOf(project, firstId, lastId);
+
+                for (SourceCode sc : sources) {
+                    log.debug("-- Working on " + idsAndNames.get(sc.getId()) + " id " + sc.getId());
                     manipulate(sc, idsAndNames.get(sc.getId()));
-                }
+				}
 				
 			}
 
