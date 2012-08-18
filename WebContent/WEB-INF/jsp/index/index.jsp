@@ -52,7 +52,7 @@
 						</tr>
 						<c:forEach items="${newProjects}" var="project">
 							<tr>
-								<td><a href="<c:url value="/project/${project.id}"/>">${project.name}</a></td>
+								<td><a href="<c:url value="/projects/${project.id}"/>">${project.name}</a></td>
 							</tr>
 						</c:forEach>
 					</table>
