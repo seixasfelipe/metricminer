@@ -13,6 +13,7 @@ public class TaskBuilder {
 
     public TaskBuilder() {
         position = 0;
+        name = "Default task name";
         this.runnableTaskFactory = new SCMCloneTaskFactory();
     }
 

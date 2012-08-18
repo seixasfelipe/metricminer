@@ -1,12 +1,14 @@
 package org.metricminer.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
 
 import org.junit.Test;
+import org.metricminer.tasks.metric.CalculateAllMetricsTaskFactory;
 import org.metricminer.tasks.metric.cc.CCMetricFactory;
 import org.metricminer.tasks.metric.lcom.LComMetricFactory;
 import org.metricminer.tasks.metric.methods.MethodsCountMetricFactory;
@@ -63,6 +65,25 @@ public class ProjectTest {
 						"CC metric", MethodsCountMetricFactory.class)));
 
 		assertTrue(avaiable.isEmpty());
+	}
+	
+	@Test
+    public void shouldVerifyIfWillCalculateAllMetrics() throws Exception {
+	    Project project = new Project();
+	    Task calculateAllMetricsTask = new TaskBuilder().
+	            withRunnableTaskFactory(new CalculateAllMetricsTaskFactory()).build();
+        project.addTask(calculateAllMetricsTask);
+        assertTrue(project.willCalculateAllMetrics());
+    }
+	
+	@Test
+	public void shouldNotConsiderThatWillCalculateAllMetricsIfThatTaskIsFinished() throws Exception {
+	    Project project = new Project();
+	    Task calculateAllMetricsTask = new TaskBuilder().
+	            withRunnableTaskFactory(new CalculateAllMetricsTaskFactory()).build();
+	    project.addTask(calculateAllMetricsTask);
+	    calculateAllMetricsTask.finish();
+	    assertFalse(project.willCalculateAllMetrics());
 	}
 
 	private void setupProject(Project project) {

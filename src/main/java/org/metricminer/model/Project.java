@@ -265,7 +265,7 @@ public class Project {
 
 	public void addNewMetrics(List<RegisteredMetric> registeredMetrics) {
 		for (RegisteredMetric registeredMetric : registeredMetrics) {
-			if (!alreadyCalculated(registeredMetric)) {
+			if (!alreadyCalculated(registeredMetric) && !willCalculateAllMetrics()) {
 				addMetricToCalculate(registeredMetric.getMetricFactoryClassName());
 			}
 		}
@@ -286,6 +286,15 @@ public class Project {
     @Override
     public String toString() {
         return "Project [id=" + id + ", name=" + name + "]";
+    }
+
+    public boolean willCalculateAllMetrics() {
+        for (Task task : tasks) {
+            if (!task.hasFinished() && task.getRunnableTaskFactoryClass().equals(CalculateAllMetricsTaskFactory.class)) {
+                return true;
+            }
+        }
+        return false;
     }
 	
 }
