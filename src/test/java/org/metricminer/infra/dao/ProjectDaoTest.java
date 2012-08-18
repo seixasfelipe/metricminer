@@ -134,16 +134,16 @@ public class ProjectDaoTest {
 	public void shouldGetLastTenProjects() throws Exception {
 		MetricMinerConfigs configs = mock(MetricMinerConfigs.class);
 		when(configs.getRepositoriesDir()).thenReturn("");
+		session.save(new Project("this should not appear", "", configs));
 		for (int i = 0; i < 10; i++) {
 			Thread.sleep(5);
 			session.save(new Project("new project " + i, "", configs));
 		}
-		session.save(new Project("this should not appear", "", configs));
 		List<Project> projects = projectDao.tenNewestProjects();
-		int i = 0;
+		int i = 9;
 		for (Project project : projects) {
 			assertEquals("new project " + i, project.getName());
-			i++;
+			i--;
 		}
 	}
 	
