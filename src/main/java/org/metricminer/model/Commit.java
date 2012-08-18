@@ -6,11 +6,13 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.Type;
 
@@ -25,21 +27,24 @@ public class Commit {
 	private Author author;
 	private Calendar date;
 	@Type(type = "text")
-	private String message;
-	@Type(type = "text")
-	private String diff;
-	@ManyToMany(cascade = CascadeType.ALL)
+	
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	private CommitMessage message;
+	@OneToOne(cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	private Diff diff;
+
+	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Artifact> artifacts;
-	@OneToMany(mappedBy = "commit", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "commit", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Modification> modifications;
 	private String priorCommitId;
-	@OneToMany(mappedBy = "commit")
+	@OneToMany(mappedBy = "commit", fetch = FetchType.LAZY)
 	private List<SourceCode> sources;
 	@ManyToOne
 	private Project project;
 
 	public Commit(String commitId, Author author, Calendar date,
-			String message, String diff, String priorCommitId, Project project) {
+			CommitMessage message, Diff diff, String priorCommitId, Project project) {
 		this();
 		this.commitId = commitId;
 		this.author = author;
@@ -80,19 +85,19 @@ public class Commit {
 		this.date = date;
 	}
 
-	public String getMessage() {
+	public CommitMessage getMessage() {
 		return message;
 	}
 
-	public void setMessage(String message) {
+	public void setMessage(CommitMessage message) {
 		this.message = message;
 	}
 
-	public String getDiff() {
+	public Diff getDiff() {
 		return diff;
 	}
 
-	public void setDiff(String diff) {
+	public void setDiff(Diff diff) {
 		this.diff = diff;
 	}
 

@@ -1,6 +1,5 @@
 package org.metricminer.model;
 
-import org.metricminer.MetricMinerExeption;
 
 public class RegisteredMetric {
 	private String name;
@@ -26,14 +25,6 @@ public class RegisteredMetric {
 		String className = metricFactoryClass.toString();
 		className = className.substring(6); // class org.metricminer.etcetc
 		return className;
-	}
-
-	private void setMetricFactoryClassName(String className) {
-		try {
-			this.metricFactoryClass = Class.forName(className);
-		} catch (ClassNotFoundException e) {
-			throw new MetricMinerExeption("Class not" + className + " found", e);
-		}
 	}
 
 	@Override

@@ -25,5 +25,13 @@ public class CalculatedMetric {
 	public Class<?> getMetricFactoryClass() {
 		return metricFactoryClass;
 	}
+	
+	public Project getProject() {
+		return project;
+	}
+	
+	public Long getId() {
+		return id;
+	}
 
 }
