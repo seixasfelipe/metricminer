@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -28,7 +30,7 @@ public class Task implements Comparable {
     @Id
     @GeneratedValue
     private Long id;
-    @ManyToOne(cascade=CascadeType.PERSIST, fetch=FetchType.LAZY)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
     private Project project;
     private String name;
     private Class runnableTaskFactoryClass;
@@ -40,9 +42,9 @@ public class Task implements Comparable {
     private Calendar endDate;
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
-    @ManyToMany(fetch=FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
     private List<Task> depends;
-    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TaskConfigurationEntry> configurationEntries;
     private int position;
 
@@ -149,6 +151,14 @@ public class Task implements Comparable {
         return Collections.unmodifiableList(configurationEntries);
     }
 
+    public Map<TaskConfigurationEntryKey, TaskConfigurationEntry> getConfigurationEntriesMap() {
+        Map<TaskConfigurationEntryKey, TaskConfigurationEntry> map = new HashMap<TaskConfigurationEntryKey, TaskConfigurationEntry>();
+        for (TaskConfigurationEntry entry : configurationEntries) {
+            map.put(entry.getKey(), entry);
+        }
+        return map;
+    }
+
     public Calendar getEndDate() {
         return endDate;
     }
@@ -204,10 +214,10 @@ public class Task implements Comparable {
     private boolean hasFailed() {
         return this.status == TaskStatus.FAILED;
     }
-    
+
     @Override
     public int hashCode() {
         return id.hashCode();
     }
-    
+
 }

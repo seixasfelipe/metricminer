@@ -155,7 +155,7 @@ public class Project {
 				.forProject(this).withRunnableTaskFactory(new CalculateMetricTaskFactory())
 				.withPosition(taskCount()).build();
 
-		metricTask.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRICFACTORYCLASS,
+		metricTask.addTaskConfigurationEntry(TaskConfigurationEntryKey.METRIC_FACTORY_CLASS,
 				metricFactoryClassName);
 
 		metricTask.addDependency(parseLogTask);

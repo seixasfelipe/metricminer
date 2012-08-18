@@ -1,5 +1,5 @@
 package org.metricminer.model;
 
 public enum TaskConfigurationEntryKey {
-    METRICFACTORYCLASS, QUERY_ID,
+    METRIC_FACTORY_CLASS, QUERY_ID, PROJECT_METRIC_FACTORY_CLASS,
 }

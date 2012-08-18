@@ -16,7 +16,7 @@ public class CalculateMetricTaskFactory implements RunnableTaskFactory {
 	public RunnableTask build(Task task, Session session, StatelessSession statelessSession,
 			MetricMinerConfigs config) {
 		String metricFactoryName = task
-				.getTaskConfigurationValueFor(TaskConfigurationEntryKey.METRICFACTORYCLASS);
+				.getTaskConfigurationValueFor(TaskConfigurationEntryKey.METRIC_FACTORY_CLASS);
 		try {
 			MetricFactory metricFactory = (MetricFactory) Class.forName(metricFactoryName)
 					.newInstance();
