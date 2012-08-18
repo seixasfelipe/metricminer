@@ -77,7 +77,7 @@ public class PersistedCommitConverter {
 	private Commit convertCommit(CommitData data, Session session, Author author, Project project)
 			throws ParseException {
 		Commit commit = new Commit(data.getCommitId(), author, convertDate(data),
-                data.getMessage(), data.getDiff(), data.getPriorCommit(), project);
+                new CommitMessage(data.getMessage()), new Diff(data.getDiff()), data.getPriorCommit(), project);
         session.save(commit);
 		return commit;
 	}

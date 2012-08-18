@@ -42,6 +42,8 @@
         <mapping class="org.metricminer.model.QueryResult"/>  
         <mapping class="org.metricminer.model.CalculatedMetric"/>  
         <mapping class="org.metricminer.model.User"/>  
+        <mapping class="org.metricminer.model.Diff"/>  
+        <mapping class="org.metricminer.model.CommitMessage"/>  
         
         <mapping class="org.metricminer.tasks.metric.lcom.LComResult" />
         <mapping class="org.metricminer.tasks.metric.cc.CCResult" />

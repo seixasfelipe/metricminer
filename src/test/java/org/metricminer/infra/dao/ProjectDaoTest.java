@@ -19,6 +19,8 @@ import org.junit.Test;
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.model.Author;
 import org.metricminer.model.Commit;
+import org.metricminer.model.CommitMessage;
+import org.metricminer.model.Diff;
 import org.metricminer.model.Project;
 
 public class ProjectDaoTest {
@@ -160,7 +162,7 @@ public class ProjectDaoTest {
 	private void addCommitsOfAuthor(int totalCommits, Project project,
 			Author author, Calendar commitDate) {
 		for (int i = 0; i < totalCommits; i++) {
-			session.save(new Commit("" + i, author, commitDate, "", "", "",
+			session.save(new Commit("" + i, author, commitDate, new CommitMessage(""), new Diff(""), "",
 					project));
 		}
 	}

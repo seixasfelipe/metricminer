@@ -30,7 +30,7 @@ public class Task implements Comparable {
     @Id
     @GeneratedValue
     private Long id;
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.LAZY)
+    @ManyToOne(cascade=CascadeType.PERSIST)
     private Project project;
     private String name;
     private Class runnableTaskFactoryClass;

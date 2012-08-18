@@ -35,16 +35,16 @@ public class Project {
 	private Long id;
 	private String name;
 	private String scmUrl;
-	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<ProjectConfigurationEntry> configurationEntries;
 	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Artifact> artifacts;
-	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Task> tasks;
 	private String projectPath;
 	@ManyToMany(fetch = FetchType.LAZY)
 	private List<Tag> tags;
-	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Commit> commits;
 	@OneToOne
 	private Commit firstCommit;
@@ -52,7 +52,7 @@ public class Project {
 	private Commit lastCommit;
 	private Long totalCommits;
 	private Long totalCommiters;
-	@OneToMany(mappedBy="project", fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="project", fetch = FetchType.LAZY)
 	private List<CalculatedMetric> calculatedMetrics;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar creationDate;
