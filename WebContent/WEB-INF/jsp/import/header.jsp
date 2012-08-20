@@ -8,10 +8,10 @@
 	
 	<h1><a href="${linkTo[IndexController].index}">MetricMiner</a></h1>
 	<ul id="nav">
-		<li><a href="${linkTo[ProjectController].list}">Projects</a>
+		<li><a href="<c:url value="/projects/1"/>">Projects</a>
 			<ul>
 				<li><a href="<c:url value="/projects/new" />">New</a></li>
-				<li><a href="<c:url value="/projects/1" />">List</a></li>
+				<li><a href="<c:url value="/projects/1"/>">List</a></li>
 			</ul>
 		</li>
 		<li><a href="${linkTo[QueryController].listQueries}">Queries</a>
