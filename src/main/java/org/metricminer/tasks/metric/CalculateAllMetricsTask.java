@@ -42,9 +42,11 @@ public class CalculateAllMetricsTask extends SourcesIteratorAbstractTask {
 			inputStream.close();
 			Collection<MetricResult> results = metric.resultsToPersistOf(sourceCode);
 
+			statelessSession.beginTransaction();
 			for (MetricResult result : results) {
 				statelessSession.insert(result);
 			}
+			statelessSession.getTransaction().commit();
 		} catch (Throwable t) {
 			log.error("Unable to calculate metric: ", t);
 		}
