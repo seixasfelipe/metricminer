@@ -46,9 +46,9 @@ public class Project {
 	private List<Tag> tags;
 	@OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Commit> commits;
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	private Commit firstCommit;
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	private Commit lastCommit;
 	private Long totalCommits;
 	private Long totalCommiters;
