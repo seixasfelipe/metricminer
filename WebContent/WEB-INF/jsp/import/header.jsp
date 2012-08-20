@@ -11,7 +11,7 @@
 		<li><a href="${linkTo[ProjectController].list}">Projects</a>
 			<ul>
 				<li><a href="<c:url value="/projects/new" />">New</a></li>
-				<li><a href="${linkTo[ProjectController].list}">List</a></li>
+				<li><a href="<c:url value="/projects/1" />">List</a></li>
 			</ul>
 		</li>
 		<li><a href="${linkTo[QueryController].listQueries}">Queries</a>

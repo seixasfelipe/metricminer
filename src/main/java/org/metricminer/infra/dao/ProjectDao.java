@@ -17,7 +17,8 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Component
 public class ProjectDao {
-	private final Session session;
+	static final int PAGE_SIZE = 20;
+    private final Session session;
 
 	public ProjectDao(Session session) {
 		this.session = session;
@@ -36,6 +37,22 @@ public class ProjectDao {
 
 	public Project findProjectBy(Long id) {
 		return (Project) session.load(Project.class, id);
+	}
+	
+	@SuppressWarnings("unchecked")
+    public List<Project> listPage(int page) {
+	    page--;
+	    return (List<Project>) session.createCriteria(Project.class)
+	        .setMaxResults(PAGE_SIZE)
+	        .setFirstResult(page * PAGE_SIZE)
+	        .list();
+    }
+	
+	public long totalPages() {
+	    Query query = session.createQuery("select count(id) as total from Project");
+	    Long total = (Long) query.uniqueResult();
+	    double pages = (double) total/(double)  PAGE_SIZE;
+        return (long) Math.ceil(pages);
 	}
 
 	public Long commitCountFor(Project project) {

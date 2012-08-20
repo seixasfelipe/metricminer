@@ -27,6 +27,7 @@ public class ProjectDaoTest {
 
 	private static Session session;
 	private static ProjectDao projectDao;
+    private MetricMinerConfigs mockedConfigs;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -39,6 +40,8 @@ public class ProjectDaoTest {
 	@Before
 	public void setUp() {
 		session.getTransaction().begin();
+		mockedConfigs = mock(MetricMinerConfigs.class);
+		when(mockedConfigs.getRepositoriesDir()).thenReturn("");
 	}
 
 	@After
@@ -134,12 +137,10 @@ public class ProjectDaoTest {
 	
 	@Test
 	public void shouldGetLastTenProjects() throws Exception {
-		MetricMinerConfigs configs = mock(MetricMinerConfigs.class);
-		when(configs.getRepositoriesDir()).thenReturn("");
-		session.save(new Project("this should not appear", "", configs));
+		session.save(new Project("this should not appear", "", mockedConfigs));
 		for (int i = 0; i < 10; i++) {
 			Thread.sleep(5);
-			session.save(new Project("new project " + i, "", configs));
+			session.save(new Project("new project " + i, "", mockedConfigs));
 		}
 		List<Project> projects = projectDao.tenNewestProjects();
 		int i = 9;
@@ -149,6 +150,13 @@ public class ProjectDaoTest {
 		}
 	}
 	
+	@Test
+    public void shouldGetTotalPages() throws Exception {
+	    for (int i = 0; i < 100; i++) {
+            session.save(new Project("new project " + i, "", mockedConfigs));
+        }
+	    assertEquals(100/ProjectDao.PAGE_SIZE, projectDao.totalPages());
+    }
 
 	private Project aProjectWithCommits(int totalCommits, Calendar commitDate) {
 		Project project = new Project();
@@ -158,6 +166,7 @@ public class ProjectDaoTest {
 		addCommitsOfAuthor(totalCommits, project, author, commitDate);
 		return project;
 	}
+	
 
 	private void addCommitsOfAuthor(int totalCommits, Project project,
 			Author author, Calendar commitDate) {

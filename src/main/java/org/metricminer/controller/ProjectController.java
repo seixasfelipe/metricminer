@@ -39,12 +39,14 @@ public class ProjectController {
         result.include("metrics", configs.getRegisteredMetrics());
     }
 
-    @Get("/projects")
-    public void list() {
-        result.include("projects", dao.listAll());
+    @Get("/projects/{page}")
+    public void list(int page) {
+        result.include("projects", dao.listPage(page));
+        result.include("totalPages", dao.totalPages());
+        result.include("currentPage", page);
     }
 
-    @Get("/projects/{id}")
+    @Get("/project/{id}")
     public void detail(Long id) {
         Project project = dao.findProjectBy(id);
         result.include("tags", tokenize.tags(project.getTags()));
@@ -113,7 +115,7 @@ public class ProjectController {
             }
         }
         dao.save(completeProject);
-        result.redirectTo(ProjectController.class).list();
+        result.redirectTo(ProjectController.class).list(1);
 	}
 
 }

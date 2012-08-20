@@ -36,7 +36,7 @@
 						<tbody>
 							<c:forEach items="${projects}" var="project">
 								<tr>
-									<td><a href="<c:url value="/projects/${project.id}" />">${project.name}</a></td>
+									<td><a href="<c:url value="/project/${project.id}" />">${project.name}</a></td>
 									<td>${project.scmUrl}</td>
 									<td>
 										<c:forEach items="${project.tags}" var="tag">
@@ -48,7 +48,17 @@
 							
 						</tbody>
 					</table>
-					
+					<div class="pagination right">
+						<c:if test="${currentPage != 1}">
+							<a href="<c:url value="/projects/${currentPage - 1}"/>">«</a>
+						</c:if>
+						<c:forEach var="i" begin="1" end="${totalPages}" step="1" varStatus ="status">
+							<a href="<c:url value="/projects/${i}" />">${i}</a>
+						</c:forEach>
+						<c:if test="${currentPage < totalPages}">
+							<a href="<c:url value="/projects/${currentPage + 1}"/>">»</a>
+						</c:if>
+					</div>
 				</div>		<!-- .block_content ends -->
 				
 				<div class="bendl"></div>
