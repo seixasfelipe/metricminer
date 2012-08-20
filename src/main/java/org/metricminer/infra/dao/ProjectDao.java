@@ -17,7 +17,7 @@ import br.com.caelum.vraptor.ioc.Component;
 
 @Component
 public class ProjectDao {
-	static final int PAGE_SIZE = 20;
+	static final int PAGE_SIZE = 500;
     private final Session session;
 
 	public ProjectDao(Session session) {
