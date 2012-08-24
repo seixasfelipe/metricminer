@@ -40,7 +40,7 @@ public class RScriptExecutor {
 			String algorithm = test.algorithmFor(set1, set2);
 			String rFile = saveFile(algorithm);
 			
-			String output = cmd.execute("RScript " + rFile, ".");
+			String output = cmd.execute("Rscript " + rFile, ".");
 			
 			return new StatisticalTestResult(q1, q2, test, output);
 		}
