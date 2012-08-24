@@ -32,6 +32,7 @@ public class MetricMinerConfigs {
 	private final ServletContext context;
 	private final String configPath = "/WEB-INF/metricminer.properties";
 	private String queriesResultDir;
+	private String statsResultDir;
 
     public MetricMinerConfigs(ClassScan scan, ServletContext context) {
         this.scan = scan;
@@ -63,6 +64,9 @@ public class MetricMinerConfigs {
 		properties.load(new FileInputStream(configFilePath));
 		this.repositoriesDir = properties.getProperty("repositories.dir", "/tmp/metricminer");
 		this.queriesResultDir = properties.getProperty("queries.results.dir", "/tmp/");
+
+		this.statsResultDir = properties.getProperty("stats.results.dir", "/tmp/");
+
 		File file = new File(repositoriesDir);
 		if (!file.canWrite())
 			throw new MetricMinerExeption(repositoriesDir + " is not writable.");
@@ -103,6 +107,10 @@ public class MetricMinerConfigs {
 
 	public String getQueriesResultsDir() {
 		return queriesResultDir;
+	}
+	
+	public String getStatsResultDir() {
+		return statsResultDir;
 	}
 
 }

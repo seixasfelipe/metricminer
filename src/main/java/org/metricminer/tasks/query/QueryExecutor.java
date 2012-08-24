@@ -24,6 +24,7 @@ public class QueryExecutor {
     }
     
     @SuppressWarnings("unchecked")
+    // TODO extract the csv writer to .csv package
     public void execute(Query query, OutputStream csvOutputStream) {
         session.setDefaultReadOnly(true);
         Query processedQuery = queryProcessor.process(query);
