@@ -6,3 +6,4 @@ WebContent/WEB-INF/lib
 target/
 .sonar/
 scripts/send.csv
+*.r
