@@ -9,12 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.classic.Session;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.model.Author;
@@ -23,22 +19,14 @@ import org.metricminer.model.CommitMessage;
 import org.metricminer.model.Diff;
 import org.metricminer.model.Project;
 
-public class ProjectDaoTest {
+public class ProjectDaoTest extends DaoTest {
 
-	private static Session session;
 	private static ProjectDao projectDao;
     private MetricMinerConfigs mockedConfigs;
 
-	@BeforeClass
-	public static void setUpClass() {
-		SessionFactory sessionFactory = new Configuration().configure(
-				"/hibernate.test.cfg.xml").buildSessionFactory();
-		session = sessionFactory.openSession();
-		projectDao = new ProjectDao(session);
-	}
-
 	@Before
 	public void setUp() {
+	    projectDao = new ProjectDao(session);
 		session.getTransaction().begin();
 		mockedConfigs = mock(MetricMinerConfigs.class);
 		when(mockedConfigs.getRepositoriesDir()).thenReturn("");
@@ -155,7 +143,7 @@ public class ProjectDaoTest {
 	    for (int i = 0; i < 100; i++) {
             session.save(new Project("new project " + i, "", mockedConfigs));
         }
-	    assertEquals(100/ProjectDao.PAGE_SIZE, projectDao.totalPages());
+	    assertEquals((int)Math.ceil(100.0/ProjectDao.PAGE_SIZE), projectDao.totalPages());
     }
 
 	private Project aProjectWithCommits(int totalCommits, Calendar commitDate) {
