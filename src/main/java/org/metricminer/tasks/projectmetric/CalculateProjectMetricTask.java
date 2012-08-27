@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Session;
 import org.metricminer.model.Project;
 import org.metricminer.tasks.RunnableTask;
+import org.metricminer.tasks.metric.common.MetricResult;
 import org.metricminer.tasks.projectmetric.common.ProjectMetric;
 
 public class CalculateProjectMetricTask implements RunnableTask {
@@ -21,8 +22,8 @@ public class CalculateProjectMetricTask implements RunnableTask {
 
     @Override
     public void run() {
-        List<Object> results = metric.calculate(session, project);
-        for (Object object : results) {
+        List<MetricResult> results = metric.calculate();
+        for (MetricResult object : results) {
             session.save(object);
         }
     }
