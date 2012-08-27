@@ -18,7 +18,7 @@
         <property name="connection.username">root</property>
         <property name="connection.password"></property>
         <property name="hibernate.hbm2ddl.auto">update</property>
-        <property name="show_sql">yes</property>
+        <property name="show_sql">true</property>
         <property name="format_sql">false</property>
         <property name="hibernate.generate_statistics">true</property>
 
@@ -52,6 +52,8 @@
         <mapping class="org.metricminer.tasks.metric.lines.LinesOfCodeResult" />
         <mapping class="org.metricminer.tasks.metric.methods.MethodsCountResult" />
         <mapping class="org.metricminer.tasks.metric.testedmethods.TestedMethodFinderResult" />
+        
+        <mapping class="org.metricminer.tasks.projectmetric.truckfactor.TruckFactorResult" />
 
     </session-factory>
 </hibernate-configuration>

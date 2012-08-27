@@ -34,8 +34,8 @@ public class CalculateProjectMetricTaskFactory implements RunnableTaskFactory {
         } catch (Exception e) {
             throw new MetricMinerExeption("Could not instatiate metric factory for: "+ metricClassName, e);
         }
-        ProjectMetric metric = factory.build();
+        ProjectMetric metric = factory.build(session, task.getProject());
         
-        return new CalculateProjectMetricTask(metric, task.getProject(), session);
+        return new CalculateProjectMetricTask(metric, session);
     }
 }

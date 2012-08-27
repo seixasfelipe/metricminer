@@ -5,8 +5,8 @@ public class ArtifactAndAuthor {
     private Long artifactId;
     private Long authorId;
 
-    public ArtifactAndAuthor(Integer artifact, Integer authorId) {
-        this.artifactId = Long.valueOf(artifact.toString());
+    public ArtifactAndAuthor(Integer artifactId, Integer authorId) {
+        this.artifactId = Long.valueOf(artifactId);
         this.authorId = Long.valueOf(authorId);
     }
 
@@ -53,6 +53,12 @@ public class ArtifactAndAuthor {
 
     public boolean sameArtifact(ArtifactAndAuthor nextArtifact) {
         return this.artifactId == nextArtifact.getArtifactId();
+    }
+
+    @Override
+    public String toString() {
+        return "ArtifactAndAuthor [artifactId=" + artifactId + ", authorId="
+                + authorId + "]";
     }
 
     

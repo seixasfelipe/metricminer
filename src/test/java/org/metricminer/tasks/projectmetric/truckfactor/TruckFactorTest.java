@@ -29,17 +29,17 @@ public class TruckFactorTest {
     @Test
     public void shouldFindTwoTruckFactors() {
         // two truck factors
-        ArrayList<ArtifactAndAuthor> artifacts = xArtifactsOfSomeAuthor(11, 1, 1);
-        artifacts.addAll(xArtifactsOfSomeAuthor(11, 2, 2));
-        artifacts.addAll(xArtifactsOfSomeAuthor(10, 2, 3));
+        ArrayList<ArtifactAndAuthor> artifacts = xArtifactsOfSomeAuthor(11, 10, 1);
+        artifacts.addAll(xArtifactsOfSomeAuthor(11, 20, 2));
+        artifacts.addAll(xArtifactsOfSomeAuthor(10, 20, 3));
         
         // not truck factor
-        artifacts.addAll(xArtifactsOfSomeAuthor(9, 3, 3));
+        artifacts.addAll(xArtifactsOfSomeAuthor(9, 30, 3));
         
         // not truck factor
-        artifacts.addAll(xArtifactsOfSomeAuthor(4, 4, 4));
-        artifacts.addAll(xArtifactsOfSomeAuthor(4, 4, 5));
-        artifacts.addAll(xArtifactsOfSomeAuthor(4, 4, 6));
+        artifacts.addAll(xArtifactsOfSomeAuthor(4, 40, 4));
+        artifacts.addAll(xArtifactsOfSomeAuthor(4, 40, 5));
+        artifacts.addAll(xArtifactsOfSomeAuthor(4, 40, 6));
         
         when(project.getId()).thenReturn(1l);
         when(dao.listAllArtifactsByAuthorAndCommitForProject(project)).thenReturn(artifacts);
@@ -47,12 +47,12 @@ public class TruckFactorTest {
         List<MetricResult> results = truckFactor.calculate();
         assertEquals(2, results.size());
         
-        TruckFactorResult result = (TruckFactorResult) results.get(0);
-        assertEquals(1l, (long)result.getArtifactId());
+        TruckFactorResult result = (TruckFactorResult) results.get(1);
+        assertEquals(10l, (long)result.getArtifactId());
         assertEquals(1l, (long)result.getAuthorId());
         
-        result = (TruckFactorResult) results.get(1);
-        assertEquals(2l, (long)result.getArtifactId());
+        result = (TruckFactorResult) results.get(0);
+        assertEquals(20l, (long)result.getArtifactId());
         assertEquals(2l, (long)result.getAuthorId());
     }
 

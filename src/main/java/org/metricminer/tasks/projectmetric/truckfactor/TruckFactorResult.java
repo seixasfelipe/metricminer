@@ -1,9 +1,17 @@
 package org.metricminer.tasks.projectmetric.truckfactor;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
 import org.metricminer.tasks.metric.common.MetricResult;
 
+@Entity
 public class TruckFactorResult implements MetricResult {
 
+    @Id @GeneratedValue
+    private Long id;
+    
     private final boolean truckFactor;
     private final Long authorId;
     private final Long artifactId;
@@ -25,4 +33,12 @@ public class TruckFactorResult implements MetricResult {
     public Long getArtifactId() {
         return artifactId;
     }
+
+    @Override
+    public String toString() {
+        return "TruckFactorResult [authorId=" + authorId + ", artifactId="
+                + artifactId + "]";
+    }
+    
+    
 }
