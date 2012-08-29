@@ -13,8 +13,11 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Type;
+
 @Entity
 public class Query implements Comparable<Query> {
+    @Type(type = "text")
     private String sqlQuery;
     private String name;
     @Temporal(TemporalType.TIMESTAMP)
