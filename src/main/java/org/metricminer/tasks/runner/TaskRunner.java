@@ -59,12 +59,12 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
                 return;
             }
             log.info("Starting task: " + taskToRun);
-            taskToRun.start();
+            taskToRun.setStarted();
             queueStatus.addRunningTask(taskToRun, Thread.currentThread());
             daoSession.beginTransaction();
             taskDao.update(taskToRun);
             daoSession.getTransaction().commit();
-            runTask(taskSession);
+            runTask();
         } catch (Throwable e) {
             handleError(e);
         } finally {
@@ -92,7 +92,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
                 || !taskToRun.isDependenciesFinished();
     }
 
-    private void runTask(Session taskSession) throws InstantiationException,
+    private void runTask() throws InstantiationException,
             IllegalAccessException {
         RunnableTaskFactory runnableTaskFactory = (RunnableTaskFactory) taskToRun
                 .getRunnableTaskFactoryClass().newInstance();
@@ -100,15 +100,15 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
         log.debug("Running task");
         runnableTaskFactory.build(taskToRun, taskSession, statelessSession,
                 config).run();
-        Transaction transaction = taskSession.getTransaction();
-        if (!transaction.isActive()) {
-            transaction.begin();
-        }
         finishTask();
     }
 
     private void finishTask() {
-        taskToRun.finish();
+        taskToRun.setFinished();
+        Transaction transaction = taskSession.getTransaction();
+        if (transaction.isActive()) {
+            transaction.commit();
+        }
         queueStatus.finishCurrentTask(taskToRun);
         Transaction tx = daoSession.beginTransaction();
         taskDao.update(taskToRun);

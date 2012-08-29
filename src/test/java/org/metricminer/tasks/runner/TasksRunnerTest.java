@@ -59,7 +59,7 @@ public class TasksRunnerTest {
 		when(mockedSession.beginTransaction()).thenReturn(mockedTransaction);
 
 		taskRunner.execute();
-		verify(mockedTask).start();
+		verify(mockedTask).setStarted();
 	}
 
 	@Test
@@ -71,7 +71,7 @@ public class TasksRunnerTest {
 		when(mockedSession.beginTransaction()).thenReturn(mockedTransaction);
 
 		taskRunner.execute();
-		verify(mockedTask, never()).start();
+		verify(mockedTask, never()).setStarted();
 	}
 
 }

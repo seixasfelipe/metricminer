@@ -45,7 +45,7 @@ public class TaskDaoTest {
 		Project project = new Project();
 		Task task = new TaskBuilder().withName(oldestTaskName)
 				.forProject(project).build();
-		task.finish();
+		task.setFinished();
 		session.save(project);
 		session.save(task);
 		Thread.sleep(1000);
@@ -53,7 +53,7 @@ public class TaskDaoTest {
 			project = new Project();
 			task = new TaskBuilder().withName("task " + i)
 					.forProject(project).build();
-			task.finish();
+			task.setFinished();
 			session.save(project);
 			session.save(task);
 		}

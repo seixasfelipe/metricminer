@@ -82,7 +82,7 @@ public class ProjectTest {
 	    Task calculateAllMetricsTask = new TaskBuilder().
 	            withRunnableTaskFactory(new CalculateAllMetricsTaskFactory()).build();
 	    project.addTask(calculateAllMetricsTask);
-	    calculateAllMetricsTask.finish();
+	    calculateAllMetricsTask.setFinished();
 	    assertFalse(project.willCalculateAllMetrics());
 	}
 

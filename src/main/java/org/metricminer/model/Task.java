@@ -70,12 +70,12 @@ public class Task implements Comparable {
         this.id = id;
     }
 
-    public void start() {
+    public void setStarted() {
         this.status = TaskStatus.STARTED;
         this.startDate = new GregorianCalendar();
     }
 
-    public void finish() {
+    public void setFinished() {
         this.status = TaskStatus.FINISHED;
         this.endDate = new GregorianCalendar();
     }
