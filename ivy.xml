@@ -8,9 +8,10 @@
 
 	<dependencies>
 		<!-- Hibernate and other stuff -->
-		<dependency org="org.hibernate" name="hibernate-core" rev="3.6.1.Final" conf="default" />
+		<dependency org="org.hibernate" name="hibernate-core" rev="3.6.10.Final"/>
+            
 		<dependency org="org.hibernate.javax.persistence" name="hibernate-jpa-2.0-api" rev="1.0.0.Final" conf="default" />
-		<dependency org="org.hibernate" name="hibernate-c3p0" rev="3.6.1.Final" conf="default" />
+		<dependency org="org.hibernate" name="hibernate-c3p0" rev="3.6.10.Final" conf="default" />
 		<dependency org="javax.transaction" name="jta" rev="1.1"/>
 		<dependency org="mysql" name="mysql-connector-java" rev="5.1.18"/>
 		<dependency org="c3p0" name="c3p0" rev="0.9.1" conf="default" />
