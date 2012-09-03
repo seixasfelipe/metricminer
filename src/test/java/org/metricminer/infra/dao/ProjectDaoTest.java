@@ -18,6 +18,8 @@ import org.metricminer.model.Commit;
 import org.metricminer.model.CommitMessage;
 import org.metricminer.model.Diff;
 import org.metricminer.model.Project;
+import org.metricminer.model.Task;
+import org.metricminer.model.TaskBuilder;
 
 public class ProjectDaoTest extends DaoTest {
 
@@ -145,6 +147,19 @@ public class ProjectDaoTest extends DaoTest {
         }
 	    assertEquals((int)Math.ceil(100.0/ProjectDao.PAGE_SIZE), projectDao.totalPages());
     }
+	
+	@Test
+    public void shouldDeleteProject() throws Exception {
+	    Project project = new Project("some project", "", mockedConfigs);
+	    Task task = new TaskBuilder().build();
+        project.addTask(task);
+	    session.save(project);
+	    session.save(task);
+	    session.flush();
+	    projectDao.delete(project.getId());
+	    session.flush();
+        
+    }
 
 	private Project aProjectWithCommits(int totalCommits, Calendar commitDate) {
 		Project project = new Project();
@@ -163,5 +178,7 @@ public class ProjectDaoTest extends DaoTest {
 					project));
 		}
 	}
+	
+	
 
 }

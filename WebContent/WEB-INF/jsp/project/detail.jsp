@@ -58,7 +58,7 @@
 					<div class="bheadr"></div>
 					<h2>${project.name}</h2>
 					<ul class="tabs">
-						<li><a href="<c:url value="/projects/${project.id}/delete" />">Delete project</a></li>
+						<li><a href="<c:url value="/project/${project.id}/delete" />">Delete project</a></li>
 					</ul>
 				</div>
 				<!-- .block_head ends -->

@@ -72,6 +72,12 @@ public class ProjectController {
         project.addMetricToCalculate(metricFactoryClassName);
         result.nothing();
     }
+    
+    @Get("/project/{projectId}/delete")
+    public void deleteProject(Long projectId) {
+        dao.delete(projectId);
+        result.redirectTo(ProjectController.class).list(1);
+    }
 
     @Post("/projects/{projectId}/tags/remove")
     public void removeTag(Long projectId, String tagName) {
