@@ -51,7 +51,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
                     log.error(taskToRun
                             + " failed because a dependency for this task also failed.");
                     daoSession.beginTransaction();
-                    taskToRun.fail();
+                    taskToRun.setFailed();
                     daoSession.update(taskToRun);
                     daoSession.getTransaction().commit();
                 }
@@ -76,7 +76,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
         for (Task task : tasksToClean) {
             log.error("The thread running: " + task + " died, setting status to FAILED");
             daoSession.beginTransaction();
-            task.fail();
+            task.setFailed();
             daoSession.update(task);
             daoSession.getTransaction().commit();
         }
@@ -118,7 +118,7 @@ public class TaskRunner implements br.com.caelum.vraptor.tasks.Task {
     }
 
     private void handleError(Throwable e) {
-        taskToRun.fail();
+        taskToRun.setFailed();
         queueStatus.finishCurrentTask(taskToRun);
         Transaction tx = daoSession.beginTransaction();
         taskDao.update(taskToRun);

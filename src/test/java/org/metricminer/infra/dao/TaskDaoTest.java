@@ -15,6 +15,7 @@ import org.junit.Test;
 import org.metricminer.model.Project;
 import org.metricminer.model.Task;
 import org.metricminer.model.TaskBuilder;
+import org.metricminer.model.TaskStatus;
 
 public class TaskDaoTest {
 
@@ -65,7 +66,24 @@ public class TaskDaoTest {
 		for (Task t : lastTasks) {
 			assertNotSame(oldestTaskName, t.getName());
 		}
-
 	}
+	
+	@Test
+    public void shouldGetStartedTasks() throws Exception {
+	    Project project = new Project();
+        Task task = new TaskBuilder().forProject(project).build();
+        task.setStarted();
+        session.save(project);
+        session.save(task);
+        
+        task = new TaskBuilder().forProject(project).build();
+        task.setFinished();
+        session.save(task);
+        
+        List<Task> tasksRunning = taskDao.tasksRunning();
+        
+        assertEquals(1, tasksRunning.size());
+        assertEquals(TaskStatus.STARTED, tasksRunning.get(0).getStatus());
+    }
 
 }

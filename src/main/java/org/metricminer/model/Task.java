@@ -34,18 +34,25 @@ public class Task implements Comparable {
     private Project project;
     private String name;
     private Class runnableTaskFactoryClass;
+    
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar submitDate;
+    
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar startDate;
+    
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar endDate;
+    
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
+    
     @ManyToMany(fetch = FetchType.LAZY)
     private List<Task> depends;
+    
     @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<TaskConfigurationEntry> configurationEntries;
+    
     private int position;
 
     public Task() {
@@ -80,7 +87,7 @@ public class Task implements Comparable {
         this.endDate = new GregorianCalendar();
     }
 
-    public void fail() {
+    public void setFailed() {
         this.status = TaskStatus.FAILED;
     }
 

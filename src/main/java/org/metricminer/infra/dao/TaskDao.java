@@ -55,7 +55,13 @@ public class TaskDao {
                         "select task from Task as task join fetch task.project order by endDate desc")
                 .setMaxResults(total);
         return query.list();
-
+    }
+    
+    @SuppressWarnings("unchecked")
+    public List<Task> tasksRunning() {
+        org.hibernate.Query query = session.createQuery("select task from Task as task where task.status=:status")
+                .setString("status", TaskStatus.STARTED.toString());
+        return query.list();
     }
 
     public void saveTaskToExecuteQuery(Query query) {

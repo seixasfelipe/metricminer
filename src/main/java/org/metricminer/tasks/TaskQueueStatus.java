@@ -42,6 +42,10 @@ public class TaskQueueStatus {
 	public synchronized boolean mayStartTask() {
 		return threadByTask.size() < configs.getMaxConcurrentTasks();
 	}
+	
+	public boolean containsTask(Task t) {
+	    return threadByTask.containsKey(t);
+	}
 
     
     public List<Task> cleanTasksNotRunning() {
