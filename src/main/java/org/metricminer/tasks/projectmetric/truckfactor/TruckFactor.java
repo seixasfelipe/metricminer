@@ -94,11 +94,9 @@ public class TruckFactor implements ProjectMetric {
                 max = count;
             }
         }
-        boolean isTruckFactor = false;
-        if (max * 2 > total && total > 10) {
-            isTruckFactor = true;
-        }
-        return new TruckFactorResult(isTruckFactor, artifactId, authorId);
+        double percentage = (double) ((double)max/ (double) total);
+        percentage *= 100;
+        return new TruckFactorResult(percentage, artifactId, authorId, total);
     }
 
     public static void main(String[] args) throws ClassNotFoundException {

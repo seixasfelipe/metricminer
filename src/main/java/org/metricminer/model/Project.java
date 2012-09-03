@@ -23,6 +23,8 @@ import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.config.project.MapConfig;
 import org.metricminer.tasks.metric.CalculateAllMetricsTaskFactory;
 import org.metricminer.tasks.metric.CalculateMetricTaskFactory;
+import org.metricminer.tasks.projectmetric.CalculateProjectMetricTaskFactory;
+import org.metricminer.tasks.projectmetric.truckfactor.TruckFactorFactory;
 import org.metricminer.tasks.scm.ParseSCMLogTaskFactory;
 import org.metricminer.tasks.scm.RemoveSourceDirectoryTaskFactory;
 import org.metricminer.tasks.scm.SCMCloneTaskFactory;
@@ -182,14 +184,24 @@ public class Project {
 				.withName("Calculate all metrics")
 				.withRunnableTaskFactory(new CalculateAllMetricsTaskFactory())
 				.withPosition(3).build();
-
+		
+		Task calculateTruckFactor = new TaskBuilder().forProject(this)
+		        .withName("Caculate truck factor metric")
+		        .withRunnableTaskFactory(new CalculateProjectMetricTaskFactory())
+		        .withPosition(4).build();
+		calculateTruckFactor
+		    .addTaskConfigurationEntry(TaskConfigurationEntryKey.PROJECT_METRIC_FACTORY_CLASS, 
+		            TruckFactorFactory.class.getCanonicalName());
+		
 		parseLogTask.addDependency(cloneTask);
 		removeDirectoryTask.addDependency(parseLogTask);
 		calculateAllMetricsTask.addDependency(parseLogTask);
+		calculateTruckFactor.addDependency(calculateAllMetricsTask);
 		tasks.add(cloneTask);
 		tasks.add(parseLogTask);
 		tasks.add(removeDirectoryTask);
 		tasks.add(calculateAllMetricsTask);
+		tasks.add(calculateTruckFactor);
 
 	}
 

@@ -3,6 +3,7 @@ package org.metricminer.tasks.projectmetric.truckfactor;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import org.metricminer.tasks.metric.common.MetricResult;
 
@@ -12,18 +13,22 @@ public class TruckFactorResult implements MetricResult {
     @Id @GeneratedValue
     private Long id;
     
-    private final boolean truckFactor;
     private final Long authorId;
     private final Long artifactId;
+    private double percentage;
 
-    public TruckFactorResult(boolean truckFactor, Long artifactId, Long authorId) {
-        this.truckFactor = truckFactor;
+    @Transient
+    private final int totalCommits;
+
+    public TruckFactorResult(double percentage, Long artifactId, Long authorId, int totalCommits) {
+        this.percentage = percentage;
         this.artifactId = artifactId;
         this.authorId = authorId;
+        this.totalCommits = totalCommits;
     }
-    
-    public boolean isTruckFactor() {
-        return truckFactor;
+
+    public double getPercentage() {
+        return percentage;
     }
     
     public Long getAuthorId() {
@@ -32,6 +37,10 @@ public class TruckFactorResult implements MetricResult {
 
     public Long getArtifactId() {
         return artifactId;
+    }
+    
+    public boolean isTruckFactor() {
+        return totalCommits > 10 && percentage > 50.0;  
     }
 
     @Override

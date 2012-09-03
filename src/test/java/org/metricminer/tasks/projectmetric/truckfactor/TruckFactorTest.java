@@ -62,7 +62,10 @@ public class TruckFactorTest {
         artifacts.addAll(xArtifactsOfSomeAuthor(10, 1, 2));
         TruckFactorResult result = truckFactor.isTruckFactor(artifacts);
         
-        assertTrue(result.isTruckFactor());
+        double expectedPercentage = (11.0 / 21.0) * 100;
+        
+        assertTrue(result.getPercentage() > 50);
+        assertEquals(expectedPercentage, result.getPercentage(), 0.00001);
         assertEquals(Long.valueOf(1l), result.getAuthorId());
         assertEquals(Long.valueOf(1l), result.getArtifactId());
     }

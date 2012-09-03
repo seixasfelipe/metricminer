@@ -26,6 +26,7 @@ DROP TABLE  `Artifact` ,
 `QueryResult`,
 `Query_QueryResult`,
 `CalculatedMetric`,
+`TruckFactorResult`,
 `User`;
 
 SET foreign_key_checks = 1;
