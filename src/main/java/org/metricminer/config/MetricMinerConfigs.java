@@ -62,10 +62,9 @@ public class MetricMinerConfigs {
 			FileNotFoundException {
 		String configFilePath = context.getRealPath(configPath);
 		properties.load(new FileInputStream(configFilePath));
-		this.repositoriesDir = properties.getProperty("repositories.dir", "/tmp/metricminer");
-		this.queriesResultDir = properties.getProperty("queries.results.dir", "/tmp/");
-
-		this.statsResultDir = properties.getProperty("stats.results.dir", "/tmp/");
+		this.repositoriesDir = properties.getProperty("repositories.dir", "/var/tmp/repositories");
+		this.queriesResultDir = properties.getProperty("queries.results.dir", "/var/tmp/queries");
+		this.statsResultDir = properties.getProperty("stats.results.dir", "/var/tmp/stats");
 
 		File file = new File(repositoriesDir);
 		if (!file.canWrite())
@@ -73,6 +72,9 @@ public class MetricMinerConfigs {
 		file = new File(queriesResultDir);
 		if (!file.canWrite())
 			throw new MetricMinerExeption(queriesResultDir + " is not writable.");
+		file = new File(statsResultDir);
+		if (!file.canWrite())
+			throw new MetricMinerExeption(statsResultDir + " is not writable.");
 	}
 
     private void registerMetrics() {
