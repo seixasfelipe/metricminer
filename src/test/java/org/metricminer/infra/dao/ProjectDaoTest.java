@@ -21,7 +21,6 @@ import org.metricminer.model.Diff;
 import org.metricminer.model.Project;
 import org.metricminer.model.Task;
 import org.metricminer.model.TaskBuilder;
-import org.metricminer.tasks.metric.common.Metric;
 import org.metricminer.tasks.metric.lcom.LComMetricFactory;
 
 public class ProjectDaoTest extends DaoTest {
