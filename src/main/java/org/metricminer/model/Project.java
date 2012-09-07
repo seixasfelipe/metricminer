@@ -54,7 +54,7 @@ public class Project {
 	private Commit lastCommit;
 	private Long totalCommits;
 	private Long totalCommiters;
-	@OneToMany(mappedBy="project", fetch = FetchType.LAZY)
+	@OneToMany(mappedBy="project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<CalculatedMetric> calculatedMetrics;
 	@Temporal(TemporalType.TIMESTAMP)
 	private Calendar creationDate;

@@ -14,12 +14,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.metricminer.config.MetricMinerConfigs;
 import org.metricminer.model.Author;
+import org.metricminer.model.CalculatedMetric;
 import org.metricminer.model.Commit;
 import org.metricminer.model.CommitMessage;
 import org.metricminer.model.Diff;
 import org.metricminer.model.Project;
 import org.metricminer.model.Task;
 import org.metricminer.model.TaskBuilder;
+import org.metricminer.tasks.metric.common.Metric;
+import org.metricminer.tasks.metric.lcom.LComMetricFactory;
 
 public class ProjectDaoTest extends DaoTest {
 
@@ -152,13 +155,16 @@ public class ProjectDaoTest extends DaoTest {
     public void shouldDeleteProject() throws Exception {
 	    Project project = new Project("some project", "", mockedConfigs);
 	    Task task = new TaskBuilder().build();
+	    CalculatedMetric calculatedMetric = new CalculatedMetric(project, 
+	    		LComMetricFactory.class);
         project.addTask(task);
+        project.addCalculatedMetric(calculatedMetric);
 	    session.save(project);
 	    session.save(task);
+	    session.save(calculatedMetric);
 	    session.flush();
 	    projectDao.delete(project.getId());
 	    session.flush();
-        
     }
 
 	private Project aProjectWithCommits(int totalCommits, Calendar commitDate) {
